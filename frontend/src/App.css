@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+p {
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+.container {
+  width: 1170px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 auto;
+  gap: 50px;
+  justify-content: center;
+}
+
+nav {
+  background-color: #F44C0C;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 120px;
+}
+
+.nav_logo {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+}
+
+.nav_logo p {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  align-items: center;margin-top: 5px;
+}
+
+.nav_logo img {
+  height: 50px;
+}
+
+.navSearch {
+  height: 40px;
+  display: flex;
+}
+
+.navSearch input {
+  height: 40px;
+  width: 550px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px 0px 0px 5px;
+  outline: none;
+  font-size: 18px;
+}
+
+.navbutton {
+  width: 51px;
+  height: 40px;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 0px 5px 5px 0px;
+}
+
+.navbutton button{
+  background-color: #F44C0C;
+  width: 45px;
+  height: 34px;
+  border: none;
+  border-radius: 5px;
+}
+
+.navbutton button img {
+  width: 20px;
+  height: 20px;
+}
+
+nav a, p {
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.regislogin {
+  display: flex;
+  gap: 20px;
+}
