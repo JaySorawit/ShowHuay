@@ -13,7 +13,8 @@ p {
   font-weight: 400;
 }
 
-.container {
+/*------------ Nav bar --------------*/
+.navcontainer {
   width: 1170px;
   display: flex;
   flex-direction: row;
@@ -53,6 +54,8 @@ nav {
 .navSearch {
   height: 40px;
   display: flex;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 .navSearch input {
@@ -96,3 +99,5 @@ nav a, p {
   display: flex;
   gap: 20px;
 }
+
+/*-----------------------------------*/
