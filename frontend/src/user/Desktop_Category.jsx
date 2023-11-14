@@ -1,13 +1,13 @@
 import React from 'react'
 import Navbar from './Navbar'
 
-function Home() {
+function Desktop_Category() {
   return (
     <>
     <Navbar/>
-    <div>Desktop 4</div>
+    <div>Desktop_Category</div>
     </>
   )
 }
 
-export default Home
+export default Desktop_Category

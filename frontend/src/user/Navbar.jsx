@@ -14,9 +14,11 @@ function Navbar() {
             <div className="navSearch">
                 <input type="text" placeholder="Search..."/>
                 <div className="navbutton">
-                    <button type="button">
-                        <img src={search} />
-                    </button>
+                    <Link to='/Goods_List'>
+                        <button type="button">
+                        <img src={search} />                      
+                        </button>
+                    </Link>
                 </div>
             </div>
             <div className="regislogin">
