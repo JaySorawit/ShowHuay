@@ -1,9 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
-import axios from 'axios'
+import io from 'socket.io-client';
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const socket = io('http://localhost:3000/chat');
+
 function Chat() {
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        socket.on('chat message', (msg) => {
+            setMessages((prevMessages) => [...prevMessages, msg]);
+        });
+        
+        return () => {
+            socket.disconnect();};
+        }, []);
+        
+    const handleSendMessage = () => {
+        socket.emit('chat message', message);
+        setMessage('');
+    };
+
   return (
       <>
       <Navbar/>
@@ -16,8 +35,8 @@ function Chat() {
                 <div className="chatdetail">
                     <div className="card-footer">
                         <div className="input-group">
-                            <input type='text' className='form-control' id='message' placeholder='Send new message'></input>
-                            <button className='btn btn-success' type='button' id='message'>Send</button>
+                            <input type='text' className='form-control' id='message' placeholder='Send new message' value={message} onChange={(e) => setMessage(e.target.value)}/>
+                            <button className='btn btn-success' type='button' id='message' onClick={handleSendMessage} >Send</button>
                         </div>
                     </div>
                 </div>

@@ -1,22 +1,31 @@
 const express = require('express');
-const mysql =  require('mysql');
+const http = require('http');
+const socketIo = require('socket.io');
 
+// Create Express app
 const app = express();
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'showhuay_db'
-})
 
-connection.connect((err) => {
-    if(err) {
-        console.log('Error connecting to MySQL database!', err);
-        return;
-    }
-    console.log('MySQL successfully connected!');
-})
+// Create HTTP server
+const server = http.createServer(app);
 
+const io = socketIo(server);
+io.on('connection', (socket) => {
+    console.log('A user connected');
+  
+    // Handle WebSocket events here
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
+  });
+
+// Routes
+const chatRoutes = require('./routes/chatRoutes');
+
+app.use('/chat', chatRoutes(io));
+
+// Start the server
 app.listen(3000, () => {
-    console.log('Sever started successfully!');
+    console.log('Sever started successfully on port 3000!');
 })
+
+
