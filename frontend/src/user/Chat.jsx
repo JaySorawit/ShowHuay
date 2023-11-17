@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import io from 'socket.io-client';
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const socket = io('http://localhost:3000/apis/chat/');
+// const socket = io('http://localhost:3000/apis/chat/');
 
 function Chat() {
     const [messages, setMessages] = useState([]);
