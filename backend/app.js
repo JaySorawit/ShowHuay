@@ -1,9 +1,7 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
-const mysql = require('mysql');
 const chatRoutes = require('./routes/chatRoutes');
 const authRoute = require('./routes/authRoutes')
 const app = express();
@@ -21,7 +19,6 @@ const io = socketIo(server);
 // Routes
 app.use('/auth', authRoute);
 // app.use('/api/chat', chatRoutes(io));
-
 
 // Start the server
 app.listen(3000, () => {
