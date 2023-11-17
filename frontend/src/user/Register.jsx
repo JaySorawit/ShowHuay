@@ -138,7 +138,6 @@ function Register() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    ref={emailRef}
                     required
                   />
                 </Form.Group>
