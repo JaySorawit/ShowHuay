@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import Navbar from './Navbar';
 import loginImage from '../assets/Register-left.png';
@@ -16,12 +16,30 @@ function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login submitted:', formData);
-    // Add login logic here, e.g., API calls, authentication, etc.
-  };
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+        window.location.href = './';
+      } else {
+        const errorData = await response.json();
+        console.error('Login failed:', errorData.error);
+
+      }
+    } catch (error) {
+      console.error('Login failed:', error.message);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -64,7 +82,7 @@ function Login() {
 
               <div className="text-center">
                 <p className="link-to-register">Don't have an account? <a href="/register">Register</a></p>
-                <img src={belowLoginImage} alt="Register Image" className='below-login-img'/>
+                <img src={belowLoginImage} alt="Register Image" className='below-login-img' />
               </div>
             </Col>
           </Row>
