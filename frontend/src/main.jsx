@@ -5,6 +5,7 @@ import Home from './user/Home.jsx';
 import Register from './user/Register.jsx';
 import Login from './user/Login.jsx';
 import Chat from './user/Chat.jsx';
+import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
 import PageNotfound from './user/PageNotfound.jsx';

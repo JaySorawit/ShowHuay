@@ -26,7 +26,7 @@ function Register() {
   return (
     <>
       <Navbar />
-      <div className="pt-5" style={{ backgroundColor: '#F1F0F0' }}>
+      <div className="pt-5" style={{ backgroundColor: '#F1F0F0',height: '100vh' }}>
         <Container className="p-4" style={{ maxWidth: '1080px' }}>
           <Row className="no-gutters">
             <Col md={6}>
