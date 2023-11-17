@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from './Navbar'
 
-function Goods_List() {
+function ProductList() {
   return (
     <>
     <Navbar/>
@@ -10,4 +10,4 @@ function Goods_List() {
   )
 }
 
-export default Goods_List
+export default ProductList
