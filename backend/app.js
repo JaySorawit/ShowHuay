@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const chatRoutes = require('./routes/chatRoutes');
 
 
 // Create Express app
@@ -17,13 +18,11 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // Routes
-const chatRoutes = require('./routes/chatRoutes');
-
-app.use('/chat', chatRoutes(io));
+app.use('/apis/chat', chatRoutes(io));
 
 
 // Start the server
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log('Sever started successfully on port 3001!');
 })
 

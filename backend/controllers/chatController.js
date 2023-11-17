@@ -1,10 +1,11 @@
+const database = require('../Database/database')
+
 class ChatController {
     constructor(io) {
       this.io = io;
     }
   
     handleConnection(socket) {
-      console.log('a user connected');
   
       socket.on('join', (userId) => {
         socket.join(userId);
