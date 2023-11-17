@@ -7,8 +7,7 @@ import Home from './user/Home.jsx'
 import Register from './user/Register.jsx'
 import Login from './user/Login.jsx'
 import Chat from './user/Chat.jsx'
-import Goods_List from './user/Goods_List.jsx'
-import Desktop_Category from './user/Desktop_Category.jsx'
+import ProductList from './user/ProductList.jsx'
 
 const router = createBrowserRouter([
   {
@@ -28,12 +27,8 @@ const router = createBrowserRouter([
     element: <Chat/>
   },
   {
-    path: "Desktop_Category",
-    element: <Desktop_Category/>
-  },
-  {
-    path: "/Goods_List",
-    element: <Goods_List/>
+    path: "/ProductList",
+    element: <ProductList/>
   }
   
 ])
