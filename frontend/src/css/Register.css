@@ -1,0 +1,52 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.no-gutters [class^='col'] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+.header-layout {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 43px 0px 32px 40px;
+}
+
+.form-layout {
+    margin: 0px 32px 32px 40px;
+}
+
+.form-layout .form-control {
+    height: 52px;
+    border: 1px solid black;
+    border-radius: 0px;
+  }
+
+  .form-layout .form-control::placeholder {
+    font-size: 18px;
+    color: #B0AAAA;
+  }
+
+.btn-submit {
+    height: 52px;
+    background-color: #F44C0C !important;
+    border: 1px solid #F44C0C !important;
+    border-radius: 0px !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase;
+}
+
+.link-to-login {
+    color: #B0AAAA;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.link-to-login a {
+    color: #F44C0C;
+    text-decoration: none;
+}

@@ -1,9 +1,77 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Form, Button, Row, Col, Container } from 'react-bootstrap';
+import Navbar from './Navbar';
+import loginImage from '../assets/Register-left.png';
+import belowLoginImage from '../assets/below-login-image.png';
+import '../css/Login.css';
 
 function Login() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Login submitted:', formData);
+    // Add login logic here, e.g., API calls, authentication, etc.
+  };
+
   return (
-    <div>login</div>
-  )
+    <>
+      <Navbar />
+      <div className="pt-5" style={{ backgroundColor: '#F1F0F0' }}>
+        <Container className="p-4" style={{ maxWidth: '1080px' }}>
+          <Row className="no-gutters">
+            <Col md={6}>
+              <img src={loginImage} alt="Login" style={{ width: '100%' }} />
+            </Col>
+            <Col md={6} style={{ backgroundColor: '#FFFFFF' }}>
+              <h2 className="header-layout">Log In</h2>
+
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="form-layout" controlId="email">
+                  <Form.Control
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+                <Form.Group className="form-layout" controlId="password">
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+                <div className="form-layout" style={{ marginBottom: '16px' }}>
+                  <Button className="btn-submit w-100" type="submit">
+                    Log in
+                  </Button>
+                </div>
+              </Form>
+
+              <div className="text-center">
+                <p className="link-to-register">Don't have an account? <a href="/register">Register</a></p>
+                <img src={belowLoginImage} alt="Register Image" className='below-login-img'/>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </>
+  );
 }
 
-export default Login
+export default Login;
