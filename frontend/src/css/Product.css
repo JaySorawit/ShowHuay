@@ -7,3 +7,52 @@
 p{
     margin: 0px !important;
 }
+
+.productShow {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 0px;
+}
+
+.productShow img {
+    width: 50%;
+    height: 40%;
+    padding: 0px 50px;
+}
+
+.productInfoBox {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 50px;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.price {
+    width: 100%;
+    background-color: #D9D9D9;
+    color: #F44C0C;
+    padding-left: 15px;
+    margin: 25px 0px;
+}
+
+.quantity button {
+    width: 30px;
+    height: 30px;
+    border: solid 2px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.quantity p {
+    width: 30px;
+    height: 30px;
+    border-top: solid 2px;
+    border-bottom: solid 2px;
+    text-align: center;
+}

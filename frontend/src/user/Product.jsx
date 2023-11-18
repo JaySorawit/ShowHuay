@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios"
-import Navbar from "./Navbar"
+import axios from "axios";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
-import product1_img from '../assets/img/product-img/product1.png'
+import product1_img from '../assets/img/product-img/product1.png';
 import RatingStar from "./RatingStar";
-import '../css/Product.css'
+import '../css/Product.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
@@ -112,28 +112,33 @@ const Product = () => {
       };
   
       return (
-        <div className="quantity">
-          <button onClick={handleDecrease}>-</button>
-          <span>{quantity}</span>
-          <button onClick={handleIncrease} disabled={quantity === product.stockRemaining}>
-            +
-          </button>
+        <>
+        <div className="quantitybox" style={{display:'flex',gap:'50px'}}>
+          <p style={{border:'none'}}> Quauntity</p>
+          <div className="quantitybutton" style={{display:'flex'}}>
+            <button onClick={handleDecrease}>-</button>
+            <p>{quantity}</p>
+            <button onClick={handleIncrease} disabled={quantity === product.stockRemaining}> + </button>
+          </div>
         </div>
+        </>
       );
     };
 
     return (
         <>
         <Navbar/>
-        <div className="BG" style={{ width: '100%' }}>
-            <div className="container-xxl" style={{ width: '1170px', backgroundColor: '#F1F0F0' }}>
+        <div className="BG">
+            <div className="container" style={{ width: '1170px', backgroundColor: '#F1F0F0' }}>
               <div className="productShow"> 
-                <img src={product1_img} style={{width: '40%',marginTop:'50px'}}/>
-                <div className="productInfo">
+                <img src={product1_img} />
+                <div className="productInfoBox">
                   <h2> Nike Dunk Low Retro White Black (2021)[พร้อมส่งของแท้] </h2>
                   <div className="productInfo">
-                    <p> 4.8 </p> 
-                    <RatingStar score={initialScore} />
+                    <div style={{display:'flex',gap:'5px' }}>
+                      <p> 4.8 </p> 
+                      <RatingStar score={initialScore} />
+                    </div>
                     <p> | </p>
                     <p> 69 Rating </p>
                     <p> | </p>
@@ -155,7 +160,7 @@ const Product = () => {
                 </div>
               </div>
               <div className="productDescription">
-                <h2> Product Description </h2>
+                <h4> Product Description </h4>
                 <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel ullam laborum aliquam cumque, eius commodi minus eos, tempore magni necessitatibus, facere unde veniam nisi in dignissimos consectetur omnis animi harum.</p>
               </div>
               <div className="seller">
@@ -170,7 +175,7 @@ const Product = () => {
                 </div>
               </div>
               <div className="ProductRating">
-                <h3> Product Score Ratings </h3>
+                <h4> Product Score Ratings </h4>
                 <div className="scorefilter">
                   <div className="productScore">
                     <p> {initialScore} out of 5 </p> 
