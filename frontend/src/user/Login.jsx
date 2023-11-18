@@ -10,6 +10,9 @@ function Login() {
     email: '',
     password: '',
   });
+  const [error, setError] = useState('');
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +33,18 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
-        window.location.href = './';
+        // window.location.href = './';
       } else {
         const errorData = await response.json();
-        console.error('Login failed:', errorData.error);
-
+        if (errorData.error === 'User not found') {
+          emailRef.current.focus();
+          setError('*User not found');
+        } else if (errorData.error === 'Incorrect password') {
+          passwordRef.current.focus();
+          setError('*Incorrect password');
+        } else {
+          setError('An error occurred. Please try again.');
+        }
       }
     } catch (error) {
       console.error('Login failed:', error.message);
@@ -60,6 +70,8 @@ function Login() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    ref={emailRef}
+                    require
                   />
                 </Form.Group>
 
@@ -70,7 +82,10 @@ function Login() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    ref={passwordRef}
+                    require
                   />
+                  {error && <div className="error-message mt-2" style={{ color: 'red' }}>{error}</div>}
                 </Form.Group>
 
                 <div className="form-layout" style={{ marginBottom: '16px' }}>
@@ -82,7 +97,7 @@ function Login() {
 
               <div className="text-center">
                 <p className="link-to-register">Don't have an account? <a href="/register">Register</a></p>
-                <img src={belowLoginImage} alt="Register Image" className='below-login-img' />
+                <img src={belowLoginImage} alt="Register Image" className='below-login-img' style={{ width: '150px' }}/>
               </div>
             </Col>
           </Row>

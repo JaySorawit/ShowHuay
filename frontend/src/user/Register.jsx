@@ -23,7 +23,7 @@ function Register() {
   /************************************* Query Email *********************************************/
   const handleEmailCheck = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/auth/check-email ?email=${formData.email}`);
+      const response = await fetch(`http://localhost:3000/auth/check-email?email=${formData.email}`);
       const data = await response.json();
       setEmailExists(data.exists);
     } catch (error) {

@@ -14,13 +14,12 @@ const register = (req, res) => {
             return;
         }
 
-        const userId = results.insertId; // Assuming your database returns the inserted ID
+        const userId = results.insertId;
 
         res.status(200).json({
             status: 'success',
             message: 'User registered successfully',
             userId: userId,
-            // You can add more data here if needed
         });
     });
 };

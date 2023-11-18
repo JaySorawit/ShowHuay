@@ -52,6 +52,6 @@
 }
 
 .below-login-img {
-    width: '200px'; 
+    width: '1px' !important; 
     margin: 10px 0px;
 }
