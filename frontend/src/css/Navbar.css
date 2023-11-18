@@ -28,7 +28,7 @@ nav {
 .search-box::placeholder {
     opacity: 0.5 !important;
     font-size: 16px;
-  }
+}
 
 .btn-search {
     border: 3px solid #fff !important;
@@ -52,6 +52,10 @@ nav {
     color: #fdc7b1 !important;
     font-size: 16px !important;
     text-decoration: none !important;
+}
+
+.dropdown-name {
+    color: #fff !important;
 }
 
 @media (max-width: 991px) {
@@ -114,5 +118,18 @@ nav {
     .register-login:hover {
         color: #F44C0C !important;
     }
-}
 
+    .dropdown {
+        border-bottom: 1px solid #cfcfcf !important;
+    }
+
+    .cart-profile {
+        color: #2a2a2a !important;
+        font-size: 16px !important;
+        text-decoration: none !important;
+    }
+
+    .cart-profile:hover {
+        color: #F44C0C !important;
+    }
+}

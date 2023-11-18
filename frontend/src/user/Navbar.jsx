@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../assets/icon/logo.png';
 import search from '../assets/icon/search.png';
+import account from '../assets/account.png';
+import shoppingCart from '../assets/shopping-cart.png';
 import { Link } from 'react-router-dom';
 import '../css/Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function Navbar() {
-    const [isToggled, setIsToggled] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
 
+    useEffect(() => {
+        const loggedInStatus = localStorage.getItem('isLoggedIn');
+        if (loggedInStatus === 'true') {
+            setIsLoggedIn(true);
+            const storedUsername = localStorage.getItem('username');
+            setUsername(storedUsername);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setUsername('');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+    };
+
+    const [isToggled, setIsToggled] = useState(false);
     const handleToggle = () => {
         setIsToggled(!isToggled);
     };
@@ -40,25 +60,76 @@ function Navbar() {
                                 aria-label="Search"
                             />
                             <button className="btn btn-search" type="button">
-                                <img src={search} alt="Search" height="20" className="img-search"/>
+                                <img src={search} alt="Search" height="20" className="img-search" />
                             </button>
                         </div>
                     </div>
 
                     <ul className="navbar-nav mt-2" style={{ marginRight: '27px' }}>
-                        <li className="nav-item nav-item2">
-                            <Link className="nav-link register-login" to='/Register'>Register</Link>
-                        </li>
-                        {!isToggled && (
+                        {isLoggedIn ? (
                             <>
+                                {isToggled ? (
+                                    <>
+                                        <li className="nav-item" style={{ marginRight: '15px' }}>
+                                            <Link className="nav-link" to='/Cart'>
+                                                <span className="nav-link cart-profile">Cart</span>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item dropdown">
+                                            <span className="nav-link dropdown-toggle cart-profile" href="/" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span>Profile</span>
+                                            </span>
+                                            <ul className="dropdown-menu" aria-labelledby="profileDropdown">
+                                                <li><Link className="dropdown-item" to="/Profile">My Account</Link></li>
+                                                <li><Link className="dropdown-item" to="/Purchases">My Purchases</Link></li>
+                                                <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
+                                                <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
+                                                <li><hr className="dropdown-divider" /></li>
+                                                <li><Link className="dropdown-item" to="/Login" onClick={handleLogout}>Logout</Link></li>
+                                            </ul>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li className="nav-item" style={{ marginRight: '15px' }}>
+                                            <Link className="nav-link" to='/Cart'>
+                                                <img src={shoppingCart} alt="shopping-cart" height="25" />
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item dropdown">
+                                            <a className="nav-link dropdown-toggle" href="/" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img src={account} alt="account" height="25" style={{ marginRight: '5px', marginBottom: '1px' }} />
+                                                <span>{username}</span>
+                                            </a>
+                                            <ul className="dropdown-menu" aria-labelledby="profileDropdown">
+                                                <li><Link className="dropdown-item" to="/Profile">My Account</Link></li>
+                                                <li><Link className="dropdown-item" to="/Purchases">My Purchases</Link></li>
+                                                <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
+                                                <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
+                                                <li><hr className="dropdown-divider" /></li>
+                                                <li><Link className="dropdown-item" to="/Login" onClick={handleLogout}>Logout</Link></li>
+                                            </ul>
+                                        </li>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <li className="nav-item nav-item2">
+                                    <Link className="nav-link register-login" to='/Register'>Register</Link>
+                                </li>
+                                {!isToggled && (
+                                    <>
+                                        <li className="nav-item">
+                                            <span className="nav-link register-login-sep">|</span>
+                                        </li>
+                                    </>
+                                )}
                                 <li className="nav-item">
-                                    <span className="nav-link register-login-sep">|</span>
+                                    <Link className="nav-link register-login" to='/LogIn'>Login</Link>
                                 </li>
                             </>
                         )}
-                        <li className="nav-item">
-                            <Link className="nav-link register-login" to='/LogIn'>Login</Link>
-                        </li>
                     </ul>
                 </div>
             </div>

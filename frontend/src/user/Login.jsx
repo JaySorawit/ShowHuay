@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect  } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -13,6 +13,7 @@ function Login() {
   });
 
   /************************ Initialize State *****************************/
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState('');
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -38,9 +39,20 @@ function Login() {
       });
 
       if (loginResponse.ok) {
-        const data = await loginResponse.json();
-        console.log('Login successful:', data);
-        window.location.href = './';
+        const loginData = await loginResponse.json();
+        console.log('Login successful:', loginData);
+
+        if (formData.email === 'admin@showhuay.com') {
+          // Admin Role
+          window.location.href = '/admin';
+        } else {
+          // User Role
+          setIsLoggedIn(true);
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('username', loginData.username);
+          
+          window.location.href = '/';
+        }
       }
       else {
         const errorData = await loginResponse.json();

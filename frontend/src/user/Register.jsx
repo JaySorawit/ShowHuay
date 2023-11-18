@@ -13,13 +13,17 @@ function Register() {
     cpassword: '',
   });
 
-  /************************ Initialize State *****************************/
+  /********************************** Initialize State *******************************************/
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const emailRef = useRef(null);
+  const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const [emailExists, setEmailExists] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  /************************************************************************/
+  /***********************************************************************************************/
+
 
   /************************************* Query Email *********************************************/
   const handleEmailCheck = async () => {
@@ -33,6 +37,20 @@ function Register() {
   };
   /***********************************************************************************************/
 
+
+  /************************************* Query Username *********************************************/
+  const handleUsernameCheck = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/auth/check-username?username=${formData.username}`);
+      const data = await response.json();
+      setUsernameExists(data.exists);
+    } catch (error) {
+      console.error('Error checking username:', error);
+    }
+  };
+  /***********************************************************************************************/
+
+
   /************************************* Handle Change *********************************************/
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,19 +60,30 @@ function Register() {
       setEmailExists(false);
     }
 
+    if (name === 'username') {
+      setUsernameExists(false);
+    }
+
     if (name === 'password' || name === 'cpassword') {
       setPasswordMatch(formData.password === value);
     }
   };
   /*************************************************************************************************/
 
+
   /************************************* Handle Submit *********************************************/
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
 
+    /******************** Condition to Submit *********************/
     if (emailExists) {
       emailRef.current.focus();
+      return;
+    }
+
+    if (usernameExists) {
+      usernameRef.current.focus();
       return;
     }
 
@@ -63,6 +92,7 @@ function Register() {
       passwordRef.current.focus();
       return;
     }
+    /**************************************************************/
 
     try {
       const registerResponse = await fetch('http://localhost:3000/auth/register', {
@@ -84,10 +114,14 @@ function Register() {
           body: JSON.stringify({ email: formData.email, password: formData.password }),
         });
 
-        const loginData = await loginResponse.json();
-
         if (loginResponse.ok) {
+          const loginData = await loginResponse.json();
           console.log('Login successful:', loginData);
+
+          setIsLoggedIn(true);
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('username', loginData.username);
+
           window.location.href = './';
         }
       }
@@ -99,10 +133,11 @@ function Register() {
   };
   /*************************************************************************************************/
 
+
   return (
     <>
       <Navbar />
-      <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0'}}>
+      <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0' }}>
         <Container className="p-4" style={{ maxWidth: '1080px' }}>
           <Row className="no-gutters align-items-stretch">
             <Col md={6}>
@@ -137,8 +172,15 @@ function Register() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    onBlur={handleUsernameCheck}
+                    ref={usernameRef}
                     required
                   />
+                  {usernameExists && (
+                    <div className="mt-2" style={{ color: 'red' }}>
+                      *This username is already in use.
+                    </div>
+                  )}
                 </Form.Group>
 
                 <Form.Group className="form-layout" controlId="password">

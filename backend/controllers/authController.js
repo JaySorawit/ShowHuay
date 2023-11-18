@@ -51,6 +51,30 @@ const checkEmail = (req, res) => {
 };
 /******************************/
 
+/***** Query Username System *****/
+const checkUsername = (req, res) => {
+    const { username } = req.query;
+
+    const query = 'SELECT COUNT(*) AS count FROM user WHERE username = ?';
+
+    db.query(query, [username], (error, results) => {
+        if (error) {
+            console.error('Error querying database:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        const count = results[0].count;
+
+        if (count > 0) {
+            res.json({ exists: true });
+        } else {
+            res.json({ exists: false });
+        }
+    });
+};
+/******************************/
+
 /***********************************************************************************************/
 
 /************************************** LogIn BackEnd ******************************************/
@@ -81,11 +105,12 @@ const login = (req, res) => {
       res.status(200).json({
         status: 'success',
         message: 'Login successful',
-        userId: user.id,
+        userId: user.user_id,
+        username: user.username,
       });
     });
   };
   
 /***********************************************************************************************/
 
-module.exports = { register, checkEmail, login };
+module.exports = { register, checkEmail, checkUsername, login };
