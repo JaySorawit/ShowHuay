@@ -22,6 +22,7 @@ const guestRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/cart", element: <Navigate to="/login" />},
+  { path: "/chat", element: <Navigate to="/login"/> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
