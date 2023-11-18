@@ -45,7 +45,7 @@ function Navbar() {
                         </div>
                     </div>
 
-                    <ul className="navbar-nav">
+                    <ul className="navbar-nav mt-2">
                         <li className="nav-item nav-item2">
                             <Link className="nav-link register-login" to='/Register'>Register</Link>
                         </li>
