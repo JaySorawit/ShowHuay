@@ -5,7 +5,7 @@ function ProductList() {
   return (
     <>
     <Navbar/>
-    <div>Goods List</div>
+    <div>ProductList</div>
     </>
   )
 }
