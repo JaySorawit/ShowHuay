@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import Navbar from './Navbar';
+import Footer from './Footer';
 import loginImage from '../assets/Register-left.png';
 import belowLoginImage from '../assets/below-login-image.png';
 import '../css/Login.css';
@@ -60,11 +61,11 @@ function Login() {
     }
   };
   /*************************************************************************************************/
-  
+
   return (
     <>
       <Navbar />
-      <div className="pt-5" style={{ backgroundColor: '#F1F0F0' }}>
+      <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0' }}>
         <Container className="p-4" style={{ maxWidth: '1080px' }}>
           <Row className="no-gutters">
             <Col md={6}>
@@ -114,6 +115,8 @@ function Login() {
           </Row>
         </Container>
       </div>
+
+      <Footer />
     </>
   );
 }

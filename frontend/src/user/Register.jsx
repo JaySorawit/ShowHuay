@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Form, Button, Row, Col, Container, Alert } from 'react-bootstrap';
 import Navbar from './Navbar';
+import Footer from './Footer';
 import registrationImage from '../assets/Register-left.png';
 import '../css/Register.css';
 
@@ -101,13 +102,13 @@ function Register() {
   return (
     <>
       <Navbar />
-      <div className="pt-5" style={{ backgroundColor: '#F1F0F0',height: '100vh' }}>
+      <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0'}}>
         <Container className="p-4" style={{ maxWidth: '1080px' }}>
-          <Row className="no-gutters">
+          <Row className="no-gutters align-items-stretch">
             <Col md={6}>
-              <img src={registrationImage} alt="Registration" style={{ width: '100%' }} />
+              <img src={registrationImage} alt="Registration" style={{ width: '100%', height: '100%' }} />
             </Col>
-            <Col md={6} style={{ backgroundColor: '#FFFFFF' }}>
+            <Col md={6} style={{ backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
               <h2 className="header-layout">Register</h2>
 
               <Form onSubmit={handleSubmit}>
@@ -185,6 +186,8 @@ function Register() {
           </Row>
         </Container>
       </div>
+
+      <Footer />
     </>
   );
 }

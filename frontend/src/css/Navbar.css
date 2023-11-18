@@ -16,8 +16,17 @@ nav {
     margin-top: 5px;
 }
 
+.search-bar {
+    margin: 0px 27px;
+}
+
 .search-box {
-    margin: 0px 70px;
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 3px !important;
+}
+
+.btn-search {
+    border: 3px solid #fff !important;
 }
 
 .btn-search:hover {
@@ -38,14 +47,6 @@ nav {
     color: #fdc7b1 !important;
     font-size: 16px !important;
     text-decoration: none !important;
-}
-
-.toggler-button {
-    transition: background-color 0.3s ease-in-out;
-}
-
-.toggler-button:hover {
-    background-color: #fb5533 !important;
 }
 
 @media (max-width: 991px) {
