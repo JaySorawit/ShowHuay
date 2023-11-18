@@ -1,4 +1,4 @@
-const database = require('../Database/database')
+const db = require('../Database/database')
 
 class ChatController {
     constructor(io) {

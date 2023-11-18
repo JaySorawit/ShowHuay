@@ -8,7 +8,7 @@ import Chat from './user/Chat.jsx';
 import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
-import PageNotfound from './user/PageNotfound.jsx';
+import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
 
 const commonRoutes = [
@@ -22,19 +22,19 @@ const guestRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/cart", element: <Navigate to="/login" />},
-  { path: "/*", element: <PageNotfound /> },
+  { path: "/*", element: <PageNotFound /> },
 ];
 
 const userRoutes = [
   ...commonRoutes,
   { path: "/cart", element: <Cart />},
   { path: "/chat", element: <Chat /> },
-  { path: "/*", element: <PageNotfound /> },
+  { path: "/*", element: <PageNotFound /> },
 ];
 
 const adminRoutes = [
   // { path: "/", element: </> },
-  { path: "/*", element: <PageNotfound /> },
+  { path: "/*", element: <PageNotFound /> },
 ];
 
 
