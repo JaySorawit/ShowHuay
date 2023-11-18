@@ -10,19 +10,25 @@ function Login() {
     email: '',
     password: '',
   });
+
+  /************************ Initialize State *****************************/
   const [error, setError] = useState('');
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  /***********************************************************************/
 
+  /************************************* Handle Change *********************************************/
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  /*************************************************************************************************/
 
+  /************************************* Handle Submit *********************************************/
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const loginResponse = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,19 +36,22 @@ function Login() {
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (loginResponse.ok) {
+        const data = await loginResponse.json();
         console.log('Login successful:', data);
-        // window.location.href = './';
-      } else {
-        const errorData = await response.json();
+        window.location.href = './';
+      }
+      else {
+        const errorData = await loginResponse.json();
         if (errorData.error === 'User not found') {
           emailRef.current.focus();
           setError('*User not found');
-        } else if (errorData.error === 'Incorrect password') {
+        }
+        else if (errorData.error === 'Incorrect password') {
           passwordRef.current.focus();
           setError('*Incorrect password');
-        } else {
+        }
+        else {
           setError('An error occurred. Please try again.');
         }
       }
@@ -50,6 +59,8 @@ function Login() {
       console.error('Login failed:', error.message);
     }
   };
+  /*************************************************************************************************/
+  
   return (
     <>
       <Navbar />
@@ -97,7 +108,7 @@ function Login() {
 
               <div className="text-center">
                 <p className="link-to-register">Don't have an account? <a href="/register">Register</a></p>
-                <img src={belowLoginImage} alt="Register Image" className='below-login-img' style={{ width: '150px' }}/>
+                <img src={belowLoginImage} alt="Register Image" className='below-login-img' style={{ width: '150px' }} />
               </div>
             </Col>
           </Row>

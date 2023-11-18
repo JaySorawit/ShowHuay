@@ -40,6 +40,10 @@
     text-transform: uppercase;
 }
 
+.btn-submit:hover {
+    background-color: #fb5533 !important;
+}
+
 .link-to-register {
     color: #B0AAAA;
     font-size: 16px;
@@ -49,6 +53,10 @@
 .link-to-register a {
     color: #F44C0C;
     text-decoration: none;
+}
+
+.link-to-register a:hover {
+    color: #ff8453;
 }
 
 .below-login-img {

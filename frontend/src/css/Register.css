@@ -40,6 +40,10 @@
     text-transform: uppercase;
 }
 
+.btn-submit:hover {
+    background-color: #fb5533 !important;
+}
+
 .link-to-login {
     color: #B0AAAA;
     font-size: 16px;
@@ -49,4 +53,8 @@
 .link-to-login a {
     color: #F44C0C;
     text-decoration: none;
+}
+
+.link-to-login a:hover {
+    color: #ff8453;
 }

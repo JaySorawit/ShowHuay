@@ -18,7 +18,7 @@ function Register() {
   const [emailExists, setEmailExists] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  /*********************************************************************/
+  /************************************************************************/
 
   /************************************* Query Email *********************************************/
   const handleEmailCheck = async () => {
@@ -64,18 +64,17 @@ function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/auth/register', {
+      const registerResponse = await fetch('http://localhost:3000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      console.log(response)
-      const data = await response.json();
+      const data = await registerResponse.json();
 
 
-      if (response.ok) {
+      if (registerResponse.ok) {
         const loginResponse = await fetch('http://localhost:3000/auth/login', {
           method: 'POST',
           headers: {
@@ -88,7 +87,7 @@ function Register() {
 
         if (loginResponse.ok) {
           console.log('Login successful:', loginData);
-          // window.location.href = './';
+          window.location.href = './';
         }
       }
 
@@ -97,7 +96,6 @@ function Register() {
       console.error('Error registering user:', error);
     }
   };
-
   /*************************************************************************************************/
 
   return (

@@ -1,0 +1,112 @@
+nav {
+    background-color: #F44C0C;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 120px;
+}
+
+.nav_logo-span {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.search-box {
+    margin: 0px 70px;
+}
+
+.btn-search:hover {
+    background-color: #fb5533 !important;
+}
+
+.register-login {
+    color: #fff !important;
+    font-size: 16px !important;
+    text-decoration: none !important;
+}
+
+.register-login:hover {
+    color: #fdc7b1;
+}
+
+.register-login-sep {
+    color: #fdc7b1 !important;
+    font-size: 16px !important;
+    text-decoration: none !important;
+}
+
+.toggler-button {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.toggler-button:hover {
+    background-color: #fb5533 !important;
+}
+
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background-color: #f8f9fa;
+        position: absolute;
+        width: 100%;
+        top: 120px;
+        left: 0;
+        z-index: 1000;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: none;
+    }
+
+    .navbar {
+        position: relative;
+        z-index: 1100;
+    }
+
+    .navbar-toggler {
+        z-index: 1200 !important;
+    }
+
+    .navbar-collapse.show {
+        display: block;
+    }
+
+    main {
+        position: relative;
+        z-index: 1050;
+    }
+
+    .btn-search {
+        background-color: #F44C0C !important;
+    }
+
+    .btn-search:hover {
+        background-color: #fb5533 !important;
+    }
+
+    .nav-item {
+        border-bottom: 1px solid #cfcfcf;
+        margin: 10px 60px 0px 60px;
+    }
+
+    .nav-item2 {
+        border-top: 1px solid #cfcfcf;
+        padding-top: 8px;
+    }
+
+    .register-login {
+        color: #2a2a2a !important;
+        font-size: 16px !important;
+        text-decoration: none !important;
+        margin-left: 17px;
+    }
+
+    .register-login:hover {
+        color: #F44C0C !important;
+    }
+}
+
