@@ -25,6 +25,11 @@ nav {
     border-bottom-left-radius: 3px !important;
 }
 
+.search-box::placeholder {
+    opacity: 0.5 !important;
+    font-size: 16px;
+  }
+
 .btn-search {
     border: 3px solid #fff !important;
 }
