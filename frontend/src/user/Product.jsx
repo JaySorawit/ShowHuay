@@ -16,9 +16,12 @@ const Product = () => {
     const [product, setProduct] = useState({
       productName: '',
       productDescription: '',
-      Seller: '',
+      sellerName: '',
+      sellerId: '',
+      sellerTel: '',
       categoryId: '',
-      Price: '',
+      price: '',
+      totalSold: '',
       stockRemaining: '',
       imgPath: '',
     });
@@ -34,9 +37,12 @@ const Product = () => {
           setProduct({
             productName: response.data.product[0].product_name,
             productDescription: response.data.product[0].product_description,
-            Seller: response.data.product[0].user_id,
+            sellerName: response.data.product[0].username,
+            sellerId: response.data.product[0].user_id,
+            sellerTel: response.data.product[0].telephone_number,
             categoryId: response.data.product[0].category_id,
-            Price: response.data.product[0].price,
+            price: response.data.product[0].price,
+            totalSold: response.data.product[0].total_sold,
             stockRemaining: response.data.product[0].stock_remaining,
             imgPath: response.data.product[0].image_path,
           });
@@ -124,10 +130,10 @@ const Product = () => {
                       <RatingStar score={initialScore} />
                     </div>
                     <p> | {review.reviewTotal} Rating </p>
-                    <p> | 1526 Sold </p>
+                    <p> | {product.totalSold} Sold </p>
                   </div>
                   <div className="price">
-                    <h2> ฿{product.Price} </h2>
+                    <h2> ฿{product.price} </h2>
                   </div>
                   <div className="stockRemaining">
                     <p>Stock Remaining : {stockRemaining}  </p>
@@ -149,8 +155,8 @@ const Product = () => {
                 <img src={userImage} style={{borderRadius: '50%'}}/>
                 <div className="SellerInfo">
                   <h4> Seller </h4>
-                  <p> Name: Jay Sorawit</p>
-                  <p> Phone: 0123456789</p>
+                  <p> Name: {product.sellerName}</p>
+                  <p> Phone: {product.sellerTel}</p>
                 </div>
                 <div className="sellercontact">
                 <Link to='/chat'><button>View Profile</button></Link>
