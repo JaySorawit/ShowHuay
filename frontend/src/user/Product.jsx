@@ -1,129 +1,113 @@
 import React, { useState, useEffect } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, json } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import product1_img from '../assets/img/product-img/product1.png';
+import QuantityAdjust from "./QuantityAdjust";
+// import product1_img from '../assets/img/product-img/product1.png';
+import userImage from '../assets/icon/userImage.png'
 import RatingStar from "./RatingStar";
 import '../css/Product.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
     const { id } = useParams();
-    const [url, setUrl] = useState("");
-    const [quantity, setQuantity] = useState(1);
-    const [product, setProduct] = useState({});
-    const [stocks, setStocks] = useState([]);
-    const [images, setImages] = useState([]);
-    // const [show, setShow] = useState(false);
-    // const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-    // const dispatch = useDispatch();
-    // const cart = useSelector((state) => state.cart);
-    // const fontSize = useSelector((state) => state.fontSize);
-    const [error, setError] = useState({
-      title: "",
-      message: "",
-      type: "",
-      link: "",
+
+    const [product, setProduct] = useState({
+      productName: '',
+      productDescription: '',
+      Seller: '',
+      categoryId: '',
+      Price: '',
+      stockRemaining: '',
+      imgPath: '',
     });
-  
-    // get product information from the backend, including colors, images, and stock
+
+    const [review, setReview] = useState({});
+
+    const navigate = useNavigate();
+
     useEffect(() => {
       // get product detail
-      const getProduct = async () => {
-        try {
-          const res = await axios.get(
-            // "http://localhost:3000/api/products/" + id
-          );
-          if (res.data.length !== 1) {
-            navigate("/*");
-          }
-          setProduct(res.data[0]);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-  
-      // get the color details of the product
-      const getColors = async () => {
-        try {
-          const res = await axios.get(
-            // "http://localhost:3000/api/products/color/" + id
-          );
-          setColors(res.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-  
-      // get the images of the product
-      const getImages = async () => {
-        try {
-          const res = await axios.get(
-            // "http://localhost:3000/api/products/img/" + id
-          );
-          setImages(res.data);
-          for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].is_main_color) {
-              setMainColor(res.data[i].product_color_id);
-              setUrl(res.data[i].img_link);
-              break;
+      axios.get("http://localhost:3000/products/" + id)
+        .then(function(response) {
+          setProduct({
+            productName: response.data.product[0].product_name,
+            productDescription: response.data.product[0].product_description,
+            Seller: response.data.product[0].user_id,
+            categoryId: response.data.product[0].category_id,
+            Price: response.data.product[0].price,
+            stockRemaining: response.data.product[0].stock_remaining,
+            imgPath: response.data.product[0].image_path,
+          });
+        })
+        .catch(function(error) {
+          if (error.response) {
+            console.error("Server responded with an error status:", error.response.status);
+            console.log("Full response:", error.response);
+            if (error.response.status === 404) {
+              // Handle 404 Not Found
+              // Redirect to the Page not found.
+              console.log("Product not found. Navigating...");
+              navigate('/*');
             }
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.error("No response received from the server:", error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error("Error setting up the request:", error.message);
           }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-  
-      // get the stock details of the product
-      const getStocks = async () => {
-        try {
-          const res = await axios.get(
-            // "http://localhost:3000/api/products/stock/" + id
-          );
-          setStocks(res.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-  
-      getProduct();
-      getColors();
-      getImages();
-      getStocks();
+        });
+    }, [id, navigate]);    
+    
+    useEffect(() => {
+      // get Review detail
+      axios.get("http://localhost:3000/products/getProductReview/" + id)
+        .then(function (res) {
+          const reviews = res.data.review.map(review => ({
+            reviewId: review.review_id,
+            reviewerId: review.user_id,
+            score: review.review_score,
+            reviewText: review.review_text,
+            reviewTime: review.review_timestamp,
+            reviewName: review.username,
+          }));
+    
+          setReview({
+            reviewTotal: reviews.length,
+            reviews: reviews,
+          });
+        });
     }, [id, navigate]);
     
-    const initialScore = 4.8;
-    let stockRemaining = 9;
+    //Calculate the initialScore for product
+    let sumOfScores = 0;
+    const reviewArray = review.reviews ? Object.values(review.reviews) : [];
+    for (const singleReview of reviewArray) {
+      sumOfScores += singleReview.score;
+    }
 
-    // adjustProductQuantity
-    const ProductQuantityAdjuster = () => {
-      const handleIncrease = () => {
-        if (quantity < stockRemaining) {
-          setQuantity(quantity + 1);
-        }
-      };
-  
-      const handleDecrease = () => {
-        if (quantity > 1) {
-          setQuantity(quantity - 1);
-        }
-      };
-  
-      return (
-        <>
-        <div className="quantitybox" style={{display:'flex',gap:'50px'}}>
-          <p style={{border:'none'}}> Quauntity</p>
-          <div className="quantitybutton" style={{display:'flex'}}>
-            <button onClick={handleDecrease}>-</button>
-            <p>{quantity}</p>
-            <button onClick={handleIncrease} disabled={quantity === product.stockRemaining}> + </button>
-          </div>
-        </div>
-        </>
-      );
+    // Assuming you have a state variable for selectedScore
+    const [selectedScore, setSelectedScore] = useState('ALL');
+
+    // Function to handle score selection
+    const handleScoreSelection = (score) => {
+      setSelectedScore(score);
     };
+
+    const getButtonStyle = (score) => {
+      return {
+        backgroundColor: selectedScore === score ? '#F44C0C' : 'transparent',
+        border: selectedScore === score ? 'none' : 'solid 1px',
+        color: selectedScore === score ? 'white' : 'black', 
+      };
+    };
+    
+    
+    let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
+    let stockRemaining = product.stockRemaining;
+
 
     return (
         <>
@@ -131,75 +115,81 @@ const Product = () => {
         <div className="BG">
             <div className="container" style={{ width: '1170px', backgroundColor: '#F1F0F0' }}>
               <div className="productShow"> 
-                <img src={product1_img} />
+              <img src={product.imgPath} />
                 <div className="productInfoBox">
-                  <h2> Nike Dunk Low Retro White Black (2021)[พร้อมส่งของแท้] </h2>
+                  <h2> {product.productName} </h2>
                   <div className="productInfo">
                     <div style={{display:'flex',gap:'5px' }}>
-                      <p> 4.8 </p> 
+                      <p> {initialScore} </p> 
                       <RatingStar score={initialScore} />
                     </div>
-                    <p> | </p>
-                    <p> 69 Rating </p>
-                    <p> | </p>
-                    <p> 1526 Sold </p>
+                    <p> | {review.reviewTotal} Rating </p>
+                    <p> | 1526 Sold </p>
                   </div>
                   <div className="price">
-                    <h2> ฿3900 </h2>
+                    <h2> ฿{product.Price} </h2>
                   </div>
                   <div className="stockRemaining">
                     <p>Stock Remaining : {stockRemaining}  </p>
                   </div>
                   <div className="quantity">
-                  <ProductQuantityAdjuster />
+                  <QuantityAdjust stockRemaining={stockRemaining} />
                   </div>
                   <div className="submitbutton">
-                    <button type="submit ">Add To Cart </button>
-                    <button type="submit ">Buy Now </button>
+                    <button type="submit " style={{color:'#F44C0C',backgroundColor:'#F2BFAC', border: 'solid 3px #F44C0C'}}>Add To Cart </button>
+                    <button type="submit " style={{color:'#fff', border:'none', backgroundColor:'#F44C0C'}}>Buy Now </button>
                   </div>
                 </div>
               </div>
               <div className="productDescription">
                 <h4> Product Description </h4>
-                <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel ullam laborum aliquam cumque, eius commodi minus eos, tempore magni necessitatibus, facere unde veniam nisi in dignissimos consectetur omnis animi harum.</p>
+                <div dangerouslySetInnerHTML={{ __html: product.productDescription }} />
               </div>
               <div className="seller">
-                <img src="./img" style={{borderRadius: '50%'}}/>
+                <img src={userImage} style={{borderRadius: '50%'}}/>
                 <div className="SellerInfo">
+                  <h4> Seller </h4>
                   <p> Name: Jay Sorawit</p>
                   <p> Phone: 0123456789</p>
                 </div>
                 <div className="sellercontact">
-                  <button>View Profile</button>
+                <Link to='/chat'><button>View Profile</button></Link>
                   <Link to='/chat'><button>Chat</button></Link>
                 </div>
               </div>
               <div className="ProductRating">
                 <h4> Product Score Ratings </h4>
-                <div className="scorefilter">
-                  <div className="productScore">
-                    <p> {initialScore} out of 5 </p> 
-                    <RatingStar score={initialScore} />
+                <div className="RatingInfo">
+                  <div className="scorefilter">
+                    <div className="productScore">
+                      <p> {initialScore} out of 5 </p> 
+                      <RatingStar score={initialScore}/>
+                    </div>
+                    <div className="scoreSelection">
+                      <button onClick={() => handleScoreSelection('ALL')} style={getButtonStyle('ALL')}> ALL </button>
+                      <button onClick={() => handleScoreSelection(5)} style={getButtonStyle(5)}> 5 Star </button>
+                      <button onClick={() => handleScoreSelection(4)} style={getButtonStyle(4)}> 4 Star </button>
+                      <button onClick={() => handleScoreSelection(3)} style={getButtonStyle(3)}> 3 Star </button>
+                      <button onClick={() => handleScoreSelection(2)} style={getButtonStyle(2)}> 2 Star </button>
+                      <button onClick={() => handleScoreSelection(1)} style={getButtonStyle(1)}> 1 Star</button>
+                    </div>
                   </div>
-                  <div className="scoreSelection">
-                    <button> ALL </button>
-                    <button> 5 </button>
-                    <button> 4 </button>
-                    <button> 3 </button>
-                    <button> 2 </button>
-                    <button> 1 </button>
-                  </div>
-                </div>
-                <div className="productComment">
-                  <img src="test"/>
-                  <div className="commentInfo">
-                    <p> Parn007x </p>
-                    <RatingStar score={initialScore} />
-                    <p> 2023-10-14 07:41 | 5 out of 5 </p>
-                    <p> รองเท้าสวยมากไม่รู้ว่าแท้มั้ยได้มาในราคาที่เหมาะสมคุณภาพดีไซส์ถูกต้องเลิสมาก </p>
-                  </div>
+                  {review.reviews && review.reviews
+                    .filter(singleReview => selectedScore === 'ALL' || singleReview.score === selectedScore)
+                    .map((singleReview, index) => (
+                      <div className="productComment" key={index}>
+                        <img src={userImage} style={{ width: '70px', height: '70px' }} />
+                        <div className="commentInfo">
+                          <p>{singleReview.reviewName}</p>
+                          <RatingStar score={singleReview.score} />
+                          <p>{singleReview.reviewTime} | {singleReview.score} out of 5</p>
+                          <p>{singleReview.reviewText}</p>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
+              <div style={{height:'50px'}}></div>
             </div>
         </div>
         <Footer /> 

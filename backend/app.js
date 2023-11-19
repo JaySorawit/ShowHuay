@@ -3,7 +3,9 @@ const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const chatRoutes = require('./routes/chatRoutes');
-const authRoute = require('./routes/authRoutes')
+const authRoute = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes'); 
+
 const app = express();
 
 // Enable CORS for all routes
@@ -17,10 +19,11 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // Routes
+app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
 // app.use('/api/chat', chatRoutes(io));
 
 // Start the server
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log('Server started successfully on port 3000!');
-})
+});
