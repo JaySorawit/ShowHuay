@@ -19,7 +19,8 @@ const register = (req, res) => {
         res.status(200).json({
             status: 'success',
             message: 'User registered successfully',
-            userId: userId,
+            userId: user.user_id,
+            username: user.username,
         });
     });
 };
@@ -81,36 +82,36 @@ const checkUsername = (req, res) => {
 const login = (req, res) => {
     const { email, password } = req.body;
     const SELECT_USER_QUERY = 'SELECT * FROM user WHERE email = ?';
-    
+
     db.query(SELECT_USER_QUERY, [email], (err, results) => {
-      if (err) {
-        console.error('Error retrieving user:', err);
-        res.status(500).json({ error: 'Error retrieving user' });
-        return;
-      }
-  
-      if (results.length === 0) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
-  
-      const user = results[0];
-     
-      if (password !== user.password) {
-        res.status(401).json({ error: 'Incorrect password' });
-        return;
-      }
-  
-      // Login successful
-      res.status(200).json({
-        status: 'success',
-        message: 'Login successful',
-        userId: user.user_id,
-        username: user.username,
-      });
+        if (err) {
+            console.error('Error retrieving user:', err);
+            res.status(500).json({ error: 'Error retrieving user' });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+
+        const user = results[0];
+
+        if (password !== user.password) {
+            res.status(401).json({ error: 'Incorrect password' });
+            return;
+        }
+
+        // Login successful
+        res.status(200).json({
+            status: 'success',
+            message: 'Login successful',
+            userId: user.user_id,
+            username: user.username,
+        });
     });
-  };
-  
+};
+
 /***********************************************************************************************/
 
 module.exports = { register, checkEmail, checkUsername, login };
