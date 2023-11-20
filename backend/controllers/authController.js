@@ -14,7 +14,7 @@ const register = (req, res) => {
             return;
         }
 
-        const userId = results.insertId;
+        const user = results.insertId;
 
         res.status(200).json({
             status: 'success',
