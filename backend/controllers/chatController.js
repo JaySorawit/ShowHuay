@@ -1,5 +1,4 @@
 const db = require('../Database/database')
-
 class ChatController {
     constructor(io) {
       this.io = io;
@@ -39,5 +38,6 @@ class ChatController {
   
   module.exports = ChatController;
   
+
 
   

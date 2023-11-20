@@ -1,17 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
-import "bootstrap/dist/css/bootstrap.min.css";
-
-// const socket = io('http://localhost:3000/apis/chat/');
+import Navbar from './Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Chat() {
-    const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
-    let sender = '1022';
-    let receiver = '555';
-
+    const { id: receiverId } = useParams();
+    const UserId = localStorage.getItem('userId');
+    
+    let receiverIdd = receiverId;
+    
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+    const [userId, setUserId] = useState('');
+    
     useEffect(() => {
+      const loggedInStatus = localStorage.getItem('isLoggedIn');
+      if (loggedInStatus === 'true') {
+        setIsLoggedIn(true);
+        const storedUsername = localStorage.getItem('username');
+        const storedUserId = localStorage.getItem('userId');
+        setUsername(storedUsername);
+        setUserId(storedUserId);
+      }
+    }, []);
+    
+    console.log(username);
+    console.log(userId);
+    
+
+  
+
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  const socketRef = useRef(); // Create a ref for the socket
+
+  useEffect(() => {
+    // Initialize the socket when the component mounts
+    const socket = io('http://localhost:3000');
+    socketRef.current = socket;
+
     // Listen for incoming messages
     socket.on('chat message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
@@ -21,62 +50,59 @@ function Chat() {
     return () => {
       socket.disconnect();
     };
-    }, []);
+  }, []);
 
-    const handleSendMessage = () => {
-        socket.emit('chat message', { message: newMessage, sender, receiver });
-        setNewMessage('');
-    };
+  const handleSendMessage = () => {
+    // Access the socket through the ref
+    socketRef.current.emit('chat message', { message: newMessage, UserId, receiverId });
+    setNewMessage('');
+  };
 
-    return (
-        <>
-        <Navbar />
-        <div className="BG" style={{ width: '100%', backgroundColor: '#D9D9D9' }}>
-            <div className="container-xxl" style={{ width: '1170px', backgroundColor: 'red' }}>
-            <div className="Chat">
-                <div className="contactlist"></div>
-                <div className="chatdetail">
-                <div className="card-footer">
-                    <ul>
-                        {messages.map((message, index) => (
-                        <li key={index}>
-                            {message.sender === sender ? (
-                            <span>
-                                <strong>You:</strong> {message.message}
-                            </span>
-                            ) : (
-                            <span>
-                                <strong>{message.sender}:</strong> {message.message}
-                            </span>
-                            )}
-                        </li>
-                        ))}
-                    </ul>
-                    <div className="input-group">
-                    <input
-                        type='text'
-                        className='form-control'
-                        id='newMessage'
-                        placeholder='Send new message'
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                    />
-                    <button
-                        className='btn btn-success'
-                        type='button'
-                        id='sendMessage'
-                        onClick={handleSendMessage}
-                    >
-                        Send
-                    </button>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
+  return (
+    <>
+      <Navbar />
+      {/* rest of the component */}
+      <div className="card-footer">
+      {/* <h1>
+            UserIdd: {UserIdd} <br />
+            receiverIdd: {receiverIdd}
+    </h1> */}
+        <ul>
+        {messages.map((message, index) => (
+            <li key={index}>
+            {message.sender === UserId ? (
+                <span>
+                <strong>You:</strong> {message.message}
+                </span>
+            ) : (
+                <span>
+                <strong>{message.sender ? message.sender : 'Anonymous'}:</strong> {message.message}
+                </span>
+            )}
+            </li>
+        ))}
+        </ul>
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            id="newMessage"
+            placeholder="Send new message"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button
+            className="btn btn-success"
+            type="button"
+            id="sendMessage"
+            onClick={handleSendMessage}
+          >
+            Send
+          </button>
         </div>
-        </>
-    );
+      </div>
+    </>
+  );
 }
 
 export default Chat;

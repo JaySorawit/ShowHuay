@@ -8,11 +8,5 @@ module.exports = (io) => {
     res.send(ChatController(io));
   })
 
-  const chatController = ChatController(io);
-
-  io.on('connection', (socket) => {
-    chatController.handleConnection(socket);
-  });
-
   return router;
 };

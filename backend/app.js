@@ -16,12 +16,17 @@ app.use(express.json());
 const server = http.createServer(app);
 
 // Create Socket.io server
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+      origin: "http://localhost:5173", // Replace with the origin of your React app
+      methods: ["GET", "POST"]
+    }
+  });
 
 // Routes
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
-// app.use('/api/chat', chatRoutes(io));
+app.use('/chat', chatRoutes(io));
 
 // Start the server
 server.listen(3000, () => {

@@ -121,6 +121,7 @@ function Register() {
           setIsLoggedIn(true);
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('username', loginData.username);
+          localStorage.setItem('userId', loginData.userId);
 
           window.location.href = './';
         }
