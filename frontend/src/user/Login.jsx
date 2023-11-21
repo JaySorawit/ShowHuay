@@ -44,7 +44,7 @@ function Login() {
 
         if (formData.email === 'admin@showhuay.com') {
           // Admin Role
-          window.location.href = '/Admin';
+          window.location.href = '/admin';
         } else {
           // User Role
           setIsLoggedIn(true);
