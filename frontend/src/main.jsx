@@ -15,14 +15,14 @@ import './App.css'
 const commonRoutes = [
   { path: "/", element: <Home /> },
   { path: "/productList", element: <ProductList /> },
-  { path: "/Product/:id", element: <Product />},
+  { path: "/Product/:id", element: <Product /> },
 ];
 
 const guestRoutes = [
   ...commonRoutes,
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
-  { path: "/cart", element: <Navigate to="/login" />},
+  { path: "/cart", element: <Navigate to="/login" /> },
   // { path: "/chat", element: <Navigate to="/login"/> },
   { path: "/chat", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
@@ -30,13 +30,14 @@ const guestRoutes = [
 
 const userRoutes = [
   ...commonRoutes,
-  { path: "/cart", element: <Cart />},
+  { path: "/cart", element: <Cart /> },
   { path: "/chat", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
 const adminRoutes = [
   { path: "/admin", element: <Admin /> },
+  { path: "/login", element: <Login /> },
 ];
 
 
@@ -44,20 +45,25 @@ const guestRouter = createBrowserRouter(guestRoutes);
 const userRouter = createBrowserRouter(userRoutes);
 const adminRouter = createBrowserRouter(adminRoutes);
 
-const user = null; // Set user to the appropriate value
+const userIsAdmin = localStorage.getItem('is_admin');
+let user = null;
+
+if (userIsAdmin === '1') {
+  user = userIsAdmin;
+}
 
 const Main = () => {
   return (
     <React.StrictMode>
-    <RouterProvider
-      router={
-        user == null
-          ? guestRouter
-          : user.is_admin === 1
-          ? adminRouter
-          : userRouter
-      }
-    />
+      <RouterProvider
+        router={
+          user == null
+            ? guestRouter
+            : user === '1'
+              ? adminRouter
+              : userRouter
+        }
+      />
     </React.StrictMode>
   )
 };

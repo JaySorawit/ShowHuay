@@ -5,11 +5,11 @@ import Content from './components/Content';
 
 function Admin() {
   return (
-    <div>
+      <div className="wrapper">
         <Header />
         <Sidebar />
-        <Content />
-    </div>
+        {/* <Content /> */}
+      </div>
   );
 }
 

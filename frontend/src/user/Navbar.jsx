@@ -22,10 +22,6 @@ function Navbar() {
     }, []);
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
-        setUsername('');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
         localStorage.clear();
     };
 
