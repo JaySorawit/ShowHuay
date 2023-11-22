@@ -5,6 +5,7 @@ const cors = require('cors');
 const chatRoutes = require('./routes/chatRoutes');
 const authRoute = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes'); 
+const adminRoutes = require('./routes/adminRoute');
 
 const app = express();
 
@@ -27,6 +28,7 @@ const io = socketIo(server, {
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
 app.use('/chat', chatRoutes(io));
+app.use('/system', adminRoutes);
 
 // Start the server
 server.listen(3000, () => {

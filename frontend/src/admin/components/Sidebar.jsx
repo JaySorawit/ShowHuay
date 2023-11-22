@@ -76,7 +76,7 @@ function Sidebar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a href="pages/kanban.html" className="nav-link">
+                <a href="/Products" className="nav-link">
                   <i className="nav-icon fas fa-store" />
                   <p>
                     Products
