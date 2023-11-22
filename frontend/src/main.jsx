@@ -24,20 +24,19 @@ const guestRoutes = [
   { path: "/register", element: <Register /> },
   { path: "/cart", element: <Navigate to="/login" /> },
   // { path: "/chat", element: <Navigate to="/login"/> },
-  { path: "/chat/:id", element: <Chat /> },
+  { path: "/chat", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
 const userRoutes = [
   ...commonRoutes,
   { path: "/cart", element: <Cart /> },
-  // { path: "/chat", element: <Chat /> },
+  { path: "/chat", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
 const adminRoutes = [
-  {path: "/", element: <admin />},
-  // { path: "/admin", element: <Admin /> },
+  { path: "/admin", element: <Admin /> },
 ];
 
 

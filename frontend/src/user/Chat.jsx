@@ -5,49 +5,56 @@ import Navbar from './Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Chat() {
-  const { id: receiverId } = useParams();
-  const UserId = localStorage.getItem('userId');
-  const socketRef = useRef(); // Create a ref for the socket
+    const { id: receiverId } = useParams();
+    const UserId = localStorage.getItem('userId');
+    
+    let receiverIdd = receiverId;
+    
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+    const [userId, setUserId] = useState('');
+    
+    useEffect(() => {
+      const loggedInStatus = localStorage.getItem('isLoggedIn');
+      if (loggedInStatus === 'true') {
+        setIsLoggedIn(true);
+        const storedUsername = localStorage.getItem('username');
+        const storedUserId = localStorage.getItem('userId');
+        setUsername(storedUsername);
+        setUserId(storedUserId);
+      }
+    }, []);
+    
+    console.log(username);
+    console.log(userId);
+    
+
+  
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  console.log(receiverId);
-  console.log(UserId);
+  const socketRef = useRef(); // Create a ref for the socket
 
   useEffect(() => {
-    // Connect to the server and join the chat room based on receiverId
-    socketRef.current = io('http://localhost:3000/');
-
-    // Join the room with the receiverId
-    socketRef.current.emit('joinRoom', receiverId);
+    // Initialize the socket when the component mounts
+    const socket = io('http://localhost:3000');
+    socketRef.current = socket;
 
     // Listen for incoming messages
-    socketRef.current.on('chat message', (message) => {
+    socket.on('chat message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     // Clean up socket connection on component unmount
     return () => {
-      socketRef.current.disconnect();
+      socket.disconnect();
     };
-  }, [receiverId]);
-
-  useEffect(() => {
-    console.log('Chat component mounted with receiverId:', receiverId);
-    socketRef.current = io('http://localhost:3000/');
-    console.log('Socket connected');
-    socketRef.current.emit('joinRoom', receiverId);
-    console.log('Joining room:', receiverId);
-  
-    // Rest of the code...
-  }, [receiverId]);
-  
-  
+  }, []);
 
   const handleSendMessage = () => {
     // Access the socket through the ref
-    socketRef.current.emit('chat message', { message: newMessage, senderId: UserId, receiverId });
+    socketRef.current.emit('chat message', { message: newMessage, UserId, receiverId });
     setNewMessage('');
   };
 
@@ -56,20 +63,24 @@ function Chat() {
       <Navbar />
       {/* rest of the component */}
       <div className="card-footer">
+      {/* <h1>
+            UserIdd: {UserIdd} <br />
+            receiverIdd: {receiverIdd}
+    </h1> */}
         <ul>
-          {messages.map((message, index) => (
+        {messages.map((message, index) => (
             <li key={index}>
-              {message.sender === UserId ? (
+            {message.sender === UserId ? (
                 <span>
-                  <strong>You:</strong> {message.message}
+                <strong>You:</strong> {message.message}
                 </span>
-              ) : (
+            ) : (
                 <span>
-                  <strong>{message.sender ? message.sender : 'Anonymous'}:</strong> {message.message}
+                <strong>{message.sender ? message.sender : 'Anonymous'}:</strong> {message.message}
                 </span>
-              )}
+            )}
             </li>
-          ))}
+        ))}
         </ul>
         <div className="input-group">
           <input

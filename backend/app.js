@@ -26,8 +26,6 @@ const io = socketIo(server, {
 // Routes
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
-
-// Use the setupChatRoutes function to create chat routes with Socket.io instance
 app.use('/chat', chatRoutes(io));
 
 // Start the server
