@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect  } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -44,12 +44,6 @@ function Login() {
 
         if (formData.email === 'admin@showhuay.com') {
           // Admin Role
-          setIsLoggedIn(true);
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('username', loginData.username);
-          localStorage.setItem('userId', loginData.userId);
-          localStorage.setItem('is_admin', '1');
-
           window.location.href = '/Admin';
         } else {
           // User Role

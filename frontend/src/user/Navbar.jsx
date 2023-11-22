@@ -26,7 +26,6 @@ function Navbar() {
         setUsername('');
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('username');
-        
         localStorage.clear();
     };
 
