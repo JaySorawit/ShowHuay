@@ -8,11 +8,7 @@ import Chat from './user/Chat.jsx';
 import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
-<<<<<<< Updated upstream
 import Admin from './admin/Admin.jsx';
-=======
-// import Admin from './admin/Admin.jsx'
->>>>>>> Stashed changes
 import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
 
