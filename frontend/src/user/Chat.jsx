@@ -29,8 +29,6 @@ function Chat() {
     console.log(userId);
     
 
-  
-
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
