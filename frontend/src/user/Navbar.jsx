@@ -22,6 +22,7 @@ function Navbar() {
     }, []);
 
     const handleLogout = () => {
+        window.location.href = "/";
         localStorage.clear();
     };
 
@@ -55,6 +56,7 @@ function Navbar() {
                                 type="search"
                                 placeholder="Search..."
                                 aria-label="Search"
+                                style={{height:'42px'}}
                             />
                             <button className="btn btn-search" type="button">
                                 <img src={search} alt="Search" height="20" className="img-search" />

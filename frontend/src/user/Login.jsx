@@ -48,7 +48,7 @@ function Login() {
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('username', loginData.username);
           localStorage.setItem('userId', loginData.userId);
-          localStorage.setItem('is_admin', '1');
+          localStorage.setItem('is_admin', 'true');
 
           window.location.href = '/Admin';
         } else {

@@ -24,15 +24,14 @@ const guestRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/cart", element: <Navigate to="/login" /> },
-  // { path: "/chat", element: <Navigate to="/login"/> },
-  { path: "/chat", element: <Chat /> },
+  { path: "/chat", element: <Navigate to="/login"/> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
 const userRoutes = [
   ...commonRoutes,
   { path: "/cart", element: <Cart /> },
-  { path: "/chat", element: <Chat /> },
+  { path: "/chat/:id", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
@@ -47,21 +46,18 @@ const guestRouter = createBrowserRouter(guestRoutes);
 const userRouter = createBrowserRouter(userRoutes);
 const adminRouter = createBrowserRouter(adminRoutes);
 
-const userIsAdmin = localStorage.getItem('is_admin');
-let user = null;
+let userIsAdmin = localStorage.getItem('is_admin');
+let userIsLogIn = localStorage.getItem('isLoggedIn');
 
-if (userIsAdmin === '1') {
-  user = userIsAdmin;
-}
 
 const Main = () => {
   return (
     <React.StrictMode>
       <RouterProvider
         router={
-          user == null
+          userIsLogIn == null
             ? guestRouter
-            : user === '1'
+            : userIsAdmin === 'true'
               ? adminRouter
               : userRouter
         }
