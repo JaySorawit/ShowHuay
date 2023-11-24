@@ -1,0 +1,35 @@
+.categoryBox {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+
+.categoryBox button {
+    height: 200px;
+    width: 180px;
+    border: 1px solid #000;
+    overflow: hidden;
+    background-size: cover;
+    color: #fff;
+    padding: 10px;
+    border-radius: 0;
+  }
+
+.TopProductsBox {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom:50px;
+    justify-content: center;
+    gap:20px;
+}
+
+.TopProductsBox button {
+    height: 200px;
+    width: 180px;
+    border: 1px solid #000;
+    overflow: hidden;
+    background-size: cover;
+    color: #fff;
+    padding: 10px;
+    border-radius: 0;
+  }

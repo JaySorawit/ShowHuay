@@ -1,0 +1,25 @@
+.promotion {
+    max-width: 100%;
+    background-color: #fff;
+    /* background-color: #F44C0C; */
+    color: #F44C0C;
+    height: 50px;
+    text-align: center;
+    padding: 17px;
+    font-size: 22px;
+    letter-spacing: 4px;
+    font-weight: 700;
+  }
+  
+  .fade-text {
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .fade-in {
+    opacity: 1;
+  }
+  
+  .fade-out {
+    opacity: 0;
+  }
+  
