@@ -23,7 +23,7 @@ function Header() {
       <ul className="navbar-nav ml-auto">
         <li>
           <button className="btn btn-danger d-flex align-items-center me-3" style={{ height: '40px' }} onClick={handleLogout}>
-            <Link className="nav-link" style={{ fontWeight: '500', color: '#FFFFFF' }} to="/Login">
+            <Link className="nav-link" style={{ fontWeight: '500', color: '#FFFFFF' }} to="/">
               Logout
             </Link>
           </button>
