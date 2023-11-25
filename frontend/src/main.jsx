@@ -9,6 +9,7 @@ import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
 import Admin from './admin/Admin.jsx';
+import Users from './admin/pages/Users.jsx';
 import Products from './admin/pages/Products.jsx';
 import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
@@ -37,8 +38,8 @@ const userRoutes = [
 
 const adminRoutes = [
   { path: "/admin", element: <Admin /> },
+  { path: "/users", element: <Users /> },
   { path: "/products", element: <Products /> },
-  { path: "/login", element: <Login /> },
 ];
 
 

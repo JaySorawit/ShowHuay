@@ -9,10 +9,10 @@ import Content from './components/Content';
 
 function Admin() {
   return (
-      <div className="wrapper">
+      <div className="">
         <Header />
         <Sidebar />
-        {/* <Content /> */}
+        <Content />
       </div>
   );
 }

@@ -39,19 +39,19 @@ function Sidebar() {
                 </a>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="./index.html" className="nav-link">
+                    <a href="/Admin" className="nav-link">
                       <i className="far fa-circle nav-icon" />
                       <p>Dashboard v1</p>
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a href="./index2.html" className="nav-link">
+                    <a href="/Admin" className="nav-link">
                       <i className="far fa-circle nav-icon" />
                       <p>Dashboard v2</p>
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a href="./index3.html" className="nav-link active">
+                    <a href="/Admin" className="nav-link">
                       <i className="far fa-circle nav-icon" />
                       <p>Dashboard v3</p>
                     </a>
@@ -60,18 +60,18 @@ function Sidebar() {
               </li>
 
               <li className="nav-item">
-                <a href="pages/calendar.html" className="nav-link">
+                <a href="/Orders" className="nav-link">
                   <i className="nav-icon fas fa-shopping-cart" />
                   <p>
-                    Sales
+                    Orders
                   </p>
                 </a>
               </li>
               <li className="nav-item">
-                <a href="pages/gallery.html" className="nav-link">
-                  <i className="nav-icon fas fa-user" />
+                <a href="/Users" className="nav-link">
+                  <i className="nav-icon fas fa-users" />
                   <p>
-                    Customers
+                    Users
                   </p>
                 </a>
               </li>

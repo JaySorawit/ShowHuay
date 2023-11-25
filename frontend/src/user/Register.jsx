@@ -6,14 +6,14 @@ import registrationImage from '../assets/Register-left.png';
 import '../css/Register.css';
 
 function Register() {
+
+  /********************************** Initialize State *******************************************/
   const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
     cpassword: '',
   });
-
-  /********************************** Initialize State *******************************************/
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const emailRef = useRef(null);
   const usernameRef = useRef(null);

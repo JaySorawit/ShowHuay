@@ -4,13 +4,16 @@ import Sidebar from '../components/Sidebar';
 import './css/Products.css';
 
 function Products() {
+
+    /************************************** Initialize State ***************************************/
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const baseURL = '../../../public/';
+    /***********************************************************************************************/
 
+    /************************************* Query Products ******************************************/
     useEffect(() => {
-        // Fetch products from the API endpoint
         fetch('http://localhost:3000/system/products')
             .then(response => {
                 if (!response.ok) {
@@ -26,9 +29,10 @@ function Products() {
                 console.error('Error fetching products:', error);
             });
     }, []);
+    /*************************************************************************************************/
 
+    /************************************** Search Products ******************************************/
     useEffect(() => {
-        // Filter products based on search term
         const results = products.filter(product =>
             product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -38,7 +42,9 @@ function Products() {
     const handleSearch = event => {
         setSearchTerm(event.target.value);
     };
+    /*************************************************************************************************/
 
+    /************************************* Delete Products *******************************************/
     const handleDelete = productId => {
         fetch(`http://localhost:3000/system/products/${productId}`, {
             method: 'DELETE',
@@ -51,11 +57,14 @@ function Products() {
                 const updatedProducts = products.filter(product => product.product_id !== productId);
                 setProducts(updatedProducts);
                 setFilteredProducts(updatedProducts);
+
+                window.alert('Product deleted successfully');
             })
             .catch(error => {
                 console.error('Error deleting product:', error);
             });
     };
+    /*************************************************************************************************/
 
     return (
         <div className="wrapper">
