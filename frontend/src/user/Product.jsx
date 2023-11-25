@@ -160,7 +160,7 @@ const Product = () => {
                 </div>
                 <div className="sellercontact">
                 <Link to='/chat'><button>View Profile</button></Link>
-                  <Link to='/chat'><button>Chat</button></Link>
+                  <Link to={`/chat/${product.sellerId}`}><button>Chat</button></Link>
                 </div>
               </div>
               <div className="ProductRating">

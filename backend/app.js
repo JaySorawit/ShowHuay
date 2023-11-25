@@ -23,11 +23,12 @@ const io = socketIo(server, {
       methods: ["GET", "POST"]
     }
   });
+app.set('io', io);
 
 // Routes
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
-app.use('/chat', chatRoutes(io));
+app.use('/chat', chatRoutes);
 app.use('/system', adminRoutes);
 
 // Start the server

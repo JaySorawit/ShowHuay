@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const ChatController = require('../controllers/chatController');
+const { getChat } = require('../controllers/chatController');
 
-module.exports = (io) => {
+router.get("/:id", (req, res) => {
+  // Access io directly from the app
+  const io = req.app.get('io');
+  getChat(req, res, io);
+});
 
-  router.get('/', (req,res) => {
-    res.send(ChatController(io));
-  })
-
-  return router;
-};
+module.exports = router;
