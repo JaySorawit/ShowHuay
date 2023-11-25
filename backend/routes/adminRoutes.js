@@ -1,6 +1,8 @@
 const router = require("express").Router();
 
-const { users, deleteUsers, addUsers, products, deleteProducts } = require("../controllers/adminController");
+const { orders, users, deleteUsers, addUsers, products, deleteProducts } = require("../controllers/adminController");
+
+router.route("/orders").get(orders);
 
 router.route("/users").get(users);
 router.route("/users/:userId").delete(deleteUsers);

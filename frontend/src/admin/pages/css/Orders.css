@@ -1,0 +1,29 @@
+.search-input {
+    width: 300px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+
+/* .text-cell {
+    max-width: 50px;
+    max-height: 50px;
+} */
+
+.edit-button {
+    background-color: #dc3545; /* Change to your desired color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.edit-button:hover {
+    background-color: #bb2d3b;
+}
+

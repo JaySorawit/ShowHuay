@@ -1,5 +1,21 @@
 const db = require('../Database/database')
 
+/****************************************** Orders Section  *********************************************/
+const orders = (req, res) => {
+
+    const query = 'SELECT * FROM purchase';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching orders:', err);
+            res.status(500).json({ error: 'Failed to fetch orders' });
+            return;
+        }
+        res.json(results);
+    });
+};
+/*******************************************************************************************************/
+
 /****************************************** Users Section  *********************************************/
 const users = (req, res) => {
 
@@ -87,4 +103,4 @@ const deleteProducts = (req, res) => {
 };
 /********************************************************************************************************/
 
-module.exports = { users, deleteUsers, addUsers, products, deleteProducts };
+module.exports = { orders, users, deleteUsers, addUsers, products, deleteProducts };
