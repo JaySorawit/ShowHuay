@@ -7,17 +7,17 @@ import belowLoginImage from '../assets/below-login-image.png';
 import '../css/Login.css';
 
 function Login() {
+
+  /*********************************** Initialize State ********************************************/
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
-  /************************ Initialize State *****************************/
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState('');
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  /***********************************************************************/
+  /*************************************************************************************************/
 
   /************************************* Handle Change *********************************************/
   const handleChange = (e) => {

@@ -7,10 +7,6 @@
     font-size: 14px;
 }
 
-.image-cell {
-    max-width: 80px;
-    max-height: 80px;
-}
 
 /* .text-cell {
     max-width: 50px;
@@ -24,11 +20,10 @@
     padding: 8px 16px;
     cursor: pointer;
     border-radius: 4px;
-    /* Add more styles as needed */
+    font-weight: 500;
 }
 
 .delete-button:hover {
-    background-color: #bb2d3b; /* Change to a darker shade or hover effect */
-    /* Add additional hover styles */
+    background-color: #bb2d3b;
 }
 
