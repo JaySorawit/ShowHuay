@@ -106,7 +106,7 @@ function Products() {
                                                     <td className="image-cell">
                                                         {product.image_path && (
                                                             <img
-                                                                src={`${baseURL}${product.image_path}`}
+                                                                src={`${product.image_path}`}
                                                                 alt={`Image of ${product.product_name}`}
                                                                 style={{ maxWidth: '150px', maxHeight: '150px' }}
                                                             />

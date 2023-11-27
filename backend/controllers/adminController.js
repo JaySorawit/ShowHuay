@@ -103,4 +103,79 @@ const deleteProducts = (req, res) => {
 };
 /********************************************************************************************************/
 
-module.exports = { orders, users, deleteUsers, addUsers, products, deleteProducts };
+/***************************************** Coupons Section  *********************************************/
+const coupons = (req, res) => {
+
+    const query = 'SELECT * FROM coupon';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching coupons:', err);
+            res.status(500).json({ error: 'Failed to fetch coupons' });
+            return;
+        }
+        res.json(results);
+    });
+};
+
+const deleteCoupons = (req, res) => {
+    const couponCode = req.params.couponCode;
+
+    const deleteQuery = 'DELETE FROM coupon WHERE coupon_code = ?';
+
+    db.query(deleteQuery, [couponCode], (err, results) => {
+        if (err) {
+            console.error('Error deleting coupon:', err);
+            res.status(500).json({ error: 'Error deleting coupon' });
+            return;
+        }
+
+        res.status(200).json({ message: 'coupon deleted successfully' });
+    });
+};
+
+const checkCouponCode = (req, res) => {
+    const { coupon_code } = req.query;
+
+    const query = 'SELECT COUNT(*) AS count FROM coupon WHERE coupon_code = ?';
+
+    db.query(query, [coupon_code], (error, results) => {
+        if (error) {
+            console.error('Error querying database:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+
+        const count = results[0].count;
+
+        if (count > 0) {
+            res.json({ exists: true });
+        } else {
+            res.json({ exists: false });
+        }
+    });
+};
+
+const addCoupons = (req, res) => {
+    const { coupon_code, discount_amount, discount_type, expiration_date } = req.body;
+
+    const INSERT_COUPON_QUERY = `INSERT INTO coupon (coupon_code, discount_amount, discount_type, expiration_date) VALUES (?, ?, ?, ?)`;
+    db.query(INSERT_COUPON_QUERY, [coupon_code, discount_amount, discount_type, expiration_date], (err, results) => {
+        if (err) {
+            console.error('Error Adding coupon: ' + err);
+            res.status(500).json({ error: 'Error Adding coupon' });
+            return;
+        }
+
+        const coupon = results.insertId;
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Coupon added successfully',
+            couponCode: coupon.coupon_code,
+        });
+    });
+};
+/********************************************************************************************************/
+
+module.exports = { orders, users, deleteUsers, addUsers, products, deleteProducts, coupons, deleteCoupons, checkCouponCode, addCoupons };

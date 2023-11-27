@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import './css/Orders.css'; // Rename the CSS file if necessary
@@ -86,8 +87,8 @@ function Orders() {
                                                 .map(order => (
                                                     <tr key={order.purchase_id}>
                                                         <td className="text-cell">{order.purchase_id}</td>
-                                                        <td className="text-cell">{order.purchase_timestamp}</td>
-                                                        <td className="text-cell">{order.payment_timestamp}</td>
+                                                        <td className="text-cell">{format(new Date(order.purchase_timestamp), 'dd/MM/yyyy HH:mm:ss')}</td>
+                                                        <td className="text-cell">{format(new Date(order.payment_timestamp), 'dd/MM/yyyy HH:mm:ss')}</td>
                                                         <td className="text-cell">{order.user_id}</td>
                                                         <td className="text-cell">{order.product_id}</td>
                                                         <td className="text-cell">{order.quantity}</td>

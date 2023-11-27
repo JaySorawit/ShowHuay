@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { orders, users, deleteUsers, addUsers, products, deleteProducts } = require("../controllers/adminController");
+const { orders, users, deleteUsers, addUsers, products, deleteProducts, coupons, deleteCoupons, checkCouponCode, addCoupons } = require("../controllers/adminController");
 
 router.route("/orders").get(orders);
 
@@ -10,6 +10,11 @@ router.route("/addusers").post(addUsers);
 
 router.route("/products").get(products);
 router.route("/products/:productId").delete(deleteProducts);
+
+router.route("/coupons").get(coupons);
+router.route("/coupons/:couponCode").delete(deleteCoupons);
+router.route("/check-coupon-code").get(checkCouponCode);
+router.route("/addcoupons").post(addCoupons);
 
 
 module.exports = router;

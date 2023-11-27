@@ -12,6 +12,7 @@ import Admin from './admin/Admin.jsx';
 import Orders from './admin/pages/Orders.jsx';
 import Users from './admin/pages/Users.jsx';
 import Products from './admin/pages/Products.jsx';
+import Coupons from './admin/pages/Coupons.jsx';
 import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
 
@@ -42,6 +43,7 @@ const adminRoutes = [
   { path: "/orders", element: <Orders /> },
   { path: "/users", element: <Users /> },
   { path: "/products", element: <Products /> },
+  { path: "/coupons", element: <Coupons /> },
 ];
 
 

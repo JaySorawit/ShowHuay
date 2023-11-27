@@ -83,6 +83,14 @@ function Sidebar() {
                   </p>
                 </a>
               </li>
+              <li className="nav-item">
+                <a href="/Coupons" className="nav-link">
+                  <i className="nav-icon fas fa-tag" />
+                  <p>
+                    Coupons
+                  </p>
+                </a>
+              </li>
             </ul>
           </div>
           {/* /.sidebar-menu */}

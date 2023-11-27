@@ -25,7 +25,6 @@ function Users() {
     const [emailExists, setEmailExists] = useState(false);
     const [usernameExists, setUsernameExists] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
-    const baseURL = '../../../public/';
     /***********************************************************************************************/
 
     /************************************* Query Users *********************************************/
@@ -258,7 +257,7 @@ function Users() {
                             }}>
                                 &times;
                             </span>
-                            <h5 className='add-user-text'>Add New User</h5>
+                            <h5 className='add-user-text'>Add new user</h5>
                             <Form onSubmit={handleAddUser}>
                                 <Form.Group className="form-layout" controlId="email">
                                     <Form.Control
