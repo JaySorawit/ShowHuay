@@ -1,4 +1,24 @@
 .col-9-gray {
-    background-color: #eeeeee;
-    height: 70vh;
+    background-color: #F1F0F0;
+   
   }
+
+.slider {
+  width: 90%; 
+  margin: 30px auto;
+  background-color: black;
+}
+.tracker {
+  background-color: #ccc; /* กำหนดสีของ tracker */
+}
+.thumb {
+  width: 17px; 
+  height: 17px; 
+  background-color: orange; 
+  border-radius: 50%; 
+  outline: none;
+}
+
+.Value-Wrapper p span {
+  color: #333;
+}

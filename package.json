@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "multi-range-slider-react": "^2.0.7",
+    "react-slider": "^2.0.6"
+  }
+}
