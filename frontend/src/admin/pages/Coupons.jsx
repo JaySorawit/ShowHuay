@@ -16,6 +16,7 @@ function Coupons() {
         coupon_code: '',
         discount_amount: '',
         discount_type: '',
+        description: '',
         expiration_date: today,
     });
     const [coupons, setCoupons] = useState([]);
@@ -91,6 +92,7 @@ function Coupons() {
             coupon_code: '',
             discount_amount: '',
             discount_type: '',
+            description: '',
             expiration_date: today,
         });
         setCouponCodeExists(false);
@@ -127,6 +129,10 @@ function Coupons() {
     const handleDiscountTypeChange = (e) => {
         const { value } = e.target;
         setNewCoupon({ ...newCoupon, discount_type: value });
+    };
+    const handleDescriptionAmountChange = (e) => {
+        const { value } = e.target;
+        setNewCoupon({ ...newCoupon, description: value });
     };
     const handleDateChange = (date) => {
         setNewCoupon({ ...newCoupon, expiration_date: date });
@@ -201,6 +207,7 @@ function Coupons() {
                                                 <th>Coupon code</th>
                                                 <th>Discount amount</th>
                                                 <th>Discount type</th>
+                                                <th>Description</th>
                                                 <th>Expiration date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -213,6 +220,7 @@ function Coupons() {
                                                         <td className="text-cell">{coupon.coupon_code}</td>
                                                         <td className="text-cell">{coupon.discount_amount}</td>
                                                         <td className="text-cell">{coupon.discount_type}</td>
+                                                        <td className="text-cell">{coupon.description}</td>
                                                         <td className="text-cell">{format(new Date(coupon.expiration_date), 'dd/MM/yyyy HH:mm:ss')}</td>
                                                         <td className="text-cell">
                                                             <button onClick={() => handleDelete(coupon.coupon_code)} className="delete-button">
@@ -295,6 +303,16 @@ function Coupons() {
                                     </div>
                                 </Form.Group>
 
+                                <Form.Group className="form-layout" controlId="description">
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Description"
+                                        name="description"
+                                        value={newCoupon.description}
+                                        onChange={handleDescriptionAmountChange}
+                                        required
+                                    />
+                                </Form.Group>
 
                                 <Form.Group className="form-layout" controlId="expiration-date">
                                     <Form.Label>Expiration Date</Form.Label>

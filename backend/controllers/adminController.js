@@ -157,10 +157,10 @@ const checkCouponCode = (req, res) => {
 };
 
 const addCoupons = (req, res) => {
-    const { coupon_code, discount_amount, discount_type, expiration_date } = req.body;
+    const { coupon_code, discount_amount, discount_type, description, expiration_date } = req.body;
 
-    const INSERT_COUPON_QUERY = `INSERT INTO coupon (coupon_code, discount_amount, discount_type, expiration_date) VALUES (?, ?, ?, ?)`;
-    db.query(INSERT_COUPON_QUERY, [coupon_code, discount_amount, discount_type, expiration_date], (err, results) => {
+    const INSERT_COUPON_QUERY = `INSERT INTO coupon (coupon_code, discount_amount, discount_type, description, expiration_date) VALUES (?, ?, ?, ?, ?)`;
+    db.query(INSERT_COUPON_QUERY, [coupon_code, discount_amount, discount_type, description, expiration_date], (err, results) => {
         if (err) {
             console.error('Error Adding coupon: ' + err);
             res.status(500).json({ error: 'Error Adding coupon' });
