@@ -6,19 +6,24 @@
 .slider {
   width: 90%; 
   margin: 30px auto;
-  background-color: black;
+  background-color: rgb(209, 209, 209);
+  
 }
-.tracker {
-  background-color: #ccc; /* กำหนดสีของ tracker */
-}
+
 .thumb {
+  position: absolute;
   width: 17px; 
   height: 17px; 
-  background-color: orange; 
+  transform: translateY(-50%);
+  background-color: #F44C0C; 
   border-radius: 50%; 
   outline: none;
 }
 
-.Value-Wrapper p span {
-  color: #333;
+.track {
+  height: 2px;
+  border-radius: 4px;
+  background-color: orange; /* สีที่ต้องการสำหรับ track ที่อยู่ระหว่าง thumb */
 }
+
+
