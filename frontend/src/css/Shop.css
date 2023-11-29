@@ -1,0 +1,95 @@
+.search-input {
+    margin-left: 15px;
+    padding: 12px !important;
+    font-size: 16px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #F44C0C;
+    box-shadow: 0 0 5px rgba(244, 76, 12, 0.5);
+}
+
+
+.product-row {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 30px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.product-row:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-image:hover {
+    transform: scale(1.05);
+}
+
+.product-details {
+    margin-left: 20px !important;
+}
+
+.product-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.product-info {
+    font-size: 16px;
+    margin: 8px 0px !important;
+}
+
+.add-product-button {
+    background-color: #F44C0C;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.add-product-button:hover {
+    background-color: #fa602d;
+}
+
+.view-edit-delete-buttons button {
+    padding: 8px 15px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    background-color: #F44C0C;
+    color: #fff;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.view-edit-delete-buttons button:hover {
+    background-color: #fa602d;
+    color: #fff;
+}

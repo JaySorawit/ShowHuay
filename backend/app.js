@@ -4,7 +4,8 @@ const socketIo = require('socket.io');
 const cors = require('cors');
 const chatRoutes = require('./routes/chatRoutes');
 const authRoute = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes'); 
+const productRoutes = require('./routes/productRoutes');
+const shopRoutes = require('./routes/shopRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
@@ -29,6 +30,7 @@ app.set('io', io);
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
 app.use('/chat', chatRoutes);
+app.use('/shop', shopRoutes);
 app.use('/system', adminRoutes);
 
 // Start the server
