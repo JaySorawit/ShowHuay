@@ -2,54 +2,80 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import Navbar from './Navbar';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Chat() {
-  const { id: receiverId } = useParams();
   const userId = localStorage.getItem('userId');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [partner, setPartner] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  const socketRef = useRef(); // Create a ref for the socket
+  const socketRef = useRef();
+
+  // get chat history
+  useEffect(() => {
+    const getUserChat = async () => {
+      if (userId !== null) {
+        try {
+          const res = await axios.get(`http://localhost:3000/chat/?receiverId=${userId}`);
+          console.log(res.data);
+  
+          // Check if res.data.chat is an array and not empty before mapping
+          const partners = Array.isArray(res.data.chat) && res.data.chat.length > 0
+            ? res.data.chat.map(partner => ({
+                partnerId: partner.send_user_id,
+                partnerName: partner.username,
+              }))
+            : [];
+  
+          setPartner(partners);
+        } catch (error) {
+          console.error('Error fetching user chat:', error);
+          setIsLoggedIn(false);
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+    };
+    getUserChat();
+  }, [userId]);
+  
+  
+  const { id } = useParams();
+  const receiverId = id;
 
   useEffect(() => {
-    // Initialize the socket when the component mounts
     const socket = io('http://localhost:3000/chat/');
-    socketRef.current = socket;    
+    socketRef.current = socket;
 
-    // Listen for incoming messages
     socket.on('chat message', (message) => {
-      setMessages((prevMessages) => {
-        const newMessages = [...prevMessages, message];
-        console.log(newMessages);
-        return newMessages;
-      });
-      console.log("Messages after state update:", messages); // Add this line
+      setMessages(prevMessages => [...prevMessages, message]);
     });
-    
-    // Clean up socket connection on component unmount
+
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  // Move this useEffect outside the first useEffect
-  useEffect(() => {
-    console.log('Updated Messages:', messages);
-  }, [messages]);
-
   const handleSendMessage = () => {
-    // Access the socket through the ref
-    socketRef.current.emit('chat message', { message: newMessage, userId, receiverId });
+    socketRef.current.emit('chat message', { message: newMessage, senderId: userId, receiverId });
     setNewMessage('');
   };
 
   return (
     <>
       <Navbar />
-      {/* rest of the component */}
+      <div className="chatSelector">
+      <h1> Chat</h1>
+      {console.log(partner)} {/* Add this line */}
+      {partner.map(partner => (
+        <div key={partner.partnerId}>
+          {partner.partnerName}
+        </div>
+      ))}
+    </div>
       <div className="card-footer">
         <ul>
           {messages.map((message, index) => (

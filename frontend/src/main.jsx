@@ -34,7 +34,7 @@ const guestRoutes = [
 const userRoutes = [
   ...commonRoutes,
   { path: "/cart", element: <Cart /> },
-  { path: "/chat/:id", element: <Chat /> },
+  { path: "/chat", element: <Chat /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
