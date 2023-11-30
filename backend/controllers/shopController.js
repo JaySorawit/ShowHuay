@@ -1,9 +1,13 @@
 const db = require('../Database/database')
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+
 
 const getFirstName = (req, res) => {
 
   const sql = 'SELECT * FROM user WHERE user_id = ?';
-  
+
   db.query(sql, [req.params.userId], (error, rows) => {
     if (error) {
       console.error('Error fetching user info:', error);
@@ -36,27 +40,48 @@ const updateUser = (req, res) => {
   });
 };
 
-// const addProduct = (req, res) => {
-//   const { category_id, product_name, product_description, price, stock_remaining, image_path } = req.body;
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '../frontend/public/product-img/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  },
+});
 
-//   const INSERT_USER_QUERY = `INSERT INTO user (email, username, password) VALUES (?, ?, ?)`;
-//   db.query(INSERT_USER_QUERY, [email, username, password], (err, results) => {
-//       if (err) {
-//           console.error('Error registering user: ' + err);
-//           res.status(500).json({ error: 'Error registering user' });
-//           return;
-//       }
+const upload = multer({ storage }).single('image_path');
 
-//       const user = results.insertId;
+const addProduct = (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      console.error('Error uploading file: ' + err);
+      res.status(500).json({ error: 'Error uploading file' });
+      return;
+    }
 
-//       res.status(200).json({
-//           status: 'success',
-//           message: 'User registered successfully',
-//           userId: user.user_id,
-//           username: user.username,
-//       });
-//   });
-// };
+    const { category_id, product_name, product_description, price, stock_remaining } = req.body;
+    const userId = req.params.userId;
+    const image_path = req.file ? `../product-img/${req.file.filename}` : null;
+
+    const INSERT_PRODUCT_QUERY = `INSERT INTO product (user_id, category_id, product_name, product_description, price, stock_remaining, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    db.query(INSERT_PRODUCT_QUERY, [userId, category_id, product_name, product_description, price, stock_remaining, image_path], (err, results) => {
+      if (err) {
+        console.error('Error adding product: ' + err);
+        res.status(500).json({ error: 'Error adding product' });
+        return;
+      }
+
+      const productId = results.insertId;
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Product added successfully',
+        productId: productId,
+        productName: product_name,
+      });
+    });
+  });
+};
 
 const queryProducts = (req, res) => {
   const userId = req.params.userId;
@@ -64,29 +89,55 @@ const queryProducts = (req, res) => {
   const query = 'SELECT * FROM product WHERE user_id = ?';
 
   db.query(query, [userId], (err, results) => {
-      if (err) {
-          console.error('Error fetching products:', err);
-          res.status(500).json({ error: 'Failed to fetch products' });
-          return;
-      }
-      res.json(results);
+    if (err) {
+      console.error('Error fetching products:', err);
+      res.status(500).json({ error: 'Failed to fetch products' });
+      return;
+    }
+    res.json(results);
   });
 };
 
 const deleteProducts = (req, res) => {
   const productId = req.params.productId;
 
-  const deleteQuery = 'DELETE FROM product WHERE product_id = ?';
+  const getProductImageQuery = 'SELECT image_path FROM product WHERE product_id = ?';
 
-  db.query(deleteQuery, [productId], (err, results) => {
+  db.query(getProductImageQuery, [productId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving product image:', err);
+      res.status(500).json({ error: 'Error retrieving product image' });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    const imagePath = results[0].image_path;
+
+    const deleteQuery = 'DELETE FROM product WHERE product_id = ?';
+
+    db.query(deleteQuery, [productId], (err, deleteResult) => {
       if (err) {
-          console.error('Error deleting product:', err);
-          res.status(500).json({ error: 'Error deleting product' });
-          return;
+        console.error('Error deleting product:', err);
+        res.status(500).json({ error: 'Error deleting product' });
+        return;
       }
 
-      res.status(200).json({ message: 'Product deleted successfully' });
+
+      const imagePathToDelete = path.join('../frontend/public/product-img/', imagePath);
+
+      fs.unlink(imagePathToDelete, (err) => {
+        if (err) {
+          console.error('Error deleting image file:', err);
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully' });
+      });
+    });
   });
 };
 
-module.exports = { getFirstName, updateUser, queryProducts, deleteProducts };
+module.exports = { getFirstName, updateUser, addProduct, queryProducts, deleteProducts };

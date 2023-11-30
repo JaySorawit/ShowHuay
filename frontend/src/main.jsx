@@ -9,7 +9,7 @@ import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
 import Shop from './user/Shop.jsx';
-// import AddProduct from './user/AddProduct.jsx';
+import AddProduct from './user/AddProduct.jsx';
 import Admin from './admin/Admin.jsx';
 import Orders from './admin/pages/Orders.jsx';
 import Users from './admin/pages/Users.jsx';
@@ -38,7 +38,7 @@ const userRoutes = [
   { path: "/cart", element: <Cart /> },
   { path: "/chat", element: <Chat /> },
   { path: "/shop", element: <Shop /> },
-  // { path: "/addProduct", element: <AddProduct /> },
+  { path: "/addProduct", element: <AddProduct /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 

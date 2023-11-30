@@ -9,7 +9,7 @@ const addProduct = (req,res) => {
         category_id, 
         product_name, 
         product_desciption, 
-        price, stock_Remaining) 
+        price, stock_remaining) 
         VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
     db.query(INSERT_PRODUCT_QUERY, [productId, userId, categoryId, productName, productDesciption, price, stockRemaining], (err, results) => {
