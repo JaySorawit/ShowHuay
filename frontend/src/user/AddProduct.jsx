@@ -6,6 +6,8 @@ import Footer from './Footer';
 import backgroundImage from '../assets/addProductBackground.jpg';
 
 const AddProduct = () => {
+    
+    /*********************************** Initialize State ********************************************/
     const [productInfo, setProductInfo] = useState({
         category_id: '',
         product_name: '',
@@ -14,7 +16,9 @@ const AddProduct = () => {
         stock_remaining: '',
         image_path: null,
     });
+    /*************************************************************************************************/
 
+    /************************************* Handle Change *********************************************/
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === 'image_path') {
@@ -23,7 +27,9 @@ const AddProduct = () => {
             setProductInfo({ ...productInfo, [name]: value });
         }
     };
+    /*************************************************************************************************/
 
+    /*************************************** Add Product *********************************************/
     const handleAddProduct = async (e) => {
         e.preventDefault();
 
@@ -53,7 +59,7 @@ const AddProduct = () => {
             console.error('Error occurred:', error);
         }
     };
-
+    /*************************************************************************************************/
 
     return (
         <>
@@ -152,7 +158,7 @@ const AddProduct = () => {
                                             type="file"
                                             name="image_path"
                                             onChange={handleChange}
-                                            accept="image/*"
+                                            accept=".jpg, .jpeg, .png"
                                             style={{ height: '38px' }}
                                             required
                                         />

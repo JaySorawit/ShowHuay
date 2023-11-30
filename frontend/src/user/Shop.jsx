@@ -8,6 +8,7 @@ import '../css/Shop.css';
 
 const Shop = () => {
 
+    /*********************************** Initialize State *********************************************/
     const [sellerInfo, setSellerInfo] = useState({
         firstName: '',
         lastName: '',
@@ -17,7 +18,9 @@ const Shop = () => {
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
+    /**************************************************************************************************/
 
+    /************************************* Seller Context *********************************************/
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -37,12 +40,16 @@ const Shop = () => {
 
         fetchUserInfo();
     }, []);
+    /*************************************************************************************************/
 
+    /************************************* Handle Change *********************************************/
     const handleChange = (e) => {
         const { name, value } = e.target;
         setSellerInfo({ ...sellerInfo, [name]: value });
     };
+    /*************************************************************************************************/
 
+    /*************************************** Update User *********************************************/
     const handleUpdateUser = async (e) => {
         e.preventDefault();
 
@@ -66,7 +73,9 @@ const Shop = () => {
             console.error('Error occurred:', error);
         }
     };
+    /*************************************************************************************************/
 
+    /*************************************** Form for not Seller *********************************************/
     const renderUserInfoForm = () => {
         return (
             <>
@@ -144,6 +153,7 @@ const Shop = () => {
             </>
         );
     };
+    /****************************************************************************************************/
 
     /************************************* Query Products ******************************************/
     useEffect(() => {

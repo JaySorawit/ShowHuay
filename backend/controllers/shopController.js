@@ -3,7 +3,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 
-
+/***************************************** Query FirstName  *********************************************/
 const getFirstName = (req, res) => {
 
   const sql = 'SELECT * FROM user WHERE user_id = ?';
@@ -22,7 +22,9 @@ const getFirstName = (req, res) => {
     }
   });
 };
+/********************************************************************************************************/
 
+/******************************************** Update User  *********************************************/
 const updateUser = (req, res) => {
 
   const { firstName, lastName, phoneNumber } = req.body;
@@ -39,13 +41,16 @@ const updateUser = (req, res) => {
     res.status(200).json({ message: 'User updated successfully' });
   });
 };
+/********************************************************************************************************/
 
+/************************************************** Add Product Section  ******************************************************/
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, '../frontend/public/product-img/');
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    const temporaryFilename = `${Date.now()}${path.extname(file.originalname)}`;
+    cb(null, temporaryFilename);
   },
 });
 
@@ -73,16 +78,35 @@ const addProduct = (req, res) => {
 
       const productId = results.insertId;
 
-      res.status(200).json({
-        status: 'success',
-        message: 'Product added successfully',
-        productId: productId,
-        productName: product_name,
+      const updatedFilename = `${productId}${path.extname(req.file.originalname)}`;
+      const updatedImagePath = `../product-img/${updatedFilename}`;
+      const imagePathToChange = path.join('../frontend/public/product-img/', image_path);
+
+      fs.rename(imagePathToChange, path.join('../frontend/public/product-img/', updatedImagePath), (err) => {
+        if (err) {
+          console.error('Error updating image filename:', err);
+        }
+
+        const UPDATE_IMAGE_PATH_QUERY = `UPDATE product SET image_path = ? WHERE product_id = ?`;
+        db.query(UPDATE_IMAGE_PATH_QUERY, [updatedImagePath, productId], (err) => {
+          if (err) {
+            console.error('Error updating image path in the database:', err);
+          }
+
+          res.status(200).json({
+            status: 'success',
+            message: 'Product added successfully',
+            productId: productId,
+            productName: product_name,
+          });
+        });
       });
     });
   });
 };
+/*****************************************************************************************************************************/
 
+/******************************************** Query Products  *********************************************/
 const queryProducts = (req, res) => {
   const userId = req.params.userId;
 
@@ -97,7 +121,9 @@ const queryProducts = (req, res) => {
     res.json(results);
   });
 };
+/**********************************************************************************************************/
 
+/******************************************** Delete Products  *********************************************/
 const deleteProducts = (req, res) => {
   const productId = req.params.productId;
 
@@ -139,5 +165,6 @@ const deleteProducts = (req, res) => {
     });
   });
 };
+/**********************************************************************************************************/
 
 module.exports = { getFirstName, updateUser, addProduct, queryProducts, deleteProducts };
