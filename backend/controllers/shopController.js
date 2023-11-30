@@ -123,6 +123,47 @@ const queryProducts = (req, res) => {
 };
 /**********************************************************************************************************/
 
+/******************************************* Get Product **************************************************/
+const getProduct = (req, res) => {
+  const productId = req.params.productId;
+
+  const sql = 'SELECT product_name, product_description, price, stock_remaining FROM product WHERE product_id = ?';
+
+  db.query(sql, [productId], (error, rows) => {
+    if (error) {
+      console.error('Error fetching product info:', error);
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+
+    if (rows.length > 0) {
+      res.json(rows[0]);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  });
+};
+/**********************************************************************************************************/
+
+/******************************************** Update Product  *********************************************/
+const updateProduct = (req, res) => {
+
+  const { product_name, product_description, price, stock_remaining } = req.body;
+  const productId = req.params.productId;
+  const sql = 'UPDATE product SET product_name = ?, product_description = ?, price = ?, stock_remaining = ? WHERE product_id = ?';
+
+  db.query(sql, [product_name, product_description, price, stock_remaining, productId], (err, results) => {
+    if (err) {
+      console.error('Error updating product:', err);
+      res.status(500).json({ error: 'Failed to update product' });
+      return;
+    }
+    console.log('User updated successfully');
+    res.status(200).json({ message: 'User updated successfully' });
+  });
+};
+/**********************************************************************************************************/
+
 /******************************************** Delete Products  *********************************************/
 const deleteProducts = (req, res) => {
   const productId = req.params.productId;
@@ -167,4 +208,4 @@ const deleteProducts = (req, res) => {
 };
 /**********************************************************************************************************/
 
-module.exports = { getFirstName, updateUser, addProduct, queryProducts, deleteProducts };
+module.exports = { getFirstName, updateUser, addProduct, queryProducts, getProduct, updateProduct, deleteProducts };

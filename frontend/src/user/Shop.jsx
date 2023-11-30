@@ -14,10 +14,18 @@ const Shop = () => {
         lastName: '',
         phoneNumber: '',
     });
+    const [productInfo, setProductInfo] = useState({
+        product_name: '',
+        product_description: '',
+        price: '',
+        stock_remaining: '',
+    });
     const [isSeller, setIsSeller] = useState(false);
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [showEditProductModal, setShowEditProductModal] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
     /**************************************************************************************************/
 
     /************************************* Seller Context *********************************************/
@@ -25,7 +33,7 @@ const Shop = () => {
         const fetchUserInfo = async () => {
             try {
                 const userId = localStorage.getItem('userId');
-                const response = await fetch(`http://localhost:3000/shop/user-info/${userId}`);
+                const response = await fetch(`http://localhost:3000/shop/userInfo/${userId}`);
                 const userData = await response.json();
 
                 if (userData !== null) {
@@ -42,12 +50,12 @@ const Shop = () => {
     }, []);
     /*************************************************************************************************/
 
-    /************************************* Handle Change *********************************************/
-    const handleChange = (e) => {
+    /************************************* Handle User Change *********************************************/
+    const handleUserChange = (e) => {
         const { name, value } = e.target;
         setSellerInfo({ ...sellerInfo, [name]: value });
     };
-    /*************************************************************************************************/
+    /*****************************************************************************************************/
 
     /*************************************** Update User *********************************************/
     const handleUpdateUser = async (e) => {
@@ -95,7 +103,7 @@ const Shop = () => {
                                                 placeholder="First Name"
                                                 name="firstName"
                                                 value={sellerInfo.firstName}
-                                                onChange={handleChange}
+                                                onChange={handleUserChange}
                                                 maxLength="10"
                                                 required
                                             />
@@ -107,7 +115,7 @@ const Shop = () => {
                                                 placeholder="Last Name"
                                                 name="lastName"
                                                 value={sellerInfo.lastName}
-                                                onChange={handleChange}
+                                                onChange={handleUserChange}
                                                 maxLength="20"
                                                 required
                                             />
@@ -119,7 +127,7 @@ const Shop = () => {
                                                 placeholder="Phone Number"
                                                 name="phoneNumber"
                                                 value={sellerInfo.phoneNumber}
-                                                onChange={handleChange}
+                                                onChange={handleUserChange}
                                                 maxLength="10"
                                                 required
                                             />
@@ -217,6 +225,68 @@ const Shop = () => {
     };
     /*************************************************************************************************/
 
+    /************************************* Toggle System **********************************************/
+    const toggleEditProductModal = () => {
+        setShowEditProductModal(!showEditProductModal);
+    };
+    /*************************************************************************************************/
+
+    /************************************* Handle Product Change **********************************************/
+    const handleProductChange = (e) => {
+        const { name, value } = e.target;
+        setProductInfo({ ...productInfo, [name]: value });
+    };
+    /**********************************************************************************************************/
+
+    /******************************************* Edit Product ************************************************/
+    const handleEdit = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:3000/shop/getProduct/${productId}`);
+            if (response.ok) {
+                const productData = await response.json();
+                setProductInfo({
+                    product_name: productData.product_name,
+                    product_description: productData.product_description,
+                    price: productData.price,
+                    stock_remaining: productData.stock_remaining,
+                });
+                setShowEditProductModal(true);
+                setSelectedProductId(productId);
+
+            } else {
+                console.error('Failed to fetch product data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+        }
+    };
+    /**********************************************************************************************************/
+
+    /*************************************** Update Product *********************************************/
+    const handleUpdateProduct = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`http://localhost:3000/shop/updateProduct/${selectedProductId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productInfo)
+            });
+
+            if (response.ok) {
+                console.log('Product updated successfully');
+                window.location.reload();
+            } else {
+                console.error('Failed to Product user');
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+        }
+    };
+    /*************************************************************************************************/
+
     return (
         <div>
             {(!isSeller) ? (
@@ -267,6 +337,75 @@ const Shop = () => {
                                 </Row>
                             ))}
                         </Container>
+                        {showEditProductModal && (
+                            <div className="modal">
+                                <div className="modal-content">
+                                    <span className="close" onClick={() => {
+                                        toggleEditProductModal();
+                                    }}>
+                                        &times;
+                                    </span>
+                                    <h5 className='add-user-text'>Edit Product</h5>
+                                    <Form onSubmit={handleUpdateProduct}>
+
+                                        <Form.Group className="form-layout" controlId="product_name">
+                                        <Form.Label style={{ fontWeight: '400' }}>Product Name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Product Name"
+                                                name="product_name"
+                                                value={productInfo.product_name}
+                                                onChange={handleProductChange}
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <Form.Group className="form-layout" controlId="product_description">
+                                        <Form.Label style={{ fontWeight: '400' }}>Product Description</Form.Label>
+                                            <Form.Control
+                                                as="textarea"
+                                                placeholder="Product Description"
+                                                name="product_description"
+                                                value={productInfo.product_description}
+                                                onChange={handleProductChange}
+                                                rows={4}
+                                                style={{ height: '120px' }}
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <Form.Group className="form-layout" controlId="price">
+                                        <Form.Label style={{ fontWeight: '400' }}>Price</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Price"
+                                                name="price"
+                                                value={productInfo.price}
+                                                onChange={handleProductChange}
+                                                required
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="form-layout" controlId="stock_remaining">
+                                        <Form.Label style={{ fontWeight: '400' }}>Stock Remaining</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Quantity"
+                                                name="stock_remaining"
+                                                value={productInfo.stock_remaining}
+                                                onChange={handleProductChange}
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <div className="form-layout" style={{ marginBottom: '16px' }}>
+                                            <Button className="btn-submit w-100" type="submit">
+                                                Save
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <Footer />
                 </>
