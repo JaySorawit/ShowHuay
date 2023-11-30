@@ -70,66 +70,74 @@ function Chat() {
     setNewMessage("");
   };
 
+  
+
   return (
   <>
     <Navbar />
-    <div className="container">
-      <div className="row">
-        {/* Left Column: Chat Selector */}
-        <div className="col-md-3">
-          <div className="chatSelector">
-            <h1> Chat</h1>
-            <div className="chatSelectorBox">
+    <div className="container app">
+      <div className="row app-one">
+        <div className="col-sm-4 side">
+          <div className="side-one">
+            <div className="row heading">
+              {/* <!-- User Info and Icons --> */}
+              Chat
+            </div>
+
+            <div className="row sideBar">
+              {/* User List */}
               {partner.map((partner) => (
-                <div key={partner.partnerId}>{partner.partnerName}</div>
+                <div className="row sideBar-body" key={partner.partnerId}>
+                  <div className="col-sm-3 col-xs-3 sideBar-avatar">
+                    <div className="avatar-icon">
+                      <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" />
+                    </div>
+                  </div>
+
+                  <div className="col-sm-9 col-xs-9 sideBar-main">
+                    <div className="row">
+                      <div className="col-sm-8 col-xs-8 sideBar-name">
+                        <span className="name-meta">{partner.partnerName}</span>
+                      </div>
+                      <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
+                        {/* <span className="time-meta pull-right">18:18</span> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
+            </div>
+
+          </div>
+
+          <div className="side-two">
+            {/* <!-- New Chat Heading --> */}
+            <div className="row composeBox">
+              {/* <!-- Compose Box --> */}
+            </div>
+
+            <div className="row compose-sideBar">
+              {/* <!-- Compose User List --> */}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Send Messages and Display */}
-        <div className="col-md-9">
-            <ul>
-              {messages.map((message, index) => (
-                <li key={index}>
-                  {message.sender === userId ? (
-                    <span>
-                      <strong>You:</strong> {message.message}
-                    </span>
-                  ) : (
-                    <span>
-                      <strong>
-                        {message.sender ? message.sender : "Anonymous"}:
-                      </strong>{" "}
-                      {message.message}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          <div className="card-footer">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                id="newMessage"
-                placeholder="Send new message"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-              />
-              <button
-                className="btn btn-success"
-                type="button"
-                id="sendMessage"
-                onClick={handleSendMessage}
-              >
-                Send
-              </button>
-            </div>
+        <div className="col-sm-8 conversation">
+          <div className="row heading">
+            {/* <!-- Conversation Heading --> */}
+          </div>
+
+          <div className="row message" id="conversation">
+            {/* <!-- Messages --> */}
+          </div>
+
+          <div className="row reply">
+            {/* <!-- Reply Section --> */}
           </div>
         </div>
       </div>
     </div>
+
   </>
   );
 }
