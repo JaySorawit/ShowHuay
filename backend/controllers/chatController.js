@@ -1,13 +1,18 @@
 const db = require('../Database/database');
 
 const getMessage = (req, res) => {
-  const { receiverId, senderId } = req.body;
+  const receiverId = req.query.receiverId;
+  const senderId = req.query.senderId;
+  console.log(receiverId);
+  console.log(senderId);
 
   try {
     const SELECT_CHAT_QUERY = `SELECT * FROM chat WHERE (send_user_id = ? AND receive_user_id = ?) OR (send_user_id = ? AND receive_user_id = ?);`;
     db.query(SELECT_CHAT_QUERY, [receiverId, senderId, senderId, receiverId], (err, results) => {
       if (err) {
-        createMessage(req, res);
+        console.error('Error finding chat: ' + err);
+        res.status(500).json({ error: 'Error finding chat' });
+        return;
       } else {
         if (results.length > 0) {
           const chatData = results.map(chat => {
@@ -44,12 +49,25 @@ const getMessage = (req, res) => {
 
 
 const getUserChat = (req, res) => {
-  const { receiverId } = req.query;
-  console.log(receiverId);
+  const { receiverId } = req.body;
+  // console.log(receiverId);
 
   try {
-    const SELECT_USER_CHAT_QUERY = `SELECT DISTINCT u.username, u.user_id FROM chat c JOIN user u ON (c.send_user_id = u.user_id OR c.receive_user_id = u.user_id) WHERE u.user_id <> ? ORDER BY u.username;`;
-    db.query(SELECT_USER_CHAT_QUERY, [receiverId], (err, results) => {
+    const SELECT_USER_CHAT_QUERY = `
+    SELECT 
+        CASE 
+            WHEN send_user_id = ? THEN receive_user_id
+            ELSE send_user_id
+        END AS user_id,
+        CASE 
+            WHEN send_user_id = ? THEN (SELECT username FROM user WHERE user_id = receive_user_id)
+            ELSE (SELECT username FROM user WHERE user_id = send_user_id)
+        END AS username
+    FROM chat
+    WHERE send_user_id = ? OR receive_user_id = ?
+    GROUP BY user_id, username;
+    `;
+    db.query(SELECT_USER_CHAT_QUERY, [receiverId,receiverId,receiverId,receiverId], (err, results) => {
       if (err) {
         console.error('Error finding user chats: ' + err);
         res.status(500).json({ error: 'Error finding user chats' });
