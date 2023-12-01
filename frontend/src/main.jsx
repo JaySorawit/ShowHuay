@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import Home from './user/Home.jsx';
 import Register from './user/Register.jsx';
 import Login from './user/Login.jsx';
+import myPurchases from './user/MyPurchases.jsx';
 import Chat from './user/Chat.jsx';
 import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
@@ -17,6 +18,7 @@ import Products from './admin/pages/Products.jsx';
 import Coupons from './admin/pages/Coupons.jsx';
 import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
+import MyPurchases from './user/MyPurchases.jsx';
 
 const commonRoutes = [
   { path: "/", element: <Home /> },
@@ -35,6 +37,7 @@ const guestRoutes = [
 
 const userRoutes = [
   ...commonRoutes,
+  { path: "/myPurchases", element: <MyPurchases /> },
   { path: "/cart", element: <Cart /> },
   { path: "/chat", element: <Chat /> },
   { path: "/shop", element: <Shop /> },

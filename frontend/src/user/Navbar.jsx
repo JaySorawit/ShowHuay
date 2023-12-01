@@ -80,7 +80,7 @@ function Navbar() {
                                             </span>
                                             <ul className="dropdown-menu" aria-labelledby="profileDropdown">
                                                 <li><Link className="dropdown-item" to="/Profile">My Account</Link></li>
-                                                <li><Link className="dropdown-item" to="/Purchases">My Purchases</Link></li>
+                                                <li><Link className="dropdown-item" to="/myPurchases">My Purchases</Link></li>
                                                 <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
                                                 <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
                                                 <li><hr className="dropdown-divider" /></li>
@@ -102,7 +102,7 @@ function Navbar() {
                                             </a>
                                             <ul className="dropdown-menu" aria-labelledby="profileDropdown">
                                                 <li><Link className="dropdown-item" to="/Profile">My Account</Link></li>
-                                                <li><Link className="dropdown-item" to="/Purchases">My Purchases</Link></li>
+                                                <li><Link className="dropdown-item" to="/myPurchases">My Purchases</Link></li>
                                                 <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
                                                 <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
                                                 <li><hr className="dropdown-divider" /></li>

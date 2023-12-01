@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const accountRoutes = require('./routes/accountRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const authRoute = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -27,6 +28,7 @@ const io = socketIo(server, {
 app.set('io', io);
 
 // Routes
+app.use('/account', accountRoutes); 
 app.use('/products', productRoutes); 
 app.use('/auth', authRoute);
 app.use('/chat', chatRoutes);

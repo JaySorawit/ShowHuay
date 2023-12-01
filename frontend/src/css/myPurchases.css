@@ -1,0 +1,69 @@
+.purchases-row {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 30px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.purchases-row:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.heading {
+    font-size: 20px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 35px;
+    padding-bottom: 20px;
+}
+
+.purchase-item {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.purchase-item h4 {
+    font-size: 20px;
+    color: #F44C0C;
+}
+
+.purchase-item p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.heading-purchases {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.view-button {
+    background-color: #F44C0C;
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 12px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.view-button:hover {
+    background-color: #fa602d;
+}
+
+.content-purchases {
+    padding: 10px 0px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.content-text {
+    font-size: 14px !important;
+}
+
+.footer-purchases {
+    padding-top: 15px;
+}
