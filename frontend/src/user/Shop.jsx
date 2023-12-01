@@ -294,7 +294,7 @@ const Shop = () => {
             ) : (
                 <>
                     <Navbar />
-                    <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0' }}>
+                    <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0', minHeight: '640px' }}>
                         <Container className="p-4" style={{ maxWidth: '1080px' }}>
 
                             <h4>Products</h4>
@@ -325,7 +325,7 @@ const Shop = () => {
                                         <div className="product-details ms-3">
                                             <h5 className="product-title">{product.product_name}</h5>
                                             <p className="product-description">{product.product_description}</p>
-                                            <p className='product-info'>Price: {product.price}฿</p>
+                                            <p className='product-info'>Price: ฿{product.price}</p>
                                             <p className='product-info'>Stock remaining: {product.stock_remaining}</p>
                                             <div className="view-edit-delete-buttons">
                                                 <button onClick={() => handleView(product.product_id)}>View Page</button>
