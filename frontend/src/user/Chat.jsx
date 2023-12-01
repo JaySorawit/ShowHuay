@@ -1,39 +1,44 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Navbar from "./Navbar";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../css/Chat.css";
 
 function Chat() {
+
   const userId = localStorage.getItem("userId");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [partner, setPartner] = useState([]);
+  const [participant, setparticipant] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
+
 
   const socketRef = useRef();
 
-  // get chat history
+  // get chat User
   useEffect(() => {
     const getUserChat = async () => {
       if (userId !== null) {
         try {
-          const res = await axios.get(
-            `http://localhost:3000/chat/?receiverId=${userId}`
+          const res = await axios.post(
+            `http://localhost:3000/chat`,{ receiverId: userId, }
           );
           console.log(res.data);
 
           // Check if res.data.chat is an array and not empty before mapping
-          const partners =
+          const participants =
             Array.isArray(res.data.chat) && res.data.chat.length > 0
-              ? res.data.chat.map((partner) => ({
-                  partnerId: partner.send_user_id,
-                  partnerName: partner.username,
+              ? res.data.chat.map((participant) => ({
+                  participantId: participant.userId,
+                  participantName: participant.username,
                 }))
               : [];
 
-          setPartner(partners);
+          setparticipant(participants);
         } catch (error) {
           console.error("Error fetching user chat:", error);
           setIsLoggedIn(false);
@@ -60,7 +65,34 @@ function Chat() {
       socket.disconnect();
     };
   }, []);
+  
+  const handleChatSelection = async (selectedparticipantId) => {
+    try {
+      const res = await axios.get(`http://localhost:3000/chat/${userId}`, {
+        params: {
+          receiverId: selectedparticipantId,
+          senderId: userId,
+        },
+      });
 
+      const chatHistory =
+            Array.isArray(res.data.chat) && res.data.chat.length > 0
+              ? res.data.chat.map((chat) => ({
+                messageId: chat.chat_id,
+                receiveId: chat.receive_user_id,
+                senderId: chat.send_user_id,
+                chatText: chat.chat_text,
+                timestamp: chat.time,
+              }))
+              : [];
+      console.log(chatHistory);
+      setChatHistory(chatHistory); 
+      setSelectedChat(selectedparticipantId);
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+    }
+  };
+  
   const handleSendMessage = () => {
     socketRef.current.emit("chat message", {
       message: newMessage,
@@ -86,53 +118,66 @@ function Chat() {
 
             <div className="row sideBar">
               {/* User List */}
-              {partner.map((partner) => (
-                <div className="row sideBar-body" key={partner.partnerId}>
-                  <div className="col-sm-3 col-xs-3 sideBar-avatar">
-                    <div className="avatar-icon">
-                      <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" />
+              {participant.length > 0 ? (
+                participant.map((participant) => (
+                  <div className="row sideBar-body" key={participant.participantId} role="button" onClick={() => {handleChatSelection(participant.participantId);}}>                  
+                    <div className="col-sm-3 col-xs-3 sideBar-avatar">
+                      <div className="avatar-icon">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" />
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="col-sm-9 col-xs-9 sideBar-main">
-                    <div className="row">
+                    <div className="col-sm-9 col-xs-9 sideBar-main">
                       <div className="col-sm-8 col-xs-8 sideBar-name">
-                        <span className="name-meta">{partner.partnerName}</span>
-                      </div>
-                      <div className="col-sm-4 col-xs-4 pull-right sideBar-time">
-                        {/* <span className="time-meta pull-right">18:18</span> */}
+                          <span className="name-meta">{participant.participantName}</span>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>No available participants.</p>
+              )}
             </div>
 
-          </div>
-
-          <div className="side-two">
-            {/* <!-- New Chat Heading --> */}
-            <div className="row composeBox">
-              {/* <!-- Compose Box --> */}
-            </div>
-
-            <div className="row compose-sideBar">
-              {/* <!-- Compose User List --> */}
-            </div>
           </div>
         </div>
 
-        <div className="col-sm-8 conversation">
+        <div className="col-sm-8 conversation" style={{height:"85vh"}}>
+          {/*if select http://localhost:5173/Chat/ show "You haven't selected a chat yet."*/}
           <div className="row heading">
-            {/* <!-- Conversation Heading --> */}
+            {/* <!-- Conversation Heading --> Show username */}
           </div>
 
           <div className="row message" id="conversation">
-            {/* <!-- Messages --> */}
+            {Array.isArray(chatHistory) && chatHistory.length > 0 ? (
+              chatHistory.map((message) => (
+                <div key={message.messageId} className={message.senderId === userId ? 'sent-message' : 'received-message'}>
+                  {message.senderId == userId ? 'You' : 'Receiver'}: {message.chatText}
+                </div>
+              ))
+            ) : (
+              <p>Please select the chat/ You dont have any chat right now.</p>
+            )}
           </div>
 
           <div className="row reply">
-            {/* <!-- Reply Section --> */}
+            <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="newMessage"
+                  placeholder="Send new message"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <button
+                  className="btn btn-success"
+                  type="button"
+                  id="sendMessage"
+                  onClick={handleSendMessage}
+                >
+                  Send
+                </button>
+              </div>
           </div>
         </div>
       </div>

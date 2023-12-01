@@ -4,7 +4,7 @@ const { getMessage, createMessage, getUserChat, getChat } = require('../controll
 
 router.route("/:id").post(createMessage);
 router.route("/:id").get(getMessage);
-router.route("/").get(getUserChat); 
+router.route("/").post(getUserChat); 
 // router.get("/:id", (req, res) => {
 //   // Access io directly from the app
 //   const io = req.app.get('io');
