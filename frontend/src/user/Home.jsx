@@ -55,6 +55,7 @@ function Home() {
             to={`/productlist/`} 
           >
             <Button
+            className='home_button'
             key={index}
             variant={selectedCategory === category[0] ? 'primary' : 'secondary'}
             onClick={() => {
@@ -67,6 +68,7 @@ function Home() {
             {category[1] && (            
                              
               <img
+                className=''
                 src={category[1]}
                 alt={category[0]}
                 style={{ width: '100px', height: '100px'}}

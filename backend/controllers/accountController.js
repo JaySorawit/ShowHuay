@@ -2,19 +2,19 @@ const db = require('../Database/database')
 
 /******************************************* Get user information *******************************************/
 const getUserInfo = (req, res) => {
-  const userId = req.params.userId;
-
-  const query = 'SELECT * FROM user WHERE user_id = ?';
-
-  db.query(query, [userId], (err, results) => {
-    if (err) {
-      console.error('Error fetching user info:', err);
-      res.status(500).json({ error: 'Failed to fetch user info' });
-      return;
-    }
-    res.json(results[0]);
-  });
-};
+    const userId = req.params.userId;
+  
+    const query = 'SELECT * FROM user WHERE user_id = ?';
+  
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error('Error fetching user info:', err);
+        res.status(500).json({ error: 'Failed to fetch user info' });
+        return;
+      }
+      res.json(results[0]);
+    });
+  };
 
 /**********************************************************************************************************/
 
