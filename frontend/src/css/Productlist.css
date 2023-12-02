@@ -2,28 +2,47 @@
     background-color: #F1F0F0;
    
   }
-
+  .col-3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 .slider {
   width: 90%; 
   margin: 30px auto;
-  background-color: rgb(209, 209, 209);
-  
+  height: 2px;
+  border-radius: 4px;
+  background-color: black;
 }
 
 .thumb {
   position: absolute;
-  width: 17px; 
-  height: 17px; 
+  width: 14px; 
+  height: 14px; 
   transform: translateY(-50%);
-  background-color: #F44C0C; 
+  background-color: black; 
   border-radius: 50%; 
   outline: none;
 }
 
-.track {
-  height: 2px;
-  border-radius: 4px;
-  background-color: orange; /* สีที่ต้องการสำหรับ track ที่อยู่ระหว่าง thumb */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
+.Value-Wrapper{
+  margin:20px;
+}
 
+.filterByText {
+  font-size: 25px;
+}
+
+.applyButton {
+  width: 40%;
+  margin: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
