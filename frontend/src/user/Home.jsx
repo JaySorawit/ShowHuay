@@ -69,10 +69,10 @@ function Home() {
               <img
                 src={category[1]}
                 alt={category[0]}
-                style={{ width: '130px', height: '130px'}}
+                style={{ width: '100px', height: '100px'}}
               />                                         
             )}   
-            <span style={{ color: 'black', marginTop: '-10px', fontSize: '14px' }}>{category[0]}</span>                  
+            <span style={{ color: 'black', marginTop: '15px', fontSize: '14px' }}>{category[0]}</span>                  
           </Button>
           </Link>
             
