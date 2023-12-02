@@ -1,0 +1,85 @@
+.rowheading {
+    display: flex;
+    height: 70px;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #F1F0F0;
+}
+
+.rowsideBar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap:20px;
+}
+
+.sideBar-body {
+    border-bottom: 1px solid #ddd; /* Add a bottom border */
+    padding-bottom: 15px /* Adjust the padding */
+}
+
+.col-sm-3.side {
+border: 1px solid #ddd; 
+padding: 0px; 
+}
+
+.side-one {
+padding: 0px; 
+}
+
+.col-sm-8.conversation {
+    border: 1px solid #ddd; /* Add border */
+}
+
+.rowheading2 {
+    display: flex;
+    height: 70px;
+    padding: 20px;
+    align-items: center;
+    background-color: #F1F0F0;
+    && p {
+        padding-left: 20px;
+        font-weight: 500;
+        font-size: 18px;
+    }
+}
+
+.row-message {
+    height: 70vh;
+    overflow: auto;
+}
+
+.sent-message, .received-message {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    gap: 10px;
+    margin: 10px auto
+}
+
+.message-content {
+    display: flex;
+    width: 100%;
+  }
+
+  .send-message {
+    height: 35px;
+    background-color: #FCCAB7;
+    border-radius: 30px;
+    padding: 5px 15px;
+    margin-left: auto;
+    margin-right: 20px;
+    align-items: center;
+}
+
+
+.receive-message {
+    height: 35px;
+    border-radius: 30px;
+    padding: 5px 15px;
+    margin: auto 0;
+    background-color: #D9D9D9;
+    align-items: center;
+}

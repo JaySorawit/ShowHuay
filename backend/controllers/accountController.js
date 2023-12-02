@@ -12,6 +12,10 @@ const getUserInfo = (req, res) => {
         res.status(500).json({ error: 'Failed to fetch user info' });
         return;
       }
+      if (results.length === 0) {
+        res.status(404).json({ error: 'Username not found' });
+        return;
+      }
       res.json(results[0]);
     });
   };
