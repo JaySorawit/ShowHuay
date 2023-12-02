@@ -67,3 +67,15 @@
 .footer-purchases {
     padding-top: 15px;
 }
+
+.no-orders {
+    min-height: 540px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}

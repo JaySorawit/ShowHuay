@@ -98,62 +98,71 @@ const MyPurchases = () => {
                             </div>
                         </Col>
                         <Col md={10}>
-                            {sortedPurchases.map((purchase) => (
-                                <Row key={purchase.purchase_id} className="purchase-item">
+                            {sortedPurchases.length === 0 ? (
+                                <div className="no-orders">
                                     <div>
-                                        {purchase.username && (
-                                            <div className="heading-purchases">
-                                                <i className="nav-icon fas fa-store me-2" style={{ color: '#F44C0C', fontSize: '14px' }} />
-                                                <span style={{ fontWeight: '500' }}>{purchase.username}</span>
-                                                <button className="view-button ms-2" onClick={() => handleView(purchase.product_id)}>View Page</button>
-                                            </div>
-                                        )}
-                                        {purchase.productDetails && (
-                                            <div className="content-purchases">
-                                                <Row>
-                                                    <Col md={2}>
-                                                        <img
-                                                            src={purchase.productDetails.image_path}
-                                                            alt={purchase.productDetails.product_name}
-                                                            className="product-image"
-                                                            style={{ width: '120px', height: '120px' }}
-                                                        />
-                                                    </Col>
-
-                                                    <Col md={9}>
-                                                        <div>
-                                                            <p className="content-text">{purchase.productDetails.product_name}</p>
-                                                            <p className="content-text">x{purchase.quantity}</p>
-                                                        </div>
-                                                    </Col>
-
-                                                    <Col md={1}>
-                                                        <div className="mt-4">
-                                                            <p className="content-text" style={{ color: '#F44C0C', fontWeight: '500' }}>฿{purchase.productDetails.price}</p>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        )}
-
-                                        {purchase.productDetails && (
-                                            <div className="footer-purchases">
-                                                <Row>
-                                                    <Col>
-                                                        <p className="mt-2 text-muted" style={{ fontSize: '12px' }}>Payment time: {format(new Date(purchase.payment_timestamp), 'dd/MM/yyyy HH:mm:ss')}</p>
-                                                    </Col>
-                                                    <Col>
-                                                        <p className="content-text text-right">Order Total:&nbsp;
-                                                            <span style={{ color: '#F44C0C', fontWeight: '500', fontSize: '20px' }}>฿{purchase.productDetails.price * purchase.quantity}</span>
-                                                        </p>
-                                                    </Col>
-                                                </Row>
-
-                                            </div>
-                                        )}
+                                        <i className="nav-icon fas fa-shopping-basket mb-2" style={{ color: '#F44C0C', fontSize: '64px' }} />
                                     </div>
-                                </Row>
-                            ))}
+                                    <p>No orders yet</p>
+                                </div>
+                            ) : (
+                                sortedPurchases.map((purchase) => (
+                                    <Row key={purchase.purchase_id} className="purchase-item">
+                                        <div>
+                                            {purchase.username && (
+                                                <div className="heading-purchases">
+                                                    <i className="nav-icon fas fa-store me-2" style={{ color: '#F44C0C', fontSize: '14px' }} />
+                                                    <span style={{ fontWeight: '500' }}>{purchase.username}</span>
+                                                    <button className="view-button ms-2" onClick={() => handleView(purchase.product_id)}>View Page</button>
+                                                </div>
+                                            )}
+                                            {purchase.productDetails && (
+                                                <div className="content-purchases">
+                                                    <Row>
+                                                        <Col md={2}>
+                                                            <img
+                                                                src={purchase.productDetails.image_path}
+                                                                alt={purchase.productDetails.product_name}
+                                                                className="product-image"
+                                                                style={{ width: '120px', height: '120px' }}
+                                                            />
+                                                        </Col>
+
+                                                        <Col md={9}>
+                                                            <div>
+                                                                <p className="content-text">{purchase.productDetails.product_name}</p>
+                                                                <p className="content-text">x{purchase.quantity}</p>
+                                                            </div>
+                                                        </Col>
+
+                                                        <Col md={1}>
+                                                            <div className="mt-4">
+                                                                <p className="content-text" style={{ color: '#F44C0C', fontWeight: '500' }}>฿{purchase.productDetails.price}</p>
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                            )}
+
+                                            {purchase.productDetails && (
+                                                <div className="footer-purchases">
+                                                    <Row>
+                                                        <Col>
+                                                            <p className="mt-2 text-muted" style={{ fontSize: '12px' }}>Payment time: {format(new Date(purchase.payment_timestamp), 'dd/MM/yyyy HH:mm:ss')}</p>
+                                                        </Col>
+                                                        <Col>
+                                                            <p className="content-text text-right">Order Total:&nbsp;
+                                                                <span style={{ color: '#F44C0C', fontWeight: '500', fontSize: '20px' }}>฿{purchase.productDetails.price * purchase.quantity}</span>
+                                                            </p>
+                                                        </Col>
+                                                    </Row>
+
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Row>
+                                ))
+                            )}
                         </Col>
                     </Row>
                 </Container>
