@@ -1,5 +1,50 @@
 const db = require('../Database/database')
 
+/******************************************* Get user information *******************************************/
+const getUserInfo = (req, res) => {
+    const userId = req.params.userId;
+  
+    const query = 'SELECT * FROM user WHERE user_id = ?';
+  
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error('Error fetching user info:', err);
+        res.status(500).json({ error: 'Failed to fetch user info' });
+        return;
+      }
+      res.json(results[0]);
+    });
+  };
+
+/**********************************************************************************************************/
+
+/******************************************* Update user information *******************************************/
+const updateUserInfo = (req, res) => {
+    const userId = req.params.userId;
+    const { username, email, password, phone_number, address, city, state, zip_code } = req.body;
+  
+    const query = `
+      UPDATE user 
+      SET username = ?, email = ?, password = ?, phone_number = ?, address = ?, city = ?, state = ?, zip_code = ?
+      WHERE user_id = ?
+    `;
+  
+    db.query(
+      query,
+      [username, email, password, phone_number, address, city, state, zip_code, userId],
+      (err, results) => {
+        if (err) {
+          console.error('Error updating user info:', err);
+          res.status(500).json({ error: 'Failed to update user info' });
+          return;
+        }
+        res.json(results);
+      }
+    );
+  };
+/**********************************************************************************************************/
+
+
 /************************************** Query Username with Product ID  *************************************/
 const queryUsername = (req, res) => {
   const productId = req.params.productId;
@@ -43,4 +88,4 @@ const queryPurchases = (req, res) => {
   };
   /**********************************************************************************************************/
 
-  module.exports = { queryUsername, queryPurchases };
+  module.exports = { getUserInfo, updateUserInfo, queryUsername, queryPurchases };

@@ -5,14 +5,16 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Chat.css";
+import userImage from "../assets/icon/userImage.png";
 
-function Chat(selectedparticipantId) {
+function Chat() {
 
   const navigate = useNavigate();
-
+  let { id } = useParams();
   const userId = localStorage.getItem("userId");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [participant, setparticipant] = useState([]);
+  const [receiver, setReceiver] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -52,25 +54,51 @@ function Chat(selectedparticipantId) {
     getUserChat();
   }, [userId]);
 
-  const { id } = useParams();
-  const receiverId = id;
+  // const { id } = useParams();
+  // const receiverId = id;
 
+  // useEffect(() => {
+  //   const socket = io("http://localhost:3000/chat/");
+  //   socketRef.current = socket;
+
+  //   socket.on("chat message", (message) => {
+  //     setMessages((prevMessages) => [...prevMessages, message]);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
+  console.log(id);
+  console.log(receiver);
+
+  // Fetch chat history when the component mounts
   useEffect(() => {
-    const socket = io("http://localhost:3000/chat/");
-    socketRef.current = socket;
-
-    socket.on("chat message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
-    return () => {
-      socket.disconnect();
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/account/getuser/${id}`);
+        console.log(res.data);
+        setReceiver({
+          receiverId: res.data.user_id,
+          receiverName: res.data.username,
+        });
+  
+        if (id) {
+          handleChatSelection(id);
+        }
+      } catch (error) {
+        console.error('Error fetching user information or chat history:', error);
+      }
     };
-  }, []);
+  
+    fetchData();
+  }, [id]);
+  
   
   const handleChatSelection = async (selectedparticipantId) => {
     try {
-      // navigate(`/Chat/${selectedparticipantId}`);
+      navigate(`/Chat/${selectedparticipantId}`);
       const res = await axios.get(`http://localhost:3000/chat/${userId}`, {
         params: {
           receiverId: selectedparticipantId,
@@ -126,7 +154,7 @@ function Chat(selectedparticipantId) {
                   <div className="row sideBar-body" key={participant.participantId} role="button" onClick={() => {handleChatSelection(participant.participantId);}}>                  
                     <div className="col-sm-3 col-xs-3 sideBar-avatar">
                       <div className="avatar-icon">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" />
+                      <img src={userImage} style={{ width: '70px', height: '70px' }} />
                       </div>
                     </div>
                     <div className="col-sm-9 col-xs-9 sideBar-main">
@@ -148,6 +176,9 @@ function Chat(selectedparticipantId) {
           {/*if select http://localhost:5173/Chat/ show "You haven't selected a chat yet."*/}
           <div className="row heading">
             {/* <!-- Conversation Heading --> Show username */}
+            <img src={userImage} style={{ width: '70px' }} />
+            <p>user1</p>
+            {/* <p> {receiver.receiverId}</p> */}
           </div>
 
           <div className="row message" id="conversation">
