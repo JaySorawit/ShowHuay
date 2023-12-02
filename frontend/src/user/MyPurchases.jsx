@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import { format } from 'date-fns';
+import { FaStar } from 'react-icons/fa';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import '../css/myPurchases.css';
+import '../css/MyPurchases.css';
 
 const MyPurchases = () => {
 
@@ -12,6 +13,17 @@ const MyPurchases = () => {
     const [username, setUsername] = useState('');
     const [purchases, setPurchases] = useState([]);
     const [filteredPurchases, setFilteredPurchases] = useState([]);
+    const [showReviewProductModal, setShowReviewProductModal] = useState(false);
+    const [selectedPurchaseId, setSelectedPurchaseId] = useState(null);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [error, setError] = useState(false);
+    const [reviewInfo, setReviewInfo] = useState({
+        product_id: '',
+        user_id: '',
+        review_score: '',
+        review_text: '',
+    });
     useEffect(() => {
         setUsername(localStorage.getItem('username'));
     }, []);
@@ -73,12 +85,96 @@ const MyPurchases = () => {
     }, []);
     /***************************************************************************************************/
 
-    /************************************** View Page of Products ******************************************/
+    /************************************** Link of Products ******************************************/
     const navigate = useNavigate();
     const handleView = (productId) => {
         navigate(`/products/${productId}`);
     };
+    const handleContactSeller = (userId) => {
+        navigate(`/chat/${userId}`);
+    };
     /******************************************************************************************************/
+
+    /************************************* Toggle System **********************************************/
+    const toggleReviewProductModal = () => {
+        setShowReviewProductModal(!showReviewProductModal);
+    };
+    /*************************************************************************************************/
+
+    /************************************* Handle Review Change **********************************************/
+    const handleReviewChange = (e) => {
+        const { name, value } = e.target;
+        setReviewInfo({ ...reviewInfo, [name]: value });
+    };
+    /**********************************************************************************************************/
+
+    /******************************************* Review Product ************************************************/
+    const handleReview = async (purchaseId, productId) => {
+        setShowReviewProductModal(true);
+        setSelectedPurchaseId(purchaseId);
+        setReviewInfo({
+            product_id: productId,
+            user_id: localStorage.getItem('userId'),
+        });
+        setError(false);
+        setRating(0);
+    };
+    /**********************************************************************************************************/
+
+    /******************************************* Update Product **********************************************/
+    const handleUpdatePurchases = async (e) => {
+        e.preventDefault();
+        if (rating === 0) {
+            setError(true);
+            return;
+        }
+
+        try {
+            const updateResponse = await fetch(`http://localhost:3000/account/review/${selectedPurchaseId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reviewInfo)
+            });
+
+            if (updateResponse.ok) {
+                console.log('Review state updated successfully');
+
+                try {
+                    const addReviewResponse = await fetch(`http://localhost:3000/account/addReview`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(reviewInfo)
+                    });
+
+                    if (addReviewResponse.ok) {
+                        console.log('Product review added successfully');
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to add product review');
+                    }
+                } catch (addReviewError) {
+                    console.error('Error occurred while adding product review:', addReviewError);
+                }
+            } else {
+                console.error('Failed to update review state');
+            }
+        } catch (updateError) {
+            console.error('Error occurred while updating review state:', updateError);
+        }
+    };
+    /*************************************************************************************************/
+
+    /**************************************** Rating star System *******************************************/
+    const handleStarClick = (value) => {
+        setRating(value);
+        setReviewInfo({ ...reviewInfo, review_score: value });
+        setError(false);
+    };
+    /*******************************************************************************************************/
 
     const sortedPurchases = [...filteredPurchases].sort((a, b) => b.purchase_id - a.purchase_id);
 
@@ -157,6 +253,12 @@ const MyPurchases = () => {
                                                         </Col>
                                                     </Row>
 
+                                                    <div className="footer-button">
+                                                        <button className="contact-review-button" onClick={() => handleContactSeller(purchase.productDetails.user_id)}>Contact Seller</button>
+                                                        {purchase.is_review === 0 && (
+                                                            <button className="contact-review-button" onClick={() => handleReview(purchase.purchase_id, purchase.productDetails.product_id)}>Review</button>)}
+                                                    </div>
+
                                                 </div>
                                             )}
                                         </div>
@@ -166,6 +268,57 @@ const MyPurchases = () => {
                         </Col>
                     </Row>
                 </Container>
+                {showReviewProductModal && (
+                    <div className="modal">
+                        <div className="modal-content">
+                            <span className="close" onClick={() => {
+                                toggleReviewProductModal();
+                            }}>
+                                &times;
+                            </span>
+                            <h5 className='add-user-text'>Review</h5>
+                            <Form onSubmit={handleUpdatePurchases}>
+
+                                <Form.Group className="form-layout" controlId="review_score">
+                                    <div className="star-rating">
+                                        {[...Array(5)].map((_, index) => {
+                                            const value = index + 1;
+                                            return (
+                                                <div key={index} onClick={() => handleStarClick(value)}>
+                                                    <FaStar
+                                                        className="star"
+                                                        color={value <= rating ? '#ffc107' : '#e4e5e9'}
+                                                        size={30}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                        {error && <p className="star-error">Please select a star</p>}
+                                    </div>
+                                </Form.Group>
+
+                                <Form.Group className="form-layout" controlId="review_text">
+                                    <Form.Control
+                                        as="textarea"
+                                        placeholder="Review Description"
+                                        name="review_text"
+                                        value={reviewInfo.review_text}
+                                        onChange={handleReviewChange}
+                                        rows={4}
+                                        style={{ height: '180px' }}
+                                        required
+                                    />
+                                </Form.Group>
+
+                                <div className="form-layout" style={{ marginBottom: '16px' }}>
+                                    <Button className="btn-submit w-100" type="submit">
+                                        SUBMIT
+                                    </Button>
+                                </div>
+                            </Form>
+                        </div>
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

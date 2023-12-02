@@ -279,7 +279,7 @@ const Shop = () => {
                 console.log('Product updated successfully');
                 window.location.reload();
             } else {
-                console.error('Failed to Product user');
+                console.error('Failed to update product');
             }
         } catch (error) {
             console.error('Error occurred:', error);

@@ -79,3 +79,44 @@
     flex-direction: column;
     height: 100%;
 }
+
+.contact-review-button {
+    background-color: #F44C0C;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.contact-review-button:hover {
+    background-color: #fa602d;
+}
+
+.footer-button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.star-rating {
+    display: flex;
+}
+
+.star-title {
+    margin-top: 4px;
+    margin-right: 10px;
+    font-size: 16px !important;
+}
+
+.star {
+    margin-right: 5px;
+}
+
+.star-error {
+    padding-left: 5px;
+    padding-top: 5px;
+    color: red;
+}
