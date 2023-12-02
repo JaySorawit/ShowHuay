@@ -4,21 +4,25 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import Home from './user/Home.jsx';
 import Register from './user/Register.jsx';
 import Login from './user/Login.jsx';
-import myPurchases from './user/MyPurchases.jsx';
 import Chat from './user/Chat.jsx';
 import Cart from './user/Cart.jsx';
 import Product from './user/Product.jsx';
 import ProductList from './user/ProductList.jsx';
+import MyProfile from './user/MyProfile.jsx';
+import EditMyProfile from './user/EditMyProfile.jsx';
+import MyAddress from './user/MyAddress.jsx';
+import MyCreditCard from './user/MyCreditCard.jsx';
+import ChangePassword from './user/ChangePassword.jsx';
 import Shop from './user/Shop.jsx';
 import AddProduct from './user/AddProduct.jsx';
 import Admin from './admin/Admin.jsx';
 import Orders from './admin/pages/Orders.jsx';
+import MyPurchases from './user/MyPurchases.jsx';
 import Users from './admin/pages/Users.jsx';
 import Products from './admin/pages/Products.jsx';
 import Coupons from './admin/pages/Coupons.jsx';
 import PageNotFound from './user/PageNotFound.jsx';
 import './App.css'
-import MyPurchases from './user/MyPurchases.jsx';
 
 const commonRoutes = [
   { path: "/", element: <Home /> },
@@ -43,6 +47,11 @@ const userRoutes = [
   { path: "/chat/:id", element: <Chat /> },
   { path: "/shop", element: <Shop /> },
   { path: "/addProduct", element: <AddProduct /> },
+  { path: "/myProfile", element: <MyProfile /> },
+  { path: "/editMyProfile", element: <EditMyProfile /> },
+  { path: "/changePassword", element: <ChangePassword /> },
+  { path: "/myAddress", element: <MyAddress /> },
+  { path: "/myCreditCard", element: <MyCreditCard /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 
