@@ -16,7 +16,7 @@ import Home_AppliancesImage from '../assets/Category/8.png';
 import Computers_LaptopsImage from '../assets/Category/9.png';
 import Mobile_GadgetsImage from '../assets/Category/10.png';
 import Tools_Home_ImprovementImage from '../assets/Category/11.png';
-import Health_HouseholdImage from '../assets/Category/12.png';
+import Sports_OutdoorsImage from '../assets/Category/12.png';
 
 function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -38,7 +38,7 @@ function Home() {
     ['Computers & Laptops',Computers_LaptopsImage],
     ['Mobile & Gadgets',Mobile_GadgetsImage],
     ['Tools & Home Improvement',Tools_Home_ImprovementImage],
-    ['Health & Household',Health_HouseholdImage],
+    ['Sports & Outdoors',Sports_OutdoorsImage],
   ];
 
   return (
