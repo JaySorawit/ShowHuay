@@ -23,7 +23,7 @@ import MyPurchases from './user/MyPurchases.jsx';
 const commonRoutes = [
   { path: "/", element: <Home /> },
   { path: "/productList", element: <ProductList /> },
-  { path: "/Product/:id", element: <Product /> },
+  { path: "/Products/:id", element: <Product /> },
 ];
 
 const guestRoutes = [

@@ -199,7 +199,7 @@ const Shop = () => {
     /************************************** View Page of Products ******************************************/
     const navigate = useNavigate();
     const handleView = (productId) => {
-        navigate(`/product/${productId}`);
+        navigate(`/products/${productId}`);
     };
     /******************************************************************************************************/
 

@@ -12,6 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
     const { id } = useParams();
+    const userId = localStorage.getItem("userId");
 
     const [product, setProduct] = useState({
       productName: '',
@@ -81,11 +82,22 @@ const Product = () => {
           }));
     
           setReview({
-            reviewTotal: reviews.length,
+            reviewTotal: reviews.length, // Set the length directly
             reviews: reviews,
           });
+        })
+        .catch(function (error) {
+          console.error('Error fetching product reviews:', error);
+          // If the error is a 404, set reviewTotal to 0
+          if (error.response && error.response.status === 404) {
+            setReview({
+              reviewTotal: 0,
+              reviews: [], 
+            });
+          }
         });
     }, [id, navigate]);
+    
     
     //Calculate the initialScore for product
     let sumOfScores = 0;
@@ -159,8 +171,13 @@ const Product = () => {
                   <p> Phone: {product.sellerTel}</p>
                 </div>
                 <div className="sellercontact">
-                <Link to='/chat'><button>View Profile</button></Link>
-                  <Link to={`/chat/${product.sellerId}`}><button>Chat</button></Link>
+                  <Link to='/chat'><button>View Profile</button></Link>
+
+                  {product.sellerId != userId && (
+                    <Link to={`/chat/${product.sellerId}`}>
+                      <button>Chat</button>
+                    </Link>
+                  )}
                 </div>
               </div>
               <div className="ProductRating">

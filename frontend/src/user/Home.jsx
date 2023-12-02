@@ -34,7 +34,7 @@ function Home() {
     'Computers & Laptops',
     'Mobile & Gadgets',
     'Tools & Home Improvement',
-    'Health & Household',
+    'Sports & Outdoors',
   ];
 
   return (

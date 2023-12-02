@@ -32,10 +32,12 @@ const addProduct = (req,res) => {
 const getOneProduct = (req, res) => {
     const productId = req.params.id;
   
-    const GET_PRODUCT_QUERY = `SELECT SUM(pur.quantity) AS total_sold, u.username, u.telephone_number, p.* 
-    FROM product p JOIN purchase pur ON p.product_id = pur.product_id 
-    JOIN user u ON p.user_id = u.user_id 
+    const GET_PRODUCT_QUERY = `SELECT COALESCE(SUM(pur.quantity), 0) AS total_sold, u.username, u.telephone_number, p.*
+    FROM product p
+    JOIN user u ON p.user_id = u.user_id
+    LEFT JOIN purchase pur ON p.product_id = pur.product_id
     WHERE p.product_id = ?
+    GROUP BY u.username, p.product_id
     HAVING p.product_id IS NOT NULL;
     `;
   

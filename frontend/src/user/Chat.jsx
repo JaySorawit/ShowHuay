@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Navbar from "./Navbar";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Chat.css";
 
-function Chat() {
+function Chat(selectedparticipantId) {
+
+  const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -68,6 +70,7 @@ function Chat() {
   
   const handleChatSelection = async (selectedparticipantId) => {
     try {
+      // navigate(`/Chat/${selectedparticipantId}`);
       const res = await axios.get(`http://localhost:3000/chat/${userId}`, {
         params: {
           receiverId: selectedparticipantId,

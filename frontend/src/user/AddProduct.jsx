@@ -103,7 +103,7 @@ const AddProduct = () => {
                                             <option value="8">Computers & Laptops</option>
                                             <option value="9">Mobile & Gadgets</option>
                                             <option value="10">Tools & Home Improvement</option>
-                                            <option value="11">Health & Household</option>
+                                            <option value="11">Sports & Outdoors</option>
                                         </Form.Control>
                                     </Form.Group>
 
