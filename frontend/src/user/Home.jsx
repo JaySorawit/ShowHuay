@@ -17,13 +17,14 @@ import Computers_LaptopsImage from '../assets/Category/9.png';
 import Mobile_GadgetsImage from '../assets/Category/10.png';
 import Tools_Home_ImprovementImage from '../assets/Category/11.png';
 import Sports_OutdoorsImage from '../assets/Category/12.png';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleCategoryClick = (category) => {
     console.log(`Selected Category: ${category}`);
-   
+    localStorage.setItem('selectedCategory', category);
   };
   
   const categories = [
@@ -49,6 +50,10 @@ function Home() {
         <h4 style={{color:'#F44C0C', margin:'20px 0px'}}>CATEGORIES</h4>
         <div className="categoryBox">
           {categories.map((category, index) => (
+            <Link
+            key={index}
+            to={`/productlist/`} 
+          >
             <Button
             key={index}
             variant={selectedCategory === category[0] ? 'primary' : 'secondary'}
@@ -59,7 +64,8 @@ function Home() {
             style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           > 
             
-            {category[1] && (                           
+            {category[1] && (            
+                             
               <img
                 src={category[1]}
                 alt={category[0]}
@@ -68,6 +74,7 @@ function Home() {
             )}   
             <span style={{ color: 'black', marginTop: '-10px', fontSize: '14px' }}>{category[0]}</span>                  
           </Button>
+          </Link>
             
           ))}
         </div>

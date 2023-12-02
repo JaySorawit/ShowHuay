@@ -8,7 +8,9 @@ function ProductList() {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(500);
   const [trackColor, setTrackColor] = useState('linear-gradient(to right, orange 0%, transparent 0%)');
+  const search = localStorage.getItem('selectedCategory');
 
+  
   const updateTrackColor = (values) => {
     const percent = ((values[0] + values[1]) / 10);
     setTrackColor(`linear-gradient(to right, orange ${percent}%, transparent ${percent}%)`);
@@ -52,7 +54,7 @@ function ProductList() {
           </div>
 
           <div className="col-9 col-9-gray">
-            <div>Search result for</div>
+            <div>Search result for  " {search} " </div>
           </div>
         </div>
       </div>
