@@ -10,10 +10,10 @@
 
  const router = require("express").Router();
 
- const { addProduct, getOneProduct, updateProductInfo, removeProduct, getProductReview } = require("../controllers/productController")
+ const { addProduct, getOneProduct, getProductReview } = require("../controllers/productController")
  
  router.route("/addProduct").post(addProduct); 
- router.route("/:id").get(getOneProduct).patch(updateProductInfo).delete(removeProduct);
+ router.route("/:id").get(getOneProduct);
  router.route("/getProductReview/:id").get(getProductReview);
  
  module.exports = router;

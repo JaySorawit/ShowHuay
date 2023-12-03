@@ -1,5 +1,6 @@
 const db = require('../Database/database')
 
+/***************************************** Add product  *********************************************/
 const addProduct = (req,res) => {
     const { productId, userId, categoryId, productName, productDesciption, price, stockRemaining } = req.body;
 
@@ -20,7 +21,6 @@ const addProduct = (req,res) => {
         }
 
         const userId = results.insertId;
-
         res.status(200).json({
             status: 'success',
             message: 'User registered successfully',
@@ -28,7 +28,10 @@ const addProduct = (req,res) => {
         });
     });
 }
+/* ****************************************************************************************************** */
 
+
+/* **************************************** Get One Product  ******************************************** */
 const getOneProduct = (req, res) => {
     const productId = req.params.id;
   
@@ -64,18 +67,13 @@ const getOneProduct = (req, res) => {
 
     });
   };
+/* ****************************************************************************************************** */
 
-  const updateProductInfo = (req,res) => {
 
-  }
-
-  const removeProduct = (req,res) => {
-
-  }
-
+/* **************************************** Get Product Review  ******************************************** */
   const getProductReview = (req, res) => {
     const productId = req.params.id;
-  
+
     const GET_PRODUCT_QUERY = `SELECT p.*, u.username
       FROM product_review p
       JOIN user u ON p.user_id = u.user_id
@@ -88,21 +86,18 @@ const getOneProduct = (req, res) => {
         return;
       }
   
-    // Check if any results were returned
-    if (results.length === 0) {
-        res.status(404).send('error: Product not found');
-        return;
-      }      
+      // Check if any results were returned
+      if (results.length === 0) {
+          res.status(404).send('error: Product not found');
+          return;
+        }      
 
-    // Format timestamps to "YYYY-MM-DD HH:mm:ss" format
-    const reviewData = results.map(review => {
-        // Assuming review.review_timestamp is the database timestamp
-        const dbTimestamp = new Date(review.review_timestamp);
-        const formattedTimestamp = dbTimestamp.toISOString().replace('T', ' ').slice(0, -5);
-
-        // Add the formatted timestamp to the review object
-        return { ...review, review_timestamp: formattedTimestamp };
-    });
+      // Format timestamps to "YYYY-MM-DD HH:mm:ss" format
+      const reviewData = results.map(review => {
+          const dbTimestamp = new Date(review.review_timestamp);
+          const formattedTimestamp = dbTimestamp.toISOString().replace('T', ' ').slice(0, -5);
+          return { ...review, review_timestamp: formattedTimestamp };
+      });
 
       res.status(200).json({
         status: 'success',
@@ -111,5 +106,6 @@ const getOneProduct = (req, res) => {
       });
     });
   };  
+/* ****************************************************************************************************** */
 
-module.exports = { addProduct, getOneProduct, updateProductInfo, removeProduct, getProductReview };
+module.exports = { addProduct, getOneProduct, getProductReview };

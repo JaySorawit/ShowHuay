@@ -4,16 +4,18 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import QuantityAdjust from "./QuantityAdjust";
-// import product1_img from '../assets/img/product-img/product1.png';
 import userImage from '../assets/icon/userImage.png'
 import RatingStar from "./RatingStar";
 import '../css/Product.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
+
+  /* **************************** Initialize State & define variable **************************** */
     const { id } = useParams();
     const userId = localStorage.getItem("userId");
-
+    const navigate = useNavigate();
+    const [review, setReview] = useState({});
     const [product, setProduct] = useState({
       productName: '',
       productDescription: '',
@@ -27,12 +29,11 @@ const Product = () => {
       imgPath: '',
     });
 
-    const [review, setReview] = useState({});
-
-    const navigate = useNavigate();
-
+  /* ******************************************************************************************** */
+  
+  
+  /* ************************************ Fetch product data ************************************ */
     useEffect(() => {
-      // get product detail
       axios.get("http://localhost:3000/products/" + id)
         .then(function(response) {
           setProduct({
@@ -53,23 +54,22 @@ const Product = () => {
             console.error("Server responded with an error status:", error.response.status);
             console.log("Full response:", error.response);
             if (error.response.status === 404) {
-              // Handle 404 Not Found
-              // Redirect to the Page not found.
               console.log("Product not found. Navigating...");
               navigate('/*');
             }
           } else if (error.request) {
-            // The request was made but no response was received
             console.error("No response received from the server:", error.request);
           } else {
-            // Something happened in setting up the request that triggered an Error
             console.error("Error setting up the request:", error.message);
           }
         });
     }, [id, navigate]);    
-    
+
+  /* ******************************************************************************************** */
+
+
+  /* ************************************ Fetch review data ************************************ */
     useEffect(() => {
-      // get Review detail
       axios.get("http://localhost:3000/products/getProductReview/" + id)
         .then(function (res) {
           const reviews = res.data.review.map(review => ({
@@ -82,13 +82,12 @@ const Product = () => {
           }));
     
           setReview({
-            reviewTotal: reviews.length, // Set the length directly
+            reviewTotal: reviews.length,
             reviews: reviews,
           });
         })
         .catch(function (error) {
           console.error('Error fetching product reviews:', error);
-          // If the error is a 404, set reviewTotal to 0
           if (error.response && error.response.status === 404) {
             setReview({
               reviewTotal: 0,
@@ -98,18 +97,23 @@ const Product = () => {
         });
     }, [id, navigate]);
     
+  /* ******************************************************************************************** */
     
-    //Calculate the initialScore for product
+
+  /* ************** Calculate the score and product remaining for product *********************** */
     let sumOfScores = 0;
     const reviewArray = review.reviews ? Object.values(review.reviews) : [];
     for (const singleReview of reviewArray) {
       sumOfScores += singleReview.score;
     }
+    let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
+    let stockRemaining = product.stockRemaining;
+    
+  /* ******************************************************************************************** */
 
-    // Assuming you have a state variable for selectedScore
+  
+  /* ***************************** Handle score selection *************************************** */
     const [selectedScore, setSelectedScore] = useState('ALL');
-
-    // Function to handle score selection
     const handleScoreSelection = (score) => {
       setSelectedScore(score);
     };
@@ -121,11 +125,8 @@ const Product = () => {
         color: selectedScore === score ? 'white' : 'black', 
       };
     };
-    
-    
-    let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
-    let stockRemaining = product.stockRemaining;
 
+  /* ******************************************************************************************** */  
 
     return (
         <>

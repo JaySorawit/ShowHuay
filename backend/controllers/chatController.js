@@ -3,8 +3,8 @@ const db = require('../Database/database');
 const getMessage = (req, res) => {
   const receiverId = req.query.receiverId;
   const senderId = req.query.senderId;
-  console.log(receiverId);
-  console.log(senderId);
+  // console.log(receiverId);
+  // console.log(senderId);
 
   try {
     const SELECT_CHAT_QUERY = `SELECT * FROM chat WHERE (send_user_id = ? AND receive_user_id = ?) OR (send_user_id = ? AND receive_user_id = ?);`;

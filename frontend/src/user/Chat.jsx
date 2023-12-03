@@ -81,8 +81,10 @@ function Chat() {
         }
       } catch (error) {
         console.error('Error fetching user information or chat history:', error);
-        if (error.response && error.response.status == 404 && id != null) {
-          navigate('/*');
+        if(id != null){
+          if (error.response && error.response.status == 404 ) {
+            navigate('/*');
+          }
         }
       }
     };

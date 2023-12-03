@@ -6,9 +6,9 @@ import AccountNav from './AccountNav'
 
 function EditMyProfile() {
 
-        /************************************** Initialize State ***************************************/
-        const username = localStorage.getItem("username");
-        /***********************************************************************************************/
+    /************************************** Initialize State ***************************************/
+    const username = localStorage.getItem("username");
+    /***********************************************************************************************/
         
   return (
     <div>

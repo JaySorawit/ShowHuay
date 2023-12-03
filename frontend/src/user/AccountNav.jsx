@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
 
 function AccountNav() {
-
-
   return (
     <>
     <Col md={2}>
