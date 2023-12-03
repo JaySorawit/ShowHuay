@@ -2,30 +2,41 @@ const db = require('../Database/database')
 
 /******************************************* Get user information *******************************************/
 const getUserInfo = (req, res) => {
-    const userId = req.params.userId;
-  
-    const query = 'SELECT * FROM user WHERE user_id = ?';
-  
-    db.query(query, [userId], (err, results) => {
-      if (err) {
-        console.error('Error fetching user info:', err);
-        res.status(500).json({ error: 'Failed to fetch user info' });
-        return;
-      }
-      if (results.length === 0) {
-        res.status(404).json({ error: 'Username not found for the given product ID' });
-        return;
-      }
-      res.json(results[0]);
-    });
-  };
+  const userId = req.params.userId;
 
+  const query = 'SELECT * FROM user WHERE user_id = ?';
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching user info:', err);
+      res.status(500).json({ error: 'Failed to fetch user info' });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).json({ error: 'Username not found for the given user ID' });
+      return;
+    }
+
+    const user = results[0];
+    
+    // Format the date_of_birth
+    const formattedUser = {
+      ...user,
+      date_of_birth: user.date_of_birth
+        ? new Date(user.date_of_birth).toLocaleDateString('en-GB') // Adjust the locale as needed
+        : null,
+    };
+
+    res.json(formattedUser);
+  });
+};
 /**********************************************************************************************************/
 
 /******************************************* Update user information *******************************************/
 const updateUserInfo = (req, res) => {
   const userId = req.params.userId;
-  const { username, email, password, phone_number, address, city, state, zip_code } = req.body;
+  const { username, email, phone_number, address, city, state, zip_code } = req.body;
 
   const query = `
       UPDATE user 

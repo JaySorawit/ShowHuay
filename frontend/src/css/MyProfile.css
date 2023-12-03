@@ -1,0 +1,56 @@
+.infoBox {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 35px 60px;
+    margin: 0px 50px;
+    gap: 20px;
+}
+
+.infoBox h5 {
+    display: flex;
+    align-items: 'center'; 
+    justify-content: 'center';
+    color: #F44C0C;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0px;
+}
+
+.userInfo {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.userInfo img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: auto;
+}
+
+.info {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    flex-direction: column;
+    gap: 25px;
+    margin-left: 20px;
+}
+
+.editBtn {
+    width: 120px;
+    background-color: #F44C0C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
