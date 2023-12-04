@@ -34,7 +34,7 @@ const Product = () => {
   
   /* ************************************ Fetch product data ************************************ */
     useEffect(() => {
-      axios.get("http://localhost:3000/products/" + id)
+      axios.get("http://localhost:3000/product/" + id)
         .then(function(response) {
           setProduct({
             productName: response.data.product[0].product_name,
@@ -70,7 +70,7 @@ const Product = () => {
 
   /* ************************************ Fetch review data ************************************ */
     useEffect(() => {
-      axios.get("http://localhost:3000/products/getProductReview/" + id)
+      axios.get("http://localhost:3000/product/getProductReview/" + id)
         .then(function (res) {
           const reviews = res.data.review.map(review => ({
             reviewId: review.review_id,
@@ -106,7 +106,7 @@ const Product = () => {
     for (const singleReview of reviewArray) {
       sumOfScores += singleReview.score;
     }
-    let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
+    let initialScore = reviewArray.length > 0 ? (sumOfScores / review.reviewTotal).toFixed(1) : 0;
     let stockRemaining = product.stockRemaining;
     
   /* ******************************************************************************************** */

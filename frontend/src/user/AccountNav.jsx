@@ -20,7 +20,7 @@ function AccountNav() {
             </Link>
             <Link to="/myCreditCard" style={{ color: '#000000', textDecoration: 'none' }}>
                 <div className="my-account-menu" style={{ backgroundColor: '#F1F0F0', padding: '10px 0px 10px 0px', borderBottom: '1px solid #E5E5E5' }}>
-                    <p style={{ fontSize: '14px' }}>Bank & Credit cards</p>
+                    <p style={{ fontSize: '14px' }}>Credit cards</p>
                 </div>
             </Link>
             <Link to="/changePassword" style={{ color: '#000000', textDecoration: 'none' }}>

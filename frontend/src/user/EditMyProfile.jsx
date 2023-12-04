@@ -157,7 +157,7 @@ function EditMyProfile() {
     /**************************************************************/
 
     try {
-      const registerResponse = await fetch(`http://localhost:3000/account/updateuser/${userId}`, {
+      const updateUserResponse = await fetch(`http://localhost:3000/account/updateuser/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ function EditMyProfile() {
         body: JSON.stringify(formData),
       });
       
-      if (registerResponse.ok) {
+      if (updateUserResponse.ok) {
         window.location.href = '/myProfile';
         };
 
@@ -276,7 +276,6 @@ function EditMyProfile() {
                                 as="select"
                                 placeholder="Select Gender"
                                 name="gender"
-                                ref={passwordRef}
                                 defaultValue={user && user.gender ? user.gender : ''}
                                 value={formData.gender}
                                 onChange={handleChange} 

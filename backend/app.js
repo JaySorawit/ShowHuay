@@ -8,6 +8,7 @@ const authRoute = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const addressRoutes = require('./routes/addressRoutes');
 
 const app = express();
 
@@ -28,8 +29,9 @@ const io = socketIo(server, {
 app.set('io', io);
 
 // Routes
+app.use('/address', addressRoutes);
 app.use('/account', accountRoutes); 
-app.use('/products', productRoutes); 
+app.use('/product', productRoutes); 
 app.use('/auth', authRoute);
 app.use('/chat', chatRoutes);
 app.use('/shop', shopRoutes);
