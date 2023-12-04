@@ -73,10 +73,10 @@ const ShopProfile = () => {
 
                 const productPromises = data.map(async product => {
                     try {
-                        const totalSoldResponse = await axios.get(`http://localhost:3000/products/${product.product_id}`);
+                        const totalSoldResponse = await axios.get(`http://localhost:3000/product/${product.product_id}`);
                         const totalSold = totalSoldResponse.data.product[0].total_sold;
 
-                        const reviewResponse = await axios.get(`http://localhost:3000/products/getProductReview/${product.product_id}`);
+                        const reviewResponse = await axios.get(`http://localhost:3000/product/getProductReview/${product.product_id}`);
 
                         let averageScore = 0;
                         if (reviewResponse.data.review.length > 0) {
@@ -190,7 +190,7 @@ const ShopProfile = () => {
                                 <div className="row-card row-cols-2 row-cols-md-5 g-3">
                                     {filteredProducts.map(product => (
                                         <div key={product.product_id} className="col mb-4">
-                                            <Link to={`/products/${product.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <Link to={`/Products/${product.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                                 <div className="product-card">
                                                     <img
                                                         src={product.image_path}

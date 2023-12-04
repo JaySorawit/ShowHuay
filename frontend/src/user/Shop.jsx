@@ -201,6 +201,9 @@ const Shop = () => {
     const handleView = (productId) => {
         navigate(`/products/${productId}`);
     };
+    const handleAdd = () => {
+        navigate(`/AddProduct`);
+    };
     /******************************************************************************************************/
 
     /************************************* Delete Products *******************************************/
@@ -300,8 +303,8 @@ const Shop = () => {
                             <h4>Products</h4>
 
                             <div>
-                                <button className="add-product-button">
-                                    <Link style={{ color: '#fff' }} to="/AddProduct">Add Product</Link>
+                                <button className="add-product-button" onClick={() => handleAdd()}>
+                                    Add Product
                                 </button>
                                 <input
                                     type="text"
@@ -349,7 +352,7 @@ const Shop = () => {
                                     <Form onSubmit={handleUpdateProduct}>
 
                                         <Form.Group className="form-layout" controlId="product_name">
-                                        <Form.Label style={{ fontWeight: '400' }}>Product Name</Form.Label>
+                                            <Form.Label style={{ fontWeight: '400' }}>Product Name</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Product Name"
@@ -361,7 +364,7 @@ const Shop = () => {
                                         </Form.Group>
 
                                         <Form.Group className="form-layout" controlId="product_description">
-                                        <Form.Label style={{ fontWeight: '400' }}>Product Description</Form.Label>
+                                            <Form.Label style={{ fontWeight: '400' }}>Product Description</Form.Label>
                                             <Form.Control
                                                 as="textarea"
                                                 placeholder="Product Description"
@@ -375,7 +378,7 @@ const Shop = () => {
                                         </Form.Group>
 
                                         <Form.Group className="form-layout" controlId="price">
-                                        <Form.Label style={{ fontWeight: '400' }}>Price</Form.Label>
+                                            <Form.Label style={{ fontWeight: '400' }}>Price</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Price"
@@ -386,7 +389,7 @@ const Shop = () => {
                                             />
                                         </Form.Group>
                                         <Form.Group className="form-layout" controlId="stock_remaining">
-                                        <Form.Label style={{ fontWeight: '400' }}>Stock Remaining</Form.Label>
+                                            <Form.Label style={{ fontWeight: '400' }}>Stock Remaining</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Quantity"
