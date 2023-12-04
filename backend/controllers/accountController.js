@@ -36,17 +36,24 @@ const getUserInfo = (req, res) => {
 /******************************************* Update user information *******************************************/
 const updateUserInfo = (req, res) => {
   const userId = req.params.userId;
-  const { username, email, phone_number, address, city, state, zip_code } = req.body;
+  const userinfo = req.body;
+  const { username, email, fname, lname, telephoneNumber, gender, dateOfBirth } = userinfo;
+  if (userinfo.dateOfBirth == '') {
+    userinfo.dateOfBirth = null;
+  }
+
+  console.log(userinfo);
+  console.log(userinfo.dateOfBirth);
 
   const query = `
       UPDATE user 
-      SET username = ?, email = ?, password = ?, phone_number = ?, address = ?, city = ?, state = ?, zip_code = ?
+      SET username = ?, email = ?, fname = ?, lname = ?, telephone_number = ?, gender = ?, date_of_birth = ?
       WHERE user_id = ?
     `;
 
   db.query(
     query,
-    [username, email, password, phone_number, address, city, state, zip_code, userId],
+    [username, email, fname, lname, telephoneNumber, gender, userinfo.dateOfBirth, userId],
     (err, results) => {
       if (err) {
         console.error('Error updating user info:', err);

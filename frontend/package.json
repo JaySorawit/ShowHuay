@@ -16,6 +16,7 @@
     "bootstrap": "^5.3.2",
     "jquery": "^3.7.1",
     "moment": "^2.29.4",
+    "pad-start": "^1.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-bootstrap-icons": "^1.10.3",
@@ -24,7 +25,8 @@
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.18.0",
     "react-slider": "^2.0.6",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "string.prototype.padstart": "^3.1.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

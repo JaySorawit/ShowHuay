@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Container } from 'react-bootstrap';
+import { Form, Button, Row, Col, Container, FormGroup } from 'react-bootstrap';
 import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -45,7 +45,6 @@ function EditMyProfile() {
         const getUserData = async () => {
           try {
             const res = await axios.get(`http://localhost:3000/account/getuser/${userId}`);
-            // console.log(res.data);
             setUser({
                 userId: res.data.user_id,
                 username: res.data.username,
@@ -57,15 +56,22 @@ function EditMyProfile() {
                 dateOfBirth: res.data.date_of_birth,
             });
 
+            const formatDateForInput = (dateString) => {
+              if (!dateString) return '';
+              const [day, month, year] = dateString.split('/');
+              return `${year || ''}-${month || ''}-${day || ''}`;
+            };
+
             setFormData({
-                username: res.data.username,
-                email: res.data.email,
-                fname: res.data.fname,
-                lname: res.data.lname,
-                telephoneNumber: res.data.telephone_number,
-                gender: res.data.gender,
-                dateOfBirth: res.data.date_of_birth,
-              });
+              username: res.data.username,
+              email: res.data.email,
+              fname: res.data.fname,
+              lname: res.data.lname,
+              telephoneNumber: res.data.telephone_number,
+              gender: res.data.gender,
+              dateOfBirth: res.data.date_of_birth ? formatDateForInput(res.data.date_of_birth) : '',
+            });
+
           } catch (error) {
             console.error('Error fetching user information or chat history:', error);
             if(id != null){
@@ -85,7 +91,7 @@ function EditMyProfile() {
         try {
         const response = await fetch(`http://localhost:3000/auth/check-email?email=${formData.email}`);
         const data = await response.json();
-        setEmailExists(data.exists);
+        setEmailExists(data.exists && formData.email !== user.email);
         } catch (error) {
         console.error('Error checking email:', error);
         }
@@ -111,6 +117,7 @@ function EditMyProfile() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        const formattedDate = formatDateForDisplay(value);
 
         if (name === 'email') {
         setEmailExists(false);
@@ -119,6 +126,7 @@ function EditMyProfile() {
         if (name === 'username') {
         setUsernameExists(false);
         }
+
     };
     /*************************************************************************************************/
 
@@ -149,37 +157,17 @@ function EditMyProfile() {
     /**************************************************************/
 
     try {
-      const registerResponse = await fetch('http://localhost:3000/auth/register', {
+      const registerResponse = await fetch(`http://localhost:3000/account/updateuser/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(formData),
       });
-      const data = await registerResponse.json();
-
-
-    //   if (registerResponse.ok) {
-    //     const loginResponse = await fetch('http://localhost:3000/auth/login', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ email: user.email, password: user.password }),
-    //     });
-
-    //     if (loginResponse.ok) {
-    //       const loginData = await loginResponse.json();
-    //       console.log('Login successful:', loginData);
-
-    //       setIsLoggedIn(true);
-    //       localStorage.setItem('isLoggedIn', 'true');
-    //       localStorage.setItem('username', loginData.username);
-    //       localStorage.setItem('userId', loginData.userId);
-
-    //       window.location.href = './';
-    //     }
-    //   }
+      
+      if (registerResponse.ok) {
+        window.location.href = '/myProfile';
+        };
 
       console.log(data);
     } catch (error) {
@@ -187,6 +175,16 @@ function EditMyProfile() {
     }
   };
   /*************************************************************************************************/
+
+  const formatForInput = (dateString) => {
+    if (!dateString) return '';
+    const [day, month, year] = (dateString || '').split('/');
+    return `${year || ''}-${month || ''}-${day || ''}`;
+  };
+  
+
+  console.log(user.dateOfBirth);
+
 
     return (
     <div>
@@ -212,7 +210,7 @@ function EditMyProfile() {
                                 value={formData.username}
                                 onChange={handleChange}
                                 onBlur={handleUsernameCheck}
-                                ref={usernameRef}
+                                required
                             />
                             {usernameExists && (
                                 <div className="mt-2" style={{ color: 'red' }}>
@@ -229,7 +227,6 @@ function EditMyProfile() {
                                 name="fname"
                                 value={formData.fname}
                                 onChange={handleChange}
-                                ref={passwordRef}
                             />
                             </Form.Group>
 
@@ -241,7 +238,6 @@ function EditMyProfile() {
                                 name="lname"
                                 value={formData.lname}
                                 onChange={handleChange}
-                                ref={passwordRef}
                             />
                             </Form.Group>   
 
@@ -254,7 +250,7 @@ function EditMyProfile() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 onBlur={handleEmailCheck}
-                                ref={emailRef}
+                                required
                             />
                             {emailExists && (
                                 <div className="mt-2" style={{ color: 'red' }}>
@@ -271,7 +267,6 @@ function EditMyProfile() {
                                 name="telephoneNumber"
                                 value={formData.telephoneNumber}
                                 onChange={handleChange}
-                                ref={passwordRef}
                             />
                             </Form.Group>
 
@@ -283,6 +278,8 @@ function EditMyProfile() {
                                 name="gender"
                                 ref={passwordRef}
                                 defaultValue={user && user.gender ? user.gender : ''}
+                                value={formData.gender}
+                                onChange={handleChange} 
                             >
                                 <option value="" disabled hidden>Select Gender</option>
                                 <option value="male">Male</option>
@@ -292,19 +289,20 @@ function EditMyProfile() {
                             </Form.Group> 
 
                             <Form.Group className="form-layout" controlId="dateOfBirth">
-                            <Form.Label>Date of Birth</Form.Label>
-                            <Form.Control
+                              <Form.Label>Date of Birth</Form.Label>
+                              <Form.Control
                                 type="date"
-                                key={user.dateOfBirth} // Add a key to force re-render when user.dateOfBirth changes
-                                defaultValue={user && user.dateOfBirth ? user.dateOfBirth : ''}
+                                name="dateOfBirth"
+                                defaultValue={user && user.dateOfBirth ? formatForInput(user.dateOfBirth) : ''}
+                                value={formData.dateOfBirth}
+                                onChange={handleChange} 
                                 placeholder="Enter your date of birth"
-                                // ref={dateOfBirthRef}
-                            />
+                              />
                             </Form.Group>
 
                             <div className="form-layout" style={{ marginBottom: '16px' }}>
                             <div className="button" style={{ display: 'flex', margin: '0 auto', justifyContent: 'center', gap: '50px' }}>
-                                <button className="editBtn" onClick={handleBack}>Back</button>
+                              <button className="editBtn" type="button" onClick={handleBack}>Back</button>
                                 <button className="editBtn" type="submit">Save</button>
                             </div>
                             </div>
