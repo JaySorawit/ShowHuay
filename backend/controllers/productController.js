@@ -87,10 +87,10 @@ const getOneProduct = (req, res) => {
       }
   
       // Check if any results were returned
-      if (results.length === 0) {
-          res.status(404).send('error: Product not found');
-          return;
-        }      
+      // if (results.length === 0) {
+      //     res.status(404).json({error: 'Product not found'});
+      //     return;
+      //   }      
 
       // Format timestamps to "YYYY-MM-DD HH:mm:ss" format
       const reviewData = results.map(review => {

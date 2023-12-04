@@ -14,6 +14,7 @@ import MyAddress from './user/MyAddress.jsx';
 import MyCreditCard from './user/MyCreditCard.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import Shop from './user/Shop.jsx';
+import ShopProfile from './user/ShopProfile.jsx'
 import AddProduct from './user/AddProduct.jsx';
 import Admin from './admin/Admin.jsx';
 import Orders from './admin/pages/Orders.jsx';
@@ -28,6 +29,7 @@ const commonRoutes = [
   { path: "/", element: <Home /> },
   { path: "/productList", element: <ProductList /> },
   { path: "/Products/:id", element: <Product /> },
+  { path: "/shopProfile/:id", element: <ShopProfile /> },
 ];
 
 const guestRoutes = [
