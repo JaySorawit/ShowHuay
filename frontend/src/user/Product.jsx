@@ -33,82 +33,82 @@ const Product = () => {
 
 
   /* ************************************ Fetch product data ************************************ */
-  useEffect(() => {
-    axios.get("http://localhost:3000/products/" + id)
-      .then(function (response) {
-        setProduct({
-          productName: response.data.product[0].product_name,
-          productDescription: response.data.product[0].product_description,
-          sellerName: response.data.product[0].username,
-          sellerId: response.data.product[0].user_id,
-          sellerTel: response.data.product[0].telephone_number,
-          categoryId: response.data.product[0].category_id,
-          price: response.data.product[0].price,
-          totalSold: response.data.product[0].total_sold,
-          stockRemaining: response.data.product[0].stock_remaining,
-          imgPath: response.data.product[0].image_path,
-        });
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.error("Server responded with an error status:", error.response.status);
-          console.log("Full response:", error.response);
-          if (error.response.status === 404) {
-            console.log("Product not found. Navigating...");
-            navigate('/*');
+    useEffect(() => {
+      axios.get("http://localhost:3000/products/" + id)
+        .then(function(response) {
+          setProduct({
+            productName: response.data.product[0].product_name,
+            productDescription: response.data.product[0].product_description,
+            sellerName: response.data.product[0].username,
+            sellerId: response.data.product[0].user_id,
+            sellerTel: response.data.product[0].telephone_number,
+            categoryId: response.data.product[0].category_id,
+            price: response.data.product[0].price,
+            totalSold: response.data.product[0].total_sold,
+            stockRemaining: response.data.product[0].stock_remaining,
+            imgPath: response.data.product[0].image_path,
+          });
+        })
+        .catch(function(error) {
+          if (error.response) {
+            console.error("Server responded with an error status:", error.response.status);
+            console.log("Full response:", error.response);
+            if (error.response.status === 404) {
+              console.log("Product not found. Navigating...");
+              navigate('/*');
+            }
+          } else if (error.request) {
+            console.error("No response received from the server:", error.request);
+          } else {
+            console.error("Error setting up the request:", error.message);
           }
-        } else if (error.request) {
-          console.error("No response received from the server:", error.request);
-        } else {
-          console.error("Error setting up the request:", error.message);
-        }
-      });
-  }, [id, navigate]);
+        });
+    }, [id, navigate]);    
 
   /* ******************************************************************************************** */
 
 
   /* ************************************ Fetch review data ************************************ */
-  useEffect(() => {
-    axios.get("http://localhost:3000/products/getProductReview/" + id)
-      .then(function (res) {
-        const reviews = res.data.review.map(review => ({
-          reviewId: review.review_id,
-          reviewerId: review.user_id,
-          score: review.review_score,
-          reviewText: review.review_text,
-          reviewTime: review.review_timestamp,
-          reviewName: review.username,
-        }));
-
-        setReview({
-          reviewTotal: reviews.length,
-          reviews: reviews,
-        });
-      })
-      .catch(function (error) {
-        console.error('Error fetching product reviews:', error);
-        if (error.response && error.response.status === 404) {
+    useEffect(() => {
+      axios.get("http://localhost:3000/products/getProductReview/" + id)
+        .then(function (res) {
+          const reviews = res.data.review.map(review => ({
+            reviewId: review.review_id,
+            reviewerId: review.user_id,
+            score: review.review_score,
+            reviewText: review.review_text,
+            reviewTime: review.review_timestamp,
+            reviewName: review.username,
+          }));
+    
           setReview({
-            reviewTotal: 0,
-            reviews: [],
+            reviewTotal: reviews.length,
+            reviews: reviews,
           });
-        }
-      });
-  }, [id, navigate]);
-
+        })
+        .catch(function (error) {
+          console.error('Error fetching product reviews:', error);
+          if (error.response && error.response.status === 404) {
+            setReview({
+              reviewTotal: 0,
+              reviews: [], 
+            });
+          }
+        });
+    }, [id, navigate]);
+    
   /* ******************************************************************************************** */
 
 
   /* ************** Calculate the score and product remaining for product *********************** */
-  let sumOfScores = 0;
-  const reviewArray = review.reviews ? Object.values(review.reviews) : [];
-  for (const singleReview of reviewArray) {
-    sumOfScores += singleReview.score;
-  }
-  let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
-  let stockRemaining = product.stockRemaining;
-
+    let sumOfScores = 0;
+    const reviewArray = review.reviews ? Object.values(review.reviews) : [];
+    for (const singleReview of reviewArray) {
+      sumOfScores += singleReview.score;
+    }
+    let initialScore = reviewArray.length > 0 ? sumOfScores / review.reviewTotal : 0;
+    let stockRemaining = product.stockRemaining;
+    
   /* ******************************************************************************************** */
 
 
