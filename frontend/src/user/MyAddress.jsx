@@ -140,13 +140,17 @@ function MyAddress() {
     const handleUpdateAddress = async (e) => {
         e.preventDefault();
 
+        address.district = formData.district;
+        address.province = formData.province;
+        address.zipcode = formData.zipcode;
+
         try {
-            const response = await fetch(`http://localhost:3000/shop/updateProduct/${selectedProductId}`, {
+            const response = await fetch(`http://localhost:3000/address/updateAddress/${userId}"`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(productInfo)
+                body: JSON.stringify(address)
             });
 
             if (response.ok) {
@@ -182,7 +186,7 @@ function MyAddress() {
     };
     const handleEditChange = (e) => {
         const { name, value } = e.target;
-        setAddress({ ...productInfo, [name]: value });
+        setAddress({ ...address, [name]: value });
     };
     
       
@@ -480,14 +484,14 @@ function MyAddress() {
                                 <div className="modal-content">
                                 <span className="close" onClick={() => toggleEditAddressModal()}>&times;</span>
                                     <h5 className='add-user-text' style={{color:'#F44C0C', fontWeight:'700'}}>Edit Address</h5>
-                                    <Form onSubmit={handleSubmit} style={{maxHeight:'550px',overflow:'auto'}}>
+                                    <Form onSubmit={handleUpdateAddress} style={{maxHeight:'550px',overflow:'auto'}}>
                                         <Form.Group className="form-layout">
                                         <Form.Label>First Name :</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="fname"
                                             value={address.fname}
-                                            onChange={(e) => handleEditChange(e, index)}
+                                            onChange={handleEditChange}
                                             placeholder="First Name"
                                             required
                                         />
@@ -499,7 +503,7 @@ function MyAddress() {
                                             type="text"
                                             name="lname"
                                             value={address.lname}
-                                            onChange={(e) => handleEditChange(e, index)}
+                                            onChange={handleEditChange}
                                             placeholder='Last Name'
                                             required
                                         />
@@ -511,7 +515,7 @@ function MyAddress() {
                                             type="text"
                                             name="telephoneNumber"
                                             value={address.telephoneNumber}
-                                            onChange={(e) => handleEditChange(e, index)}
+                                            onChange={handleEditChange}
                                             placeholder='Telephone Number'
                                             required
                                         />
@@ -523,7 +527,7 @@ function MyAddress() {
                                             type="text"
                                             name="addressinfo"
                                             value={address.addressinfo}
-                                            onChange={(e) => handleEditChange(e, index)}
+                                            onChange={handleEditChange}
                                             placeholder='Address'
                                             required
                                         />
@@ -535,7 +539,7 @@ function MyAddress() {
                                                 as="select"
                                                 name="province"
                                                 id="province"
-                                                value={address.province}
+                                                value={formData.province}
                                                 required
                                                 onChange={(e) => {
                                                     handleChange(e);
@@ -556,7 +560,7 @@ function MyAddress() {
                                             <Form.Control
                                                 as="select"
                                                 name="district"
-                                                value={address.district}
+                                                value={formData.district}
                                                 required
                                                 onChange={(e) => {
                                                     handleChange(e);
@@ -577,7 +581,7 @@ function MyAddress() {
                                             <Form.Control
                                                 as="select"
                                                 name="zipcode"
-                                                value={address.zipcode}
+                                                value={formData.zipcode}
                                                 onChange={handleChange}
                                                 required
                                             >

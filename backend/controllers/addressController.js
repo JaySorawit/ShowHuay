@@ -90,27 +90,34 @@ const db = require("../Database/database");
 
 /************************************** Update User Address ***********************************************/
   const updateUserAddress = (req, res) => {
-  const userId = req.params.userId;
-  const address = req.body;
-  const { addressLine1, addressLine2, city, state, zipCode, country } = address;
+    const userId = req.params.userId;
+    const address = req.body;
+    console.log(address);
+    const { address_id, fname, lname, telephoneNumber, addressinfo, district, province, zipcode } = address;
 
-  const query = `
-        UPDATE user_address
-        SET address_line_1 = ?, address_line_2 = ?, city = ?, state = ?, zip_code = ?, country = ?
-        WHERE user_id = ?
-      `;
-  db.query(
-    query,
-    [addressLine1, addressLine2, city, state, zipCode, country, userId],
-    (err, results) => {
-      if (err) {
-        console.error("Error updating user address:", err);
-        res.status(500).json({ error: "Failed to update user address" });
-        return;
-      }
-      res.json(results);
-    }
-  );
+    const updateAddressQuery = `
+    UPDATE user_shipping_address 
+    SET 
+        address_fname = ?,
+        address_lname = ?,
+        address_telephone_number = ?,
+        province = ?,
+        district = ?,
+        zipcode = ?,
+        address_detail = ?
+    WHERE address_id = ?;
+    `;
+
+    db.query(updateAddressQuery,[fname,lname,telephoneNumber,province,district,zipcode,addressinfo,address_id,],(err, results) => {
+            if (err) {
+                console.error("Error updating user address:", err);
+                res.status(500).json({ error: "Failed to update user address" });
+                return;
+            }
+            res.json(results);
+        }
+    );
+
 };
 /***********************************************************************************************************/
 
