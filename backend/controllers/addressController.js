@@ -18,8 +18,30 @@ const db = require("../Database/database");
     res.json(results);
   });
 };
+/***********************************************************************************************************/
 
-/******************************************** Add User Address**********************************************/
+/******************************************* Get One User Address ******************************************/
+  const getOneUserAddress = (req, res) => {
+  const addressId = req.params.addressId;
+  
+  const query = `
+        SELECT *
+        FROM user_shipping_address
+        WHERE address_id = ?
+        `;
+  db.query(query, [addressId], (err, results) => {
+    if (err) {
+      console.error("Error getting user address:", err);
+      res.status(500).json({ error: "Failed to get user address" });
+      return;
+    }
+    res.json(results);
+  });
+};
+/***********************************************************************************************************/
+
+
+/******************************************** Add User Address *********************************************/
   const addUserAddress = (req, res) => {
   const userId = req.params.userId;
   const address = req.body;
@@ -164,6 +186,7 @@ const getDistricts = (req, res) => {
 
 module.exports = {
   getUserAddress,
+  getOneUserAddress,
   addUserAddress,
   updateUserAddress,
   deleteUserAddress,

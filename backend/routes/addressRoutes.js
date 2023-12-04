@@ -1,6 +1,7 @@
 const route = require("express").Router();
 
-const { getUserAddress, 
+const { getUserAddress,
+    getOneUserAddress, 
     addUserAddress, 
     updateUserAddress, 
     deleteUserAddress,
@@ -9,6 +10,7 @@ const { getUserAddress,
     getZipcode } = require("../controllers/addressController");
 
 route.route("/getAddress/:userId").get(getUserAddress);
+route.route("/getOneAddress/:addressId").get(getOneUserAddress);
 route.route("/addAddress/:userId").post(addUserAddress);
 route.route("/updateAddress/:userId").put(updateUserAddress);
 route.route("/deleteAddress/:userId").delete(deleteUserAddress);
