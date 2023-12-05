@@ -104,6 +104,9 @@ const getUserChat = (req, res) => {
 const createMessage = (req, res) => {
   const { receiverId, senderId, text } = req.body;
 
+  console.log(receiverId);
+  console.log(senderId);
+  console.log(text);
   try{
     const INSERT_CHAT_QUERY = 'INSERT INTO chat (receive_user_id, send_user_id, chat_text) VALUES (?, ?, ?)';
     db.query(INSERT_CHAT_QUERY, [receiverId, senderId, text], (err, results) => {
@@ -114,9 +117,10 @@ const createMessage = (req, res) => {
     }
     else {
       const Message = results;
+      console.log(Message); 
       res.status(200).json({
         status: 'success',
-        message: 'Message created successfully',
+        message: 'Message created successfully', Message
       });
     }
     });

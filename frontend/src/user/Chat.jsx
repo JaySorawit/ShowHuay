@@ -1,58 +1,48 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
-import Navbar from "./Navbar";
 import axios from "axios";
+import Navbar from "./Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Chat.css";
 import userImage from "../assets/icon/userImage.png";
 
 function Chat() {
-
   const navigate = useNavigate();
-  let { id } = useParams();
+  const { id } = useParams();
+  const receiverId = id;
   const userId = localStorage.getItem("userId");
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [participant, setparticipant] = useState([]);
+  const [participant, setParticipant] = useState([]);
   const [receiver, setReceiver] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
 
-
   const socketRef = useRef();
 
-  // get chat User
   useEffect(() => {
     const getUserChat = async () => {
-      if (userId !== null) {
-        try {
-          const res = await axios.post(
-            `http://localhost:3000/chat`,{ receiverId: userId, }
-          );
+      try {
+        const res = await axios.post(`http://localhost:3000/chat/`, {
+          receiverId: userId,
+        });
 
-          const participants =
-            Array.isArray(res.data.chat) && res.data.chat.length > 0
-              ? res.data.chat.map((participant) => ({
-                  participantId: participant.userId,
-                  participantName: participant.username,
-                }))
-              : [];
+        const participants =
+          Array.isArray(res.data.chat) && res.data.chat.length > 0
+            ? res.data.chat.map((participant) => ({
+                participantId: participant.userId,
+                participantName: participant.username,
+              }))
+            : [];
 
-          setparticipant(participants);
-        } catch (error) {
-          console.error("Error fetching user chat:", error);
-          setIsLoggedIn(false);
-        }
-      } else {
-        setIsLoggedIn(false);
+        setParticipant(participants);
+      } catch (error) {
+        console.error("Error fetching user chat:", error);
       }
     };
     getUserChat();
   }, [userId]);
-
-  const receiverId = id;
 
   useEffect(() => {
     const socket = io("http://localhost:3000/chat/");
@@ -66,12 +56,13 @@ function Chat() {
       socket.disconnect();
     };
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/account/getuser/${id}`);
-        // console.log(res.data);
+        const res = await axios.get(
+          `http://localhost:3000/account/getuser/${id}`
+        );
         setReceiver({
           receiverId: res.data.user_id,
           receiverName: res.data.username,
@@ -80,53 +71,70 @@ function Chat() {
           handleChatSelection(id);
         }
       } catch (error) {
-        console.error('Error fetching user information or chat history:', error);
-        if(id != null){
-          if (error.response && error.response.status == 404 ) {
+        console.error(
+          "Error fetching user information or chat history:",
+          error
+        );
+        if (id != null) {
+          if (error.response && error.response.status === 404) {
             navigate('/*');
           }
         }
       }
     };
     fetchData();
-  }, [id, history]);
-  
-  // Fetch chat history when the component mounts
-  const handleChatSelection = async (selectedparticipantId) => {
+  }, [id]);
+
+  const handleChatSelection = async (selectedParticipantId) => {
     try {
-      navigate(`/Chat/${selectedparticipantId}`);
+      navigate(`/Chat/${selectedParticipantId}`);
       const res = await axios.get(`http://localhost:3000/chat/${userId}`, {
         params: {
-          receiverId: selectedparticipantId,
+          receiverId: selectedParticipantId,
           senderId: userId,
         },
       });
 
       const chatHistory =
-            Array.isArray(res.data.chat) && res.data.chat.length > 0
-              ? res.data.chat.map((chat) => ({
-                messageId: chat.chat_id,
-                receiveId: chat.receive_user_id,
-                senderId: chat.send_user_id,
-                chatText: chat.chat_text,
-                timestamp: chat.time,
-              }))
-              : [];
-      // console.log(chatHistory);
-      setChatHistory(chatHistory); 
-      setSelectedChat(selectedparticipantId);
+        Array.isArray(res.data.chat) && res.data.chat.length > 0
+          ? res.data.chat.map((chat) => ({
+              messageId: chat.chat_id,
+              receiveId: chat.receive_user_id,
+              senderId: chat.send_user_id,
+              chatText: chat.chat_text,
+              timestamp: chat.time,
+            }))
+          : [];
+      setChatHistory(chatHistory);
+      setSelectedChat(selectedParticipantId);
     } catch (error) {
       console.error('Error fetching chat history:', error);
     }
   };
-  
-  const handleSendMessage = () => {
-    socketRef.current.emit("chat message", {
-      message: newMessage,
-      senderId: userId,
-      receiverId,
-    });
-    setNewMessage("");
+
+  const handleSendMessage = async () => {
+    try {
+      if (typeof newMessage !== 'string' || newMessage.trim() === "") {
+        console.error("Error sending message: Invalid message format");
+        return;
+      }
+
+      const response = await axios.post(`http://localhost:3000/chat/${userId}`, {
+        receiverId,
+        senderId: userId,
+        text: newMessage,
+      });
+
+      console.log("Response:", response.data);
+
+      const { Message } = response.data;
+      console.log("Message sent:", Message);
+      setMessages((prevMessages) => [...prevMessages, Message]);
+      setChatHistory((prevChatHistory) => [...prevChatHistory, Message]);
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   return (
