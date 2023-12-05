@@ -167,10 +167,21 @@ function MyAddress() {
 
 
     /******************************************* Handle Delete ************************************************/
-    const handleDelete = (addressId) => {
-        // Implement your logic to handle editing the address with the given addressId
-        console.log(`Editing address with ID: ${addressId}`);
-        // You can navigate to the edit page or show a modal for editing, etc.
+    const handleDelete = addressId => {
+        console.log('Delete address with id:', addressId);
+        fetch(`http://localhost:3000/address/deleteAddress/${addressId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.alert('Product deleted successfully');
+                window.location.reload(false);
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
+            });
     };
     /**********************************************************************************************************/
     
@@ -390,6 +401,7 @@ function MyAddress() {
                                             value={formData.telephoneNumber}
                                             onChange={handleChange}
                                             placeholder='Telephone Number'
+                                            maxLength={10}
                                             required
                                         />
                                         </Form.Group>
@@ -517,6 +529,7 @@ function MyAddress() {
                                             value={address.telephoneNumber}
                                             onChange={handleEditChange}
                                             placeholder='Telephone Number'
+                                            maxLength={10}
                                             required
                                         />
                                         </Form.Group>

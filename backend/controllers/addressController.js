@@ -90,10 +90,10 @@ const db = require("../Database/database");
 
 /************************************** Update User Address ***********************************************/
   const updateUserAddress = (req, res) => {
-    const userId = req.params.userId;
+    const creditCardId = req.params.creditCardId;
     const address = req.body;
     console.log(address);
-    const { address_id, fname, lname, telephoneNumber, addressinfo, district, province, zipcode } = address;
+    const { fname, lname, telephoneNumber, addressinfo, district, province, zipcode } = address;
 
     const updateAddressQuery = `
     UPDATE user_shipping_address 
@@ -108,7 +108,7 @@ const db = require("../Database/database");
     WHERE address_id = ?;
     `;
 
-    db.query(updateAddressQuery,[fname,lname,telephoneNumber,province,district,zipcode,addressinfo,address_id,],(err, results) => {
+    db.query(updateAddressQuery,[fname,lname,telephoneNumber,province,district,zipcode,addressinfo,creditCardId,],(err, results) => {
             if (err) {
                 console.error("Error updating user address:", err);
                 res.status(500).json({ error: "Failed to update user address" });
@@ -123,15 +123,13 @@ const db = require("../Database/database");
 
 /***************************************** Delete User Address **********************************************/
   const deleteUserAddress = (req, res) => {
-  const userId = req.params.userId;
-  const address = req.body;
-  const { fname, lname, telephoneNumber, addressinfo, district, province, zipcode } = address;
-
+  const addressId = req.params.addressId;
+  console.log(addressId);
   const query = `
-        DELETE FROM user_address
-        WHERE user_id = ?
+        DELETE FROM user_shipping_address
+        WHERE address_id = ?
       `;
-  db.query(query, [userId], (err, results) => {
+  db.query(query, [addressId], (err, results) => {
     if (err) {
       console.error("Error deleting user address:", err);
       res.status(500).json({ error: "Failed to delete user address" });
@@ -159,6 +157,7 @@ const getDistricts = (req, res) => {
 };
 
 /***********************************************************************************************************/
+
 
 /******************************************* Get Provinces *************************************************/
   const getProvinces = (req, res) => {
