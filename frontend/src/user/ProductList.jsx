@@ -50,7 +50,7 @@ function ProductList() {
     console.log(`Selected Category: ${category}`);
     // You can add more complex logic here, like updating state or navigating to a different page
   };
-
+ const productCount=0;
   return (
     <>
       <Navbar />
@@ -59,7 +59,7 @@ function ProductList() {
           <div className="col_1">
             <div className="filterByText">Filter By</div>
             <hr className="divider_productlist" />
-            <div className="form-label">Price range</div>
+            <div className="form-label">Price</div>
             <ReactSlider
               value={[min, max]}
               className="slider"
@@ -144,7 +144,55 @@ function ProductList() {
             <div style={{ margin: "10px" }}>
               Search result for " {search} "{" "}
             </div>
-            
+            <div className="pt-3 pb-3" style={{ backgroundColor: '#F1F0F0', minHeight: '640px' }}>
+                    <Container style={{ maxWidth: '1080px' }}>
+                        {productCount === 0 ? (
+                            <div className="no-products">
+                                <div>
+                                    <i className="nav-icon fas fa-shopping-basket mb-2" style={{ color: '#F44C0C', fontSize: '64px' }} />
+                                </div>
+                                <p>No products available</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="mb-3">
+                                    <input
+                                        type="text"
+                                        placeholder="Search in this shop..."
+                                        value={searchTerm}
+                                        onChange={handleSearch}
+                                        className="search-input ms-0"
+                                    />
+                                </div>
+
+                                <div className="row-card row-cols-2 row-cols-md-5 g-3">
+                                    {filteredProducts.map(product => (
+                                        <div key={product.product_id} className="col mb-4">
+                                            <Link to={`/Products/${product.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                <div className="product-card">
+                                                    <img
+                                                        src={product.image_path}
+                                                        alt={product.product_name}
+                                                        className="product-card-image"
+                                                    />
+                                                    <div className="product-card-details">
+                                                        <h5 className="product-card-title">{product.product_name}</h5>
+                                                        <p className="product-card-info">฿{product.price}</p>
+                                                        <div className="product-card-footer">
+                                                            <RatingStar score={product.review_score} />
+                                                            <p className="product-card-sold">{product.total_sold} sold</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </div>
+
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </Container>
+                </div>
           </div>
         </div>
       </div>
