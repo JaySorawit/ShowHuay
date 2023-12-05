@@ -173,7 +173,6 @@ const Product = () => {
             </div>
             <div className="sellercontact">
               <Link to={`/shopProfile/${product.sellerId}`}><button>View Profile</button></Link>
-
               {product.sellerId != userId && (
                 <Link to={`/chat/${product.sellerId}`}>
                   <button>Chat</button>

@@ -145,4 +145,45 @@ const AddProductReview = (req, res) => {
 };
 /**********************************************************************************************************/
 
-module.exports = { getUserInfo, updateUserInfo, queryUsername, queryPurchases, updateReviewState, AddProductReview };
+
+/******************************************** Change Password *********************************************/
+const changePassword = (req, res) => {
+  const userId = req.params.userId;
+  const { currentPassword, newPassword } = req.body;
+
+  const selectQuery = 'SELECT password FROM user WHERE user_id = ?';
+
+  db.query(selectQuery, [userId], (selectErr, selectResults) => {
+    if (selectErr) {
+      console.error('Error fetching password:', selectErr);
+      return res.status(500).json({ error: 'Failed to fetch password' });
+    }
+
+    if (selectResults.length === 0) {
+      return res.status(404).json({ error: 'Password not found for the given user ID' });
+    }
+
+    const storedPassword = selectResults[0].password;
+
+    if (storedPassword !== currentPassword) {
+      return res.status(400).json({ error: 'Old password is incorrect' });
+    }
+
+    const updateQuery = 'UPDATE user SET password = ? WHERE user_id = ?';
+
+    db.query(updateQuery, [newPassword, userId], (updateErr, updateResults) => {
+      if (updateErr) {
+        console.error('Error updating password:', updateErr);
+        return res.status(500).json({ error: 'Failed to update password' });
+      }
+
+      res.status(200).json({ message: 'Password updated successfully' });
+    });
+  });
+};
+
+
+/**********************************************************************************************************/
+
+
+module.exports = { getUserInfo, updateUserInfo, queryUsername, queryPurchases, updateReviewState, AddProductReview, changePassword};

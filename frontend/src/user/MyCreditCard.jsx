@@ -244,11 +244,9 @@ function MyCreditCard() {
         const { name, value } = e.target;
         setcreditCard({ ...creditCard, [name]: value });
     };
-    
-      
-
     /**********************************************************************************************************/
 
+    /* ************************************ Display creadit card property *********************************** */
     const today = new Date();
     const minDate = today.toISOString().slice(0, 7);
     const maskedCreditCardNumber = (creditCardNumber) => {
@@ -262,6 +260,7 @@ function MyCreditCard() {
             return 'N/A';
         }
     };
+    /**********************************************************************************************************/
     
     
     return (
@@ -278,7 +277,7 @@ function MyCreditCard() {
                         <Col md={10}>
                             <div className="infoBox" style={{ gap: '5px', minHeight: '450px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <h5>My credit Card</h5>
+                                    <h5>My Credit Card</h5>
                                     <button
                                         className="btn btn-primary"
                                         style={{ float: 'right', backgroundColor: '#F44C0C', border: 'none' }}

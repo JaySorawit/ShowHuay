@@ -12,6 +12,7 @@ const ShopProfile = () => {
 
     /********************************** Initialize State ******************************************/
     const { id } = useParams();
+    const userId = localStorage.getItem('userId');
     const [sellerInfo, setSellerInfo] = useState({
         userId: '',
         username: '',
@@ -159,7 +160,10 @@ const ShopProfile = () => {
                                         <h5 className="info-seller"><i className="nav-icon fas fa-store" style={{ fontSize: '14px', marginRight: '4px' }} />
                                             Products: {productCount}
                                         </h5>
-                                        <button className="chat-button" onClick={() => handleChat(sellerInfo.userId)}>Chat</button>
+                                        {
+                                            sellerInfo.userId != userId &&
+                                            <button className="chat-button" onClick={() => handleChat(sellerInfo.userId)}>Chat</button>
+                                        }
                                     </div>
                                 </Col>
                             </Row>
