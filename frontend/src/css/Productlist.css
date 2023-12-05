@@ -40,10 +40,16 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .applyButton {
-  width: 40%;
-  margin: 20px;
+  width: 80%;
+  margin:30px;
+  display: block;
   margin-left: auto;
   margin-right: auto;
+  background-color: #F44C0C;
+  border: none; 
+  border-radius: 5px; 
+  transition: box-shadow 0.3s ease-in-out;
+  color: white;
 }
 
 .show_product {
@@ -82,12 +88,13 @@ input[type=number]::-webkit-outer-spin-button {
 
 .divider_productlist {
   border: 1px solid  #000000 ;
-  margin: 30px 0; 
+  margin: 30px 0;
+  margin-bottom: 20px; 
 }
 
 .form-label{
-  font-size: 20px;
-  margin-top: 0px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .filterByText, .form-label {
@@ -101,6 +108,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .rating_button{
+  width: 60%;
   background-color: #D9D9D9;
   border: none; 
   border-radius: 20px; 

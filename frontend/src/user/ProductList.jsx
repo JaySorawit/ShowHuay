@@ -51,20 +51,6 @@ function ProductList() {
     // You can add more complex logic here, like updating state or navigating to a different page
   };
 
-  const categories = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "5",
-    "6",
-    "7",
-    "8",
-  ];
   return (
     <>
       <Navbar />
@@ -125,6 +111,7 @@ function ProductList() {
               </div>
             </div>
             <hr className="divider_productlist" />
+            <div className="form-label">Score rating</div>
             <div className="buttonContainer">
               <button className={`rating_button ${clickedButton === 5 ? 'active' : ''}`}
           onClick={() => handleButtonClick(5)}>
@@ -147,6 +134,7 @@ function ProductList() {
                 <RatingStar score={1} />
               </button>
             </div>
+            <hr className="divider_productlist" />
             <button onClick={handleApply} className="applyButton">
               Apply
             </button>
