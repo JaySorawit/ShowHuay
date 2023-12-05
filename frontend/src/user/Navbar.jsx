@@ -84,7 +84,7 @@ function Navbar() {
                                                 <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
                                                 <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
                                                 <li><hr className="dropdown-divider" /></li>
-                                                <li><Link className="dropdown-item" to="/Login" onClick={handleLogout}>Logout</Link></li>
+                                                <li><Link className="dropdown-item" to="/" onClick={handleLogout}>Logout</Link></li>
                                             </ul>
                                         </li>
                                     </>
@@ -106,7 +106,7 @@ function Navbar() {
                                                 <li><Link className="dropdown-item" to="/Shop">My Shop</Link></li>
                                                 <li><Link className="dropdown-item" to="/Chat">Chats</Link></li>
                                                 <li><hr className="dropdown-divider" /></li>
-                                                <li><Link className="dropdown-item" to="/Login" onClick={handleLogout}>Logout</Link></li>
+                                                <li><Link className="dropdown-item" to="/" onClick={handleLogout}>Logout</Link></li>
                                             </ul>
                                         </li>
                                     </>
@@ -125,7 +125,7 @@ function Navbar() {
                                     </>
                                 )}
                                 <li className="nav-item">
-                                    <Link className="nav-link register-login" to='/LogIn'>Login</Link>
+                                    <Link className="nav-link register-login" to='/login'>Login</Link>
                                 </li>
                             </>
                         )}
