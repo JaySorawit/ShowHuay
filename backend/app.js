@@ -9,7 +9,6 @@ const shopRoutes = require('./routes/shopRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const addressRoutes = require('./routes/addressRoutes');
 const creditCardRoutes = require('./routes/creditCardRoutes');
-const { on } = require('events');
 const app = express();
 
 // Enable CORS for all routes
@@ -26,32 +25,8 @@ const io = socketIo(server, {
       methods: ["GET", "POST"]
     }
   });
-  const chatRoutes = require('./routes/chatRoutes')(io);
-let onlineUsers = [];
-io.on('connection', (socket) => {
-  socket.on("addNewUser", (userId) => {
-    !onlineUsers.some((user) => user.userId === userId) &&
-      onlineUsers.push({ 
-        userId, 
-        socketId: socket.id, 
-      });
-  });
-  io.emit("getOnlineUsers", onlineUsers);
-  socket.on("sendMessage", ({ senderId, receiveId, chatText }) => {
-    const user = onlineUsers.find((user) => user.userId === receiveId);
-    if (user) {
-      io.to(user.socketId).emit("getMessage", {
-        receiveId,
-        senderId,
-        chatText,
-      });
-    }
-  }); 
-  socket.on('disconnect', () => {
-      onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
-      io.emit("getOnlineUsers", onlineUsers);
-  });
-});
+const chatRoutes = require('./routes/chatRoutes')(io);
+
 
 // Routes
 app.use('/address', addressRoutes);
