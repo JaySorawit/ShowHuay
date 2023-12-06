@@ -66,7 +66,7 @@ function ProductList() {
               min={0}
               max={100000}
               minDistance={1}
-              step={1}
+              step={100}
               withTracks={true}
               pearling={true}
               renderThumb={(props) => <div {...props} className="thumb"></div>}
