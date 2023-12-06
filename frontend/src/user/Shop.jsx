@@ -333,6 +333,7 @@ const Shop = () => {
                   value={searchTerm}
                   onChange={handleSearch}
                   className="search-input"
+                  style={{ marginLeft: '15px' }}
                 />
               </div>
 
