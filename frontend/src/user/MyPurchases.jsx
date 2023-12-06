@@ -44,7 +44,7 @@ const MyPurchases = () => {
                 const productIds = data.map(purchase => purchase.product_id);
 
                 const productDetailsRequests = productIds.map(productId =>
-                    fetch(`http://localhost:3000/products/${productId}`)
+                    fetch(`http://localhost:3000/product/${productId}`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`Failed to fetch product with ID: ${productId}`);
