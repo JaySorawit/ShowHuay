@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getMessage, createMessage, getUserChat, getChat } = require('../controllers/chatController');
+const { getMessage, createMessage, getUserChat } = require('../controllers/chatController');
 
-router.route("/:id").post(createMessage);
-router.route("/:id").get(getMessage);
-router.route("/").post(getUserChat); 
-// router.get("/:id", (req, res) => {
-//   // Access io directly from the app
-//   const io = req.app.get('io');
-//   getChat(req, res, io);
-// });
+const chatRoutes = (io) => {
+    router.route("/:id").post(createMessage(io)).get(getMessage(io));
+    router.route("/").post(getUserChat(io));
+    return router;
+};
 
-module.exports = router;
+module.exports = chatRoutes;
+

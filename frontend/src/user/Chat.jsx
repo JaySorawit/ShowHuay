@@ -8,6 +8,7 @@ import "../css/Chat.css";
 import userImage from "../assets/icon/userImage.png";
 
 function Chat() {
+  /***************************************** Initialize State ***********************************************/
   const navigate = useNavigate();
   const { id } = useParams();
   const receiverId = id;
@@ -18,9 +19,12 @@ function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  /*************************************************************************************************************/
+  
 
-  const socketRef = useRef();
-
+  /************************************ fetch chat paticipants *************************************************/
   useEffect(() => {
     const getUserChat = async () => {
       try {
@@ -43,20 +47,49 @@ function Chat() {
     };
     getUserChat();
   }, [userId]);
+  /*************************************************************************************************************/
 
+
+  /************************************ handle socket connection ************************************************/
   useEffect(() => {
-    const socket = io("http://localhost:3000/chat/");
-    socketRef.current = socket;
-
-    socket.on("chat message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    const newSocket = io("http://localhost:3000"); 
+    setSocket(newSocket);
 
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
-  }, []);
+  }, [userId]);
 
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit("addNewUser", userId);
+    socket.on("getOnlineUsers", (res) => {
+      setOnlineUsers(res);
+    });
+    return () => {
+      socket.off("getOnlineUsers");
+    };
+  }, [socket, userId]);
+
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit("sendMessage", { receiveId: receiverId, senderId: userId, chatText: messages[messages.length - 1].chatText});
+  }, [messages]);
+
+  useEffect(() => {
+    if (socket === null) return;
+    socket.on("getMessage", (res) => {
+      console.log("getMessage event received:", res);
+      setChatHistory((prevChatHistory) => [...prevChatHistory, res]);
+    });
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket]); 
+  /*************************************************************************************************************/
+
+
+  /****************************** handle Chat Selection and fetch chat history ***********************************/
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -111,6 +144,10 @@ function Chat() {
       console.error('Error fetching chat history:', error);
     }
   };
+  /*************************************************************************************************************/
+
+
+  /****************************************** handle Send Message **********************************************/
 
   const handleSendMessage = async () => {
     try {
@@ -125,10 +162,14 @@ function Chat() {
         text: newMessage,
       });
 
-      console.log("Response:", response.data);
-
       const { Message } = response.data;
-      console.log("Message sent:", Message);
+      const firstTime = Message.firstTime;
+      if (firstTime) {
+        window.location.reload();
+        };
+      if (!firstTime) {
+        socket.emit("newMessage", Message);
+    }
       setMessages((prevMessages) => [...prevMessages, Message]);
       setChatHistory((prevChatHistory) => [...prevChatHistory, Message]);
       setNewMessage("");
@@ -136,6 +177,7 @@ function Chat() {
       console.error("Error sending message:", error);
     }
   };
+  /*************************************************************************************************************/
 
   return (
   <>

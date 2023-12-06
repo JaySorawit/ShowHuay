@@ -90,11 +90,8 @@ const getOneUserCreditCard = (req, res) => {
   
   /************************************** Update User Credit Cards *******************************************/
     const updateUserCreditCard = (req, res) => {
-      // const creditCardId = req.params.creditCardId;
       const creditCard = req.body;
       const { creditCardId, creditCardNumber, cardType, expiryDate, cvv } = creditCard;
-      console.log(creditCard);
-      console.log(creditCardId);
       const updateAddressQuery = `UPDATE user_credit_card 
       SET 
         credit_card_number = ?,
