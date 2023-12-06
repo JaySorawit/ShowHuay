@@ -18,17 +18,17 @@ const MyPurchases = () => {
   const [rating, setRating] = useState(0);
   const [error, setError] = useState(false);
   const [reviewInfo, setReviewInfo] = useState({
-    product_id: "",
-    user_id: "",
-    review_score: "",
-    review_text: "",
+    productId: "",
+    userId: "",
+    reviewScore: "",
+    reviewText: "",
   });
   useEffect(() => {
     setUsername(localStorage.getItem("username"));
   }, []);
   /***********************************************************************************************/
 
-  /************************************* Query Purchases ********************************************/
+  /************************************ Query Purchases ******************************************/
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     fetch(`http://localhost:3000/account/purchases/${userId}`)
@@ -90,7 +90,7 @@ const MyPurchases = () => {
   }, []);
   /***************************************************************************************************/
 
-  /************************************** Link of Products ******************************************/
+  /*************************************** Link of Products ******************************************/
   const navigate = useNavigate();
   const handleView = (productId) => {
     navigate(`/products/${productId}`);
@@ -98,35 +98,35 @@ const MyPurchases = () => {
   const handleContactSeller = (userId) => {
     navigate(`/chat/${userId}`);
   };
-  /******************************************************************************************************/
+  /***************************************************************************************************/
 
-  /************************************* Toggle System **********************************************/
+  /************************************** Toggle System **********************************************/
   const toggleReviewProductModal = () => {
     setShowReviewProductModal(!showReviewProductModal);
   };
-  /*************************************************************************************************/
+  /***************************************************************************************************/
 
-  /************************************* Handle Review Change **********************************************/
+  /*********************************** Handle Review Change ******************************************/
   const handleReviewChange = (e) => {
     const { name, value } = e.target;
     setReviewInfo({ ...reviewInfo, [name]: value });
   };
-  /**********************************************************************************************************/
+  /***************************************************************************************************/
 
-  /******************************************* Review Product ************************************************/
+  /************************************** Review Product *********************************************/
   const handleReview = async (purchaseId, productId) => {
     setShowReviewProductModal(true);
     setSelectedPurchaseId(purchaseId);
     setReviewInfo({
-      product_id: productId,
-      user_id: localStorage.getItem("userId"),
+      productId: productId,
+      userId: localStorage.getItem("userId"),
     });
     setError(false);
     setRating(0);
   };
-  /**********************************************************************************************************/
+  /***************************************************************************************************/
 
-  /******************************************* Update Product **********************************************/
+  /***************************************** Update Product ******************************************/
   const handleUpdatePurchases = async (e) => {
     e.preventDefault();
     if (rating === 0) {
@@ -180,15 +180,15 @@ const MyPurchases = () => {
       console.error("Error occurred while updating review state:", updateError);
     }
   };
-  /*************************************************************************************************/
+  /***************************************************************************************************/
 
-  /**************************************** Rating star System *******************************************/
+  /*************************************** Rating star System ****************************************/
   const handleStarClick = (value) => {
     setRating(value);
-    setReviewInfo({ ...reviewInfo, review_score: value });
+    setReviewInfo({ ...reviewInfo, reviewScore: value });
     setError(false);
   };
-  /*******************************************************************************************************/
+  /***************************************************************************************************/
 
   const sortedPurchases = [...filteredPurchases].sort(
     (a, b) => b.purchase_id - a.purchase_id
@@ -369,7 +369,7 @@ const MyPurchases = () => {
               </span>
               <h5 className="add-user-text">Review</h5>
               <Form onSubmit={handleUpdatePurchases}>
-                <Form.Group className="form-layout" controlId="review_score">
+                <Form.Group className="form-layout" controlId="reviewScore">
                   <div className="star-rating">
                     {[...Array(5)].map((_, index) => {
                       const value = index + 1;
@@ -389,12 +389,12 @@ const MyPurchases = () => {
                   </div>
                 </Form.Group>
 
-                <Form.Group className="form-layout" controlId="review_text">
+                <Form.Group className="form-layout" controlId="reviewText">
                   <Form.Control
                     as="textarea"
                     placeholder="Review Description"
-                    name="review_text"
-                    value={reviewInfo.review_text}
+                    name="reviewText"
+                    value={reviewInfo.reviewText}
                     onChange={handleReviewChange}
                     rows={4}
                     style={{ height: "180px" }}

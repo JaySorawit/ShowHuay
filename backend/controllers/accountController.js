@@ -3,10 +3,9 @@ const db = require('../Database/database')
 /******************************************* Get user information *******************************************/
 const getUserInfo = (req, res) => {
   const userId = req.params.userId;
+  const selectUserQuery = 'SELECT * FROM user WHERE user_id = ?';
 
-  const query = 'SELECT * FROM user WHERE user_id = ?';
-
-  db.query(query, [userId], (err, results) => {
+  db.query(selectUserQuery, [userId], (err, results) => {
     if (err) {
       console.error('Error fetching user info:', err);
       res.status(500).json({ error: 'Failed to fetch user info' });
@@ -31,9 +30,9 @@ const getUserInfo = (req, res) => {
     res.json(formattedUser);
   });
 };
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
-/******************************************* Update user information *******************************************/
+/******************************************* Update user information ****************************************/
 const updateUserInfo = (req, res) => {
   const userId = req.params.userId;
   const userinfo = req.body;
@@ -45,14 +44,14 @@ const updateUserInfo = (req, res) => {
   console.log(userinfo);
   console.log(userinfo.dateOfBirth);
 
-  const query = `
+  const updateUserInfoQuery = `
       UPDATE user 
       SET username = ?, email = ?, fname = ?, lname = ?, telephone_number = ?, gender = ?, date_of_birth = ?
       WHERE user_id = ?
     `;
 
   db.query(
-    query,
+    updateUserInfoQuery,
     [username, email, fname, lname, telephoneNumber, gender, userinfo.dateOfBirth, userId],
     (err, results) => {
       if (err) {
@@ -64,20 +63,20 @@ const updateUserInfo = (req, res) => {
     }
   );
 };
-/***********************************************************************************************************/
+/************************************************************************************************************/
 
 
 /************************************** Query Username with Product ID  *************************************/
 const queryUsername = (req, res) => {
   const productId = req.params.productId;
-  const query = `
+  const selectUsernameQuery = `
     SELECT u.username 
     FROM product AS p 
     INNER JOIN user AS u ON p.user_id = u.user_id 
     WHERE p.product_id = ?
   `;
 
-  db.query(query, [productId], (err, results) => {
+  db.query(selectUsernameQuery, [productId], (err, results) => {
     if (err) {
       console.error('Error fetching username:', err);
       res.status(500).json({ error: 'Failed to fetch username' });
@@ -90,16 +89,14 @@ const queryUsername = (req, res) => {
     res.json(results[0]);
   });
 };
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
-
-/******************************************** Query Purchases  *********************************************/
+/******************************************** Query Purchases  **********************************************/
 const queryPurchases = (req, res) => {
   const userId = req.params.userId;
+  const selectPurchaseQuery = 'SELECT * FROM purchase WHERE user_id = ?';
 
-  const query = 'SELECT * FROM purchase WHERE user_id = ?';
-
-  db.query(query, [userId], (err, results) => {
+  db.query(selectPurchaseQuery, [userId], (err, results) => {
     if (err) {
       console.error('Error fetching purchases:', err);
       res.status(500).json({ error: 'Failed to fetch purchases' });
@@ -108,14 +105,14 @@ const queryPurchases = (req, res) => {
     res.json(results);
   });
 };
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
-/********************************** Update Review State in Purchase  *************************************/
+/*********************************** Update Review State in Purchase  ***************************************/
 const updateReviewState = (req, res) => {
   const purchaseId = req.params.purchaseId;
+  const updateReviewPurchaseQuery = 'UPDATE purchase SET is_review = 1 WHERE purchase_id = ?';
 
-  const sql = 'UPDATE purchase SET is_review = 1 WHERE purchase_id = ?';
-  db.query(sql, [purchaseId], (err, results) => {
+  db.query(updateReviewPurchaseQuery, [purchaseId], (err, results) => {
     if (err) {
       console.error('Error updating review state:', err);
       res.status(500).json({ error: 'Failed to update review state' });
@@ -125,15 +122,14 @@ const updateReviewState = (req, res) => {
     res.status(200).json({ message: 'Review state updated successfully' });
   });
 };
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
-/******************************************** Add Product Review *****************************************/
+/********************************************* Add Product Review *******************************************/
 const AddProductReview = (req, res) => {
+  const { productId, userId, reviewScore, reviewText } = req.body;
+  const insertProductReviewQuery = 'INSERT INTO product_review (product_id, user_id, review_score, review_text) VALUES (?, ?, ?, ?)';
 
-  const { product_id, user_id, review_score, review_text } = req.body;
-
-  const sql = 'INSERT INTO product_review (product_id, user_id, review_score, review_text) VALUES (?, ?, ?, ?)';
-  db.query(sql, [product_id, user_id, review_score, review_text], (err, results) => {
+  db.query(insertProductReviewQuery, [productId, userId, reviewScore, reviewText], (err, results) => {
     if (err) {
       console.error('Error adding product review:', err);
       res.status(500).json({ error: 'Failed to adding product review' });
@@ -143,17 +139,16 @@ const AddProductReview = (req, res) => {
     res.status(200).json({ message: 'Product reviewed updated successfully' });
   });
 };
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
-
-/******************************************** Change Password *********************************************/
+/********************************************* Change Password **********************************************/
 const changePassword = (req, res) => {
   const userId = req.params.userId;
   const { currentPassword, newPassword } = req.body;
 
-  const selectQuery = 'SELECT password FROM user WHERE user_id = ?';
+  const selectPasswordQuery = 'SELECT password FROM user WHERE user_id = ?';
 
-  db.query(selectQuery, [userId], (selectErr, selectResults) => {
+  db.query(selectPasswordQuery, [userId], (selectErr, selectResults) => {
     if (selectErr) {
       console.error('Error fetching password:', selectErr);
       return res.status(500).json({ error: 'Failed to fetch password' });
@@ -169,9 +164,9 @@ const changePassword = (req, res) => {
       return res.status(400).json({ error: 'Old password is incorrect' });
     }
 
-    const updateQuery = 'UPDATE user SET password = ? WHERE user_id = ?';
+    const updatePasswordQuery = 'UPDATE user SET password = ? WHERE user_id = ?';
 
-    db.query(updateQuery, [newPassword, userId], (updateErr, updateResults) => {
+    db.query(updatePasswordQuery, [newPassword, userId], (updateErr, updateResults) => {
       if (updateErr) {
         console.error('Error updating password:', updateErr);
         return res.status(500).json({ error: 'Failed to update password' });
@@ -181,9 +176,7 @@ const changePassword = (req, res) => {
     });
   });
 };
-
-
-/**********************************************************************************************************/
+/************************************************************************************************************/
 
 
 module.exports = { getUserInfo, updateUserInfo, queryUsername, queryPurchases, updateReviewState, AddProductReview, changePassword};

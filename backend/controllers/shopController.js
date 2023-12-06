@@ -1,52 +1,56 @@
-const db = require('../Database/database')
-const path = require('path');
-const multer = require('multer');
-const fs = require('fs');
+const db = require("../Database/database");
+const path = require("path");
+const multer = require("multer");
+const fs = require("fs");
 
 /***************************************** Query FirstName  *********************************************/
 const getFirstName = (req, res) => {
+  const userId = req.params.userId;
+  const selectFirstNameQuery = "SELECT * FROM user WHERE user_id = ?";
 
-  const sql = 'SELECT * FROM user WHERE user_id = ?';
-
-  db.query(sql, [req.params.userId], (error, rows) => {
+  db.query(selectFirstNameQuery, [userId], (error, rows) => {
     if (error) {
-      console.error('Error fetching user info:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      console.error("Error fetching user info:", error);
+      res.status(500).json({ message: "Internal server error" });
       return;
     }
 
     if (rows.length > 0) {
       res.json(rows[0].fname);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: "User not found" });
     }
   });
 };
 /********************************************************************************************************/
 
-/******************************************** Update User  *********************************************/
+/******************************************** Update User  **********************************************/
 const updateUser = (req, res) => {
-
-  const { firstName, lastName, phoneNumber } = req.body;
   const userId = req.params.userId;
-  const sql = 'UPDATE user SET fname = ?, lname = ?, telephone_number = ? WHERE user_id = ?';
+  const { firstName, lastName, phoneNumber } = req.body;
+  const updateUserQuery =
+    "UPDATE user SET fname = ?, lname = ?, telephone_number = ? WHERE user_id = ?";
 
-  db.query(sql, [firstName, lastName, phoneNumber, userId], (err, results) => {
-    if (err) {
-      console.error('Error updating user:', err);
-      res.status(500).json({ error: 'Failed to update user' });
-      return;
+  db.query(
+    updateUserQuery,
+    [firstName, lastName, phoneNumber, userId],
+    (err, results) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        res.status(500).json({ error: "Failed to update user" });
+        return;
+      }
+      console.log("User updated successfully");
+      res.status(200).json({ message: "User updated successfully" });
     }
-    console.log('User updated successfully');
-    res.status(200).json({ message: 'User updated successfully' });
-  });
+  );
 };
 /********************************************************************************************************/
 
-/************************************************** Add Product Section  ******************************************************/
+/***************************************** Add Product Section  *****************************************/
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../frontend/public/product-img/');
+    cb(null, "../frontend/public/product-img/");
   },
   filename: (req, file, cb) => {
     const temporaryFilename = `${Date.now()}${path.extname(file.originalname)}`;
@@ -54,154 +58,192 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage }).single('image_path');
+const upload = multer({ storage }).single("imagePath");
 
 const addProduct = (req, res) => {
   upload(req, res, (err) => {
     if (err) {
-      console.error('Error uploading file: ' + err);
-      res.status(500).json({ error: 'Error uploading file' });
+      console.error("Error uploading file: " + err);
+      res.status(500).json({ error: "Error uploading file" });
       return;
     }
 
-    const { category_id, product_name, product_description, price, stock_remaining } = req.body;
     const userId = req.params.userId;
-    const image_path = req.file ? `../product-img/${req.file.filename}` : null;
+    const {
+      categoryId,
+      productName,
+      productDescription,
+      price,
+      stockRemaining,
+    } = req.body;
+    const imagePath = req.file ? `../product-img/${req.file.filename}` : null;
+    const insertProductQuery = `INSERT INTO product (user_id, category_id, product_name, product_description, price, stock_remaining, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    const INSERT_PRODUCT_QUERY = `INSERT INTO product (user_id, category_id, product_name, product_description, price, stock_remaining, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    db.query(INSERT_PRODUCT_QUERY, [userId, category_id, product_name, product_description, price, stock_remaining, image_path], (err, results) => {
-      if (err) {
-        console.error('Error adding product: ' + err);
-        res.status(500).json({ error: 'Error adding product' });
-        return;
-      }
-
-      const productId = results.insertId;
-
-      const updatedFilename = `${productId}${path.extname(req.file.originalname)}`;
-      const updatedImagePath = `../product-img/${updatedFilename}`;
-      const imagePathToChange = path.join('../frontend/public/product-img/', image_path);
-
-      fs.rename(imagePathToChange, path.join('../frontend/public/product-img/', updatedImagePath), (err) => {
+    db.query(
+      insertProductQuery,
+      [
+        userId,
+        categoryId,
+        productName,
+        productDescription,
+        price,
+        stockRemaining,
+        imagePath,
+      ],
+      (err, results) => {
         if (err) {
-          console.error('Error updating image filename:', err);
+          console.error("Error adding product: " + err);
+          res.status(500).json({ error: "Error adding product" });
+          return;
         }
 
-        const UPDATE_IMAGE_PATH_QUERY = `UPDATE product SET image_path = ? WHERE product_id = ?`;
-        db.query(UPDATE_IMAGE_PATH_QUERY, [updatedImagePath, productId], (err) => {
-          if (err) {
-            console.error('Error updating image path in the database:', err);
-          }
+        const productId = results.insertId;
 
-          res.status(200).json({
-            status: 'success',
-            message: 'Product added successfully',
-            productId: productId,
-            productName: product_name,
-          });
-        });
-      });
-    });
+        const updatedFilename = `${productId}${path.extname(
+          req.file.originalname
+        )}`;
+        const updatedImagePath = `../product-img/${updatedFilename}`;
+        const imagePathToChange = path.join(
+          "../frontend/public/product-img/",
+          imagePath
+        );
+
+        fs.rename(
+          imagePathToChange,
+          path.join("../frontend/public/product-img/", updatedImagePath),
+          (err) => {
+            if (err) {
+              console.error("Error updating image filename:", err);
+            }
+
+            const updateImagePathQuery = `UPDATE product SET image_path = ? WHERE product_id = ?`;
+            db.query(
+              updateImagePathQuery,
+              [updatedImagePath, productId],
+              (err) => {
+                if (err) {
+                  console.error(
+                    "Error updating image path in the database:",
+                    err
+                  );
+                }
+
+                res.status(200).json({
+                  status: "success",
+                  message: "Product added successfully",
+                  productId: productId,
+                  productName: productName,
+                });
+              }
+            );
+          }
+        );
+      }
+    );
   });
 };
-/*****************************************************************************************************************************/
+/********************************************************************************************************/
 
-/******************************************** Query Products  *********************************************/
+/******************************************* Query Products  ********************************************/
 const queryProducts = (req, res) => {
   const userId = req.params.userId;
+  const selectProductQuery = "SELECT * FROM product WHERE user_id = ?";
 
-  const query = 'SELECT * FROM product WHERE user_id = ?';
-
-  db.query(query, [userId], (err, results) => {
+  db.query(selectProductQuery, [userId], (err, results) => {
     if (err) {
-      console.error('Error fetching products:', err);
-      res.status(500).json({ error: 'Failed to fetch products' });
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Failed to fetch products" });
       return;
     }
     res.json(results);
   });
 };
-/**********************************************************************************************************/
+/********************************************************************************************************/
 
-/******************************************* Get Product **************************************************/
+/******************************************* Get Product ************************************************/
 const getProduct = (req, res) => {
   const productId = req.params.productId;
+  const selectProductQuery =
+    "SELECT product_name, product_description, price, stock_remaining FROM product WHERE product_id = ?";
 
-  const sql = 'SELECT product_name, product_description, price, stock_remaining FROM product WHERE product_id = ?';
-
-  db.query(sql, [productId], (error, rows) => {
+  db.query(selectProductQuery, [productId], (error, rows) => {
     if (error) {
-      console.error('Error fetching product info:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      console.error("Error fetching product info:", error);
+      res.status(500).json({ message: "Internal server error" });
       return;
     }
 
     if (rows.length > 0) {
       res.json(rows[0]);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ message: "Product not found" });
     }
   });
 };
-/**********************************************************************************************************/
+/********************************************************************************************************/
 
-/******************************************** Update Product  *********************************************/
+/******************************************* Update Product  ********************************************/
 const updateProduct = (req, res) => {
-
-  const { product_name, product_description, price, stock_remaining } = req.body;
   const productId = req.params.productId;
-  const sql = 'UPDATE product SET product_name = ?, product_description = ?, price = ?, stock_remaining = ? WHERE product_id = ?';
+  const { productName, productDescription, price, stockRemaining } = req.body;
+  const updateProductQuery =
+    "UPDATE product SET product_name = ?, product_description = ?, price = ?, stock_remaining = ? WHERE product_id = ?";
 
-  db.query(sql, [product_name, product_description, price, stock_remaining, productId], (err, results) => {
-    if (err) {
-      console.error('Error updating product:', err);
-      res.status(500).json({ error: 'Failed to update product' });
-      return;
+  db.query(
+    updateProductQuery,
+    [productName, productDescription, price, stockRemaining, productId],
+    (err, results) => {
+      if (err) {
+        console.error("Error updating product:", err);
+        res.status(500).json({ error: "Failed to update product" });
+        return;
+      }
+      console.log("User updated successfully");
+      res.status(200).json({ message: "User updated successfully" });
     }
-    console.log('User updated successfully');
-    res.status(200).json({ message: 'User updated successfully' });
-  });
+  );
 };
-/**********************************************************************************************************/
+/********************************************************************************************************/
 
-/******************************************** Delete Products  *********************************************/
+/******************************************* Delete Products  *******************************************/
 const deleteProducts = (req, res) => {
   const productId = req.params.productId;
+  const selectProductImageQuery =
+    "SELECT image_path FROM product WHERE product_id = ?";
 
-  const getProductImageQuery = 'SELECT image_path FROM product WHERE product_id = ?';
-
-  db.query(getProductImageQuery, [productId], (err, results) => {
+  db.query(selectProductImageQuery, [productId], (err, results) => {
     if (err) {
-      console.error('Error retrieving product image:', err);
-      res.status(500).json({ error: 'Error retrieving product image' });
+      console.error("Error retrieving product image:", err);
+      res.status(500).json({ error: "Error retrieving product image" });
       return;
     }
 
     if (results.length === 0) {
-      res.status(404).json({ error: 'Product not found' });
+      res.status(404).json({ error: "Product not found" });
       return;
     }
 
     const imagePath = results[0].image_path;
 
-    const deleteQuery = 'DELETE FROM product WHERE product_id = ?';
+    const deleteProductQuery = "DELETE FROM product WHERE product_id = ?";
 
-    db.query(deleteQuery, [productId], (err, deleteResult) => {
+    db.query(deleteProductQuery, [productId], (err, deleteResult) => {
       if (err) {
-        console.error('Error deleting product:', err);
-        res.status(500).json({ error: 'Error deleting product' });
+        console.error("Error deleting product:", err);
+        res.status(500).json({ error: "Error deleting product" });
         return;
       }
 
-
-      const imagePathToDelete = path.join('../frontend/public/product-img/', imagePath);
+      const imagePathToDelete = path.join(
+        "../frontend/public/product-img/",
+        imagePath
+      );
 
       fs.unlink(imagePathToDelete, (err) => {
         if (err) {
-          console.error('Error deleting image file:', err);
+          console.error("Error deleting image file:", err);
         }
-
-        res.status(200).json({ message: 'Product deleted successfully' });
+        res.status(200).json({ message: "Product deleted successfully" });
       });
     });
   });
