@@ -169,6 +169,10 @@ const deleteProduct = async (productId) => {
 };
 
 const handleCheckout = () => {
+  if (selectedItems.length === 0) {
+    alert("Please select at least one item to checkout");
+    return;
+  }
   const selectedProducts = cartItems
     .filter((item) => selectedItems.includes(item.productId))
     .map((item) => ({
@@ -176,10 +180,9 @@ const handleCheckout = () => {
       quantity: item.quantity,
     }));
 
-  // Navigate to the payment page with the selected product information
-  // Use state to pass the selected products
-  return <Link to="/payment" state={{ productInfo: selectedProducts }}>Checkout</Link>;
+  navigate("/payment", { state: { productInfo: selectedProducts } });
 };
+
 
 
 
@@ -212,7 +215,7 @@ const handleCheckout = () => {
                 />
               ))
             )}
-            <div>{handleCheckout()}</div>
+            <button onClick={handleCheckout}>Checkout</button>
 
 
           </Col>
