@@ -55,6 +55,11 @@ function ProductList() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [productCount, setProductCount] = useState(0);
   const { categoryId } = useParams();
+  const { searchKey } = useParams();
+  console.log("key",searchKey)
+  console.log("Id",categoryId)
+  console.log('key',searchKey==null)
+  console.log('Id',categoryId==null)
   /********************************* Query Information Product ***********************************/
   useEffect(() => {
     fetch(`http://localhost:3000/list/productlist/${categoryId}`)
@@ -284,31 +289,31 @@ function ProductList() {
                 <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
               </button>
               <div className="page-button">
-              <button
-                className="current-page"
-                onClick={() => handlePageChange(currentPage)}
-                disabled
-              >
-                {currentPage} /{" "}
-                {Math.ceil(filteredProducts.length / productsPerPage)}
-              </button>
-              <button
-                className="previos-next-button"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                &lt;
-              </button>
-              <button
-                className="previos-next-button"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={
-                  currentPage ===
-                  Math.ceil(filteredProducts.length / productsPerPage)
-                }
-              >
-                &gt;
-              </button>
+                <button
+                  className="current-page"
+                  onClick={() => handlePageChange(currentPage)}
+                  disabled
+                >
+                  {currentPage} /{" "}
+                  {Math.ceil(filteredProducts.length / productsPerPage)}
+                </button>
+                <button
+                  className="previos-next-button"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  &lt;
+                </button>
+                <button
+                  className="previos-next-button"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={
+                    currentPage ===
+                    Math.ceil(filteredProducts.length / productsPerPage)
+                  }
+                >
+                  &gt;
+                </button>
               </div>
             </div>
             <div

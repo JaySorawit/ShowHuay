@@ -61,7 +61,7 @@ function Navbar() {
       e.preventDefault();
       if (searchText.trim() !== "") {
         window.location.href = searchText
-          ? `/productlist/${searchText}`
+          ? `/productlist/keyword/${searchText}`
           : "/productlist";
       }
     }
@@ -113,10 +113,10 @@ function Navbar() {
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
               />
-              <Link
-                className="btn btn-search"
-                to={searchText ? `/productlist/${searchText}` : "/productlist"}
-              >
+             <Link
+              className="btn btn-search"
+              to={searchText ? `/productList/keyword/${searchText}` : "/productList"}
+          >
                 <img
                   src={search}
                   alt="Search"

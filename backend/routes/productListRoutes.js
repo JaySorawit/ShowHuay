@@ -13,5 +13,5 @@
  const { queryProductsCategoryId } = require("../controllers/ProductListController");
  
  router.route("/productlist/:categoryId").get(queryProductsCategoryId);
- 
+ router.route("/productlist/keyword/:searchkey").get(queryProductsCategoryId);
  module.exports = router;
