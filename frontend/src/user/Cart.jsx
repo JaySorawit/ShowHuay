@@ -97,32 +97,35 @@ const Cart = () => {
 
   /* ************************************ Fetch product data ************************************ */
   useEffect(() => {
-    cartItems.forEach((item) => {
-      axios
-        .get(`http://localhost:3000/product/${item.productId}`)
-        .then(function (response) {
-          const productData = response.data.product[0];
-          if (productData) {
-            setCartItems((prevCartItems) =>
-              prevCartItems.map((prevItem) =>
-                prevItem.productId === item.productId
-                  ? {
-                      ...prevItem,
-                      productName: productData.product_name,
-                      price: productData.price,
-                      sellerName: productData.username,
-                      imgPath: productData.image_path,
-                    }
-                  : prevItem
-              )
-            );
+    const fetchProductData = async () => {
+      const updatedCartItems = await Promise.all(
+        cartItems.map(async (item) => {
+          try {
+            const response = await axios.get(`http://localhost:3000/product/${item.productId}`);
+            const productData = response.data.product[0];
+  
+            if (productData) {
+              return {
+                ...item,
+                productName: productData.product_name,
+                price: productData.price,
+                sellerName: productData.username,
+                imgPath: productData.image_path,
+              };
+            }
+          } catch (error) {
+            console.error("Error fetching product data:", error);
+            return item; // Keep the original item in case of an error
           }
         })
-        .catch(function (error) {
-          console.error("Error fetching product data:", error);
-        });
-    });
-  }, [cartItems]);
+      );
+  
+      setCartItems(updatedCartItems.filter(Boolean));
+    };
+  
+    fetchProductData();
+  }, [cartItems, setCartItems]);
+  
   /* ******************************************************************************************** */
 
   /* ************************************ Handle when checkbox change *************************** */
@@ -160,7 +163,12 @@ const deleteProduct = async (productId) => {
   }
 };
 
+/* ************************************ Handle checkout *************************************** */
 const handleCheckout = () => {
+  if (selectedItems.length === 0) {
+    alert('Please select at least one item');
+    return;
+  }
   const selectedProducts = cartItems
     .filter((item) => selectedItems.includes(item.productId))
     .map((item) => ({
@@ -168,10 +176,11 @@ const handleCheckout = () => {
       quantity: item.quantity,
     }));
 
-  // Navigate to the payment page with the selected product information
-  // Use state to pass the selected products
-  return <Link to="/payment" state={{ productInfo: selectedProducts }}>Checkout</Link>;
+  navigate("/payment", { state: { productInfo: selectedProducts } });
 };
+/* ******************************************************************************************** */
+
+
 
 
 
@@ -204,7 +213,8 @@ const handleCheckout = () => {
                 />
               ))
             )}
-            <div>{handleCheckout()}</div>
+            <button onClick={handleCheckout}>Check out</button>
+
 
 
           </Col>
