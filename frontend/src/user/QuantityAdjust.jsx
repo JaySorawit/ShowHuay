@@ -1,18 +1,24 @@
-import '../css/Product.css';
-import React, { useState } from "react";
+// QuantityAdjust.jsx
+import React, { useState, useEffect } from "react";
 
-const QuantityAdjust = ({ stockRemaining }) => {
-  const [quantity, setQuantity] = useState(1);
+const QuantityAdjust = ({ stockRemaining, quantity: propQuantity, onQuantityChange }) => {
+  const [localQuantity, setLocalQuantity] = useState(propQuantity || 1);
+
+  useEffect(() => {
+    setLocalQuantity(propQuantity || 1);
+  }, [propQuantity]);
 
   const handleIncrease = () => {
-    if (quantity < stockRemaining) {
-      setQuantity(quantity + 1);
+    if (localQuantity < stockRemaining) {
+      setLocalQuantity(localQuantity + 1);
+      onQuantityChange(localQuantity + 1);
     }
   };
 
   const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+    if (localQuantity > 1) {
+      setLocalQuantity(localQuantity - 1);
+      onQuantityChange(localQuantity - 1);
     }
   };
 
@@ -22,9 +28,15 @@ const QuantityAdjust = ({ stockRemaining }) => {
         <p style={{ border: 'none' }}>Quantity</p>
       </div>
       <div className="quantitybutton" style={{ display: 'flex' }}>
-        <button onClick={handleDecrease}>-</button>
-        <p>{quantity}</p>
-        <button onClick={handleIncrease} disabled={quantity === stockRemaining}>
+        <button role="button" onClick={handleDecrease}>
+          -
+        </button>
+        <p>{localQuantity}</p>
+        <button
+          role="button"
+          onClick={handleIncrease}
+          disabled={localQuantity === stockRemaining}
+        >
           +
         </button>
       </div>
@@ -33,4 +45,3 @@ const QuantityAdjust = ({ stockRemaining }) => {
 };
 
 export default QuantityAdjust;
-

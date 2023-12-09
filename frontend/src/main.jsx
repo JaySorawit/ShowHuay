@@ -23,6 +23,7 @@ import Users from './admin/pages/Users.jsx';
 import Products from './admin/pages/Products.jsx';
 import Coupons from './admin/pages/Coupons.jsx';
 import PageNotFound from './user/PageNotFound.jsx';
+import Payment from './user/Payment.jsx';
 import './App.css'
 
 const commonRoutes = [
@@ -54,6 +55,7 @@ const userRoutes = [
   { path: "/changePassword", element: <ChangePassword /> },
   { path: "/myAddress", element: <MyAddress /> },
   { path: "/myCreditCard", element: <MyCreditCard /> },
+  { path: "/payment", element: <Payment /> },
   { path: "/*", element: <PageNotFound /> },
 ];
 

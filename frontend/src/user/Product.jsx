@@ -1,40 +1,40 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, json } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import QuantityAdjust from "./QuantityAdjust";
-import userImage from '../assets/icon/userImage.png'
+import userImage from "../assets/icon/userImage.png";
 import RatingStar from "./RatingStar";
-import '../css/Product.css';
+import "../css/Product.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
-
   /* **************************** Initialize State & define variable **************************** */
   const { id } = useParams();
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
   const [review, setReview] = useState({});
   const [product, setProduct] = useState({
-    productName: '',
-    productDescription: '',
-    sellerName: '',
-    sellerId: '',
-    sellerTel: '',
-    categoryId: '',
-    price: '',
-    totalSold: '',
-    stockRemaining: '',
-    imgPath: '',
+    productName: "",
+    productDescription: "",
+    sellerName: "",
+    sellerId: "",
+    sellerTel: "",
+    categoryId: "",
+    price: "",
+    totalSold: "",
+    stockRemaining: "",
+    imgPath: "",
   });
 
   /* ******************************************************************************************** */
 
-
   /* ************************************ Fetch product data ************************************ */
   useEffect(() => {
-    axios.get("http://localhost:3000/product/" + id)
+    axios
+      .get("http://localhost:3000/product/" + id)
       .then(function (response) {
         setProduct({
           productName: response.data.product[0].product_name,
@@ -51,11 +51,14 @@ const Product = () => {
       })
       .catch(function (error) {
         if (error.response) {
-          console.error("Server responded with an error status:", error.response.status);
+          console.error(
+            "Server responded with an error status:",
+            error.response.status
+          );
           console.log("Full response:", error.response);
           if (error.response.status === 404) {
             console.log("Product not found. Navigating...");
-            navigate('/*');
+            navigate("/*");
           }
         } else if (error.request) {
           console.error("No response received from the server:", error.request);
@@ -67,12 +70,12 @@ const Product = () => {
 
   /* ******************************************************************************************** */
 
-
   /* ************************************ Fetch review data ************************************ */
   useEffect(() => {
-    axios.get("http://localhost:3000/product/getProductReview/" + id)
+    axios
+      .get("http://localhost:3000/product/getProductReview/" + id)
       .then(function (res) {
-        const reviews = res.data.review.map(review => ({
+        const reviews = res.data.review.map((review) => ({
           reviewId: review.review_id,
           reviewerId: review.user_id,
           score: review.review_score,
@@ -87,7 +90,7 @@ const Product = () => {
         });
       })
       .catch(function (error) {
-        console.error('Error fetching product reviews:', error);
+        console.error("Error fetching product reviews:", error);
         if (error.response && error.response.status === 404) {
           setReview({
             reviewTotal: 0,
@@ -99,46 +102,83 @@ const Product = () => {
 
   /* ******************************************************************************************** */
 
-
   /* ************** Calculate the score and product remaining for product *********************** */
   let sumOfScores = 0;
   const reviewArray = review.reviews ? Object.values(review.reviews) : [];
   for (const singleReview of reviewArray) {
     sumOfScores += singleReview.score;
   }
-  let initialScore = reviewArray.length > 0 ? (sumOfScores / review.reviewTotal).toFixed(1) : 0;
-  initialScore = Math.round(initialScore)
+  let initialScore =
+    reviewArray.length > 0 ? (sumOfScores / review.reviewTotal).toFixed(1) : 0;
+  initialScore = Math.round(initialScore);
   let stockRemaining = product.stockRemaining;
   /* ******************************************************************************************** */
 
-
   /* ***************************** Handle score selection *************************************** */
-  const [selectedScore, setSelectedScore] = useState('ALL');
+  const [selectedScore, setSelectedScore] = useState("ALL");
   const handleScoreSelection = (score) => {
     setSelectedScore(score);
   };
 
   const getButtonStyle = (score) => {
     return {
-      backgroundColor: selectedScore === score ? '#F44C0C' : 'transparent',
-      border: selectedScore === score ? 'none' : 'solid 1px',
-      color: selectedScore === score ? 'white' : 'black',
+      backgroundColor: selectedScore === score ? "#F44C0C" : "transparent",
+      border: selectedScore === score ? "none" : "solid 1px",
+      color: selectedScore === score ? "white" : "black",
     };
   };
 
+  /* ******************************************************************************************** */
+
+  /* ***************************************** Add To Cart ************************************** */
+  const addToCart = async (productId, quantity) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/cart/addToCart",
+        {
+          userId: userId,
+          productId: productId,
+          quantity: quantity,
+        }
+      );
+  
+      if (response.status === 200 && response.data.message === "Product added to cart successfully") {
+        console.log(response.data);
+        alert("Product added to cart successfully");
+      } else if (response.status === 200 && response.data.message === "Product is already in the cart") {
+        console.log(response.data);
+        alert("Product is already in the cart");
+      } else {
+        console.error("Error adding to cart:", response.data.error);
+        alert("Error adding to cart. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Error adding to cart. Please try again later.");
+    }
+  };  
+  /* ******************************************************************************************** */
+
+  /* ************************************* Handle quantity ************************************** */
+  const handleQuantityChange = (newQuantity) => {
+    setQuantity(newQuantity);
+  };
   /* ******************************************************************************************** */
 
   return (
     <>
       <Navbar />
       <div className="BG">
-        <div className="container" style={{ width: '1170px', backgroundColor: '#F1F0F0' }}>
+        <div
+          className="container"
+          style={{ width: "1170px", backgroundColor: "#F1F0F0" }}
+        >
           <div className="productShow">
             <img src={product.imgPath} />
             <div className="productInfoBox">
               <h2> {product.productName} </h2>
               <div className="productInfo">
-                <div style={{ display: 'flex', gap: '5px' }}>
+                <div style={{ display: "flex", gap: "5px" }}>
                   <p> {initialScore} </p>
                   <RatingStar score={initialScore} />
                 </div>
@@ -149,30 +189,58 @@ const Product = () => {
                 <h2> ฿{product.price} </h2>
               </div>
               <div className="stockRemaining">
-                <p>Stock Remaining : {stockRemaining}  </p>
+                <p>Stock Remaining : {stockRemaining} </p>
               </div>
               <div className="quantity">
-                <QuantityAdjust stockRemaining={stockRemaining} />
+                <QuantityAdjust
+                  stockRemaining={stockRemaining}
+                  quantity={quantity}
+                  onQuantityChange={handleQuantityChange}
+                />
               </div>
+
               <div className="submitbutton">
-                <button type="submit " style={{ color: '#F44C0C', backgroundColor: '#F2BFAC', border: 'solid 3px #F44C0C' }}>Add To Cart </button>
-                <button type="submit " style={{ color: '#fff', border: 'none', backgroundColor: '#F44C0C' }}>Buy Now </button>
+                <button
+                  type="submit"
+                  style={{
+                    color: "#F44C0C",
+                    backgroundColor: "#F2BFAC",
+                    border: "solid 3px #F44C0C",
+                  }}
+                  onClick={() => addToCart(id, quantity)}
+                >
+                  Add To Cart
+                </button>
+                <button
+                  type="submit "
+                  style={{
+                    color: "#fff",
+                    border: "none",
+                    backgroundColor: "#F44C0C",
+                  }}
+                >
+                  Buy Now{" "}
+                </button>
               </div>
             </div>
           </div>
           <div className="productDescription">
             <h4> Product Description </h4>
-            <div dangerouslySetInnerHTML={{ __html: product.productDescription }} />
+            <div
+              dangerouslySetInnerHTML={{ __html: product.productDescription }}
+            />
           </div>
           <div className="seller">
-            <img src={userImage} style={{ borderRadius: '50%' }} />
+            <img src={userImage} style={{ borderRadius: "50%" }} />
             <div className="SellerInfo">
               <h4> Seller </h4>
               <p> Name: {product.sellerName}</p>
               <p> Phone: {product.sellerTel}</p>
             </div>
             <div className="sellercontact">
-              <Link to={`/shopProfile/${product.sellerId}`}><button>View Profile</button></Link>
+              <Link to={`/shopProfile/${product.sellerId}`}>
+                <button>View Profile</button>
+              </Link>
               {product.sellerId != userId && (
                 <Link to={`/chat/${product.sellerId}`}>
                   <button>Chat</button>
@@ -189,35 +257,82 @@ const Product = () => {
                   <RatingStar score={initialScore} />
                 </div>
                 <div className="scoreSelection">
-                  <button onClick={() => handleScoreSelection('ALL')} style={getButtonStyle('ALL')}> ALL </button>
-                  <button onClick={() => handleScoreSelection(5)} style={getButtonStyle(5)}> 5 Star </button>
-                  <button onClick={() => handleScoreSelection(4)} style={getButtonStyle(4)}> 4 Star </button>
-                  <button onClick={() => handleScoreSelection(3)} style={getButtonStyle(3)}> 3 Star </button>
-                  <button onClick={() => handleScoreSelection(2)} style={getButtonStyle(2)}> 2 Star </button>
-                  <button onClick={() => handleScoreSelection(1)} style={getButtonStyle(1)}> 1 Star</button>
+                  <button
+                    onClick={() => handleScoreSelection("ALL")}
+                    style={getButtonStyle("ALL")}
+                  >
+                    {" "}
+                    ALL{" "}
+                  </button>
+                  <button
+                    onClick={() => handleScoreSelection(5)}
+                    style={getButtonStyle(5)}
+                  >
+                    {" "}
+                    5 Star{" "}
+                  </button>
+                  <button
+                    onClick={() => handleScoreSelection(4)}
+                    style={getButtonStyle(4)}
+                  >
+                    {" "}
+                    4 Star{" "}
+                  </button>
+                  <button
+                    onClick={() => handleScoreSelection(3)}
+                    style={getButtonStyle(3)}
+                  >
+                    {" "}
+                    3 Star{" "}
+                  </button>
+                  <button
+                    onClick={() => handleScoreSelection(2)}
+                    style={getButtonStyle(2)}
+                  >
+                    {" "}
+                    2 Star{" "}
+                  </button>
+                  <button
+                    onClick={() => handleScoreSelection(1)}
+                    style={getButtonStyle(1)}
+                  >
+                    {" "}
+                    1 Star
+                  </button>
                 </div>
               </div>
-              {review.reviews && review.reviews
-                .filter(singleReview => selectedScore === 'ALL' || singleReview.score === selectedScore)
-                .map((singleReview, index) => (
-                  <div className="productComment" key={index}>
-                    <img src={userImage} style={{ width: '70px', height: '70px' }} />
-                    <div className="commentInfo">
-                      <p>{singleReview.reviewName}</p>
-                      <RatingStar score={singleReview.score} />
-                      <p>{singleReview.reviewTime} | {singleReview.score} out of 5</p>
-                      <p>{singleReview.reviewText}</p>
+              {review.reviews &&
+                review.reviews
+                  .filter(
+                    (singleReview) =>
+                      selectedScore === "ALL" ||
+                      singleReview.score === selectedScore
+                  )
+                  .map((singleReview, index) => (
+                    <div className="productComment" key={index}>
+                      <img
+                        src={userImage}
+                        style={{ width: "70px", height: "70px" }}
+                      />
+                      <div className="commentInfo">
+                        <p>{singleReview.reviewName}</p>
+                        <RatingStar score={singleReview.score} />
+                        <p>
+                          {singleReview.reviewTime} | {singleReview.score} out
+                          of 5
+                        </p>
+                        <p>{singleReview.reviewText}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
             </div>
           </div>
-          <div style={{ height: '50px' }}></div>
+          <div style={{ height: "50px" }}></div>
         </div>
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;
