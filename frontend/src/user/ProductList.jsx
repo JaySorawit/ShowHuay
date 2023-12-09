@@ -54,31 +54,32 @@ function ProductList() {
   const [productCount, setProductCount] = useState(0);
   const { categoryId } = useParams();
   const { searchKey } = useParams();
-  console.log("key",searchKey)
-  console.log("Id",categoryId)
-  console.log('key',searchKey==null)
-  console.log('Id',categoryId==null)
+  console.log("key", searchKey);
+  console.log("Id", categoryId);
+  console.log("key", searchKey == null);
+  console.log("Id", categoryId == null);
   const categories = [
-    ['Clothes'],
-    ['Shoes'],
-    ['Fashion Accessories'],
-    ['Watches & Glasses'],
-    ['Beauty & Personal Care'],
-    ['Pets'],
-    ['Furniture'],
-    ['Home Appliances'],
-    ['Computers & Laptops'],
-    ['Mobile & Gadgets'],
-    ['Tools & Home Improvement'],
-    ['Sports & Outdoors'],
+    ["Clothes"],
+    ["Shoes"],
+    ["Fashion Accessories"],
+    ["Watches & Glasses"],
+    ["Beauty & Personal Care"],
+    ["Pets"],
+    ["Furniture"],
+    ["Home Appliances"],
+    ["Computers & Laptops"],
+    ["Mobile & Gadgets"],
+    ["Tools & Home Improvement"],
+    ["Sports & Outdoors"],
   ];
   /********************************* Query Information Product ***********************************/
-  let path=`http://localhost:3000/list/productlist/keyword/${searchKey}`
-  let p,search= searchKey;
-  if (searchKey==null){
-      path=`http://localhost:3000/list/productlist/${categoryId}`
-      p=categoryId;
-      search="Category "+categories[categoryId]
+  let path = `http://localhost:3000/list/productlist/keyword/${searchKey}`;
+  let p,
+    search = searchKey;
+  if (searchKey == null) {
+    path = `http://localhost:3000/list/productlist/${categoryId}`;
+    p = categoryId;
+    search = "Category " + categories[categoryId];
   }
 
   useEffect(() => {
@@ -99,6 +100,12 @@ function ProductList() {
             const totalSoldResponse = await axios.get(
               `http://localhost:3000/product/${product.product_id}`
             );
+
+            let imagePath = totalSoldResponse.data.product[0].image_path;
+            if (searchKey !== null) {
+              imagePath = `../${imagePath}`;
+            }
+
             const totalSold = totalSoldResponse.data.product[0].total_sold;
 
             const reviewResponse = await axios.get(
@@ -120,6 +127,7 @@ function ProductList() {
 
             return {
               ...product,
+              image_path: imagePath,
               total_sold: totalSold,
               review_score: Math.round(averageScore),
             };
@@ -140,7 +148,6 @@ function ProductList() {
         console.error("Error fetching products:", error);
       });
   }, [p]);
-  
 
   /*************************************************************************************************/
 
@@ -162,7 +169,6 @@ function ProductList() {
     pageNumbers.push(i);
   }
 
- 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
