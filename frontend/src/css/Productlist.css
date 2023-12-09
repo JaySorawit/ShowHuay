@@ -40,6 +40,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .applyButton {
   width: 80%;
+  height: 35px;
   margin:30px;
   display: block;
   margin-left: auto;
@@ -103,7 +104,9 @@ input[type=number]::-webkit-outer-spin-button {
 .buttonContainer {
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 12px; 
+  grid-gap: 12px;
+  justify-items: center;
+  margin-right: 10px;
 }
 
 .rating_button{
@@ -112,7 +115,7 @@ input[type=number]::-webkit-outer-spin-button {
   border: none; 
   border-radius: 20px; 
   transition: box-shadow 0.3s ease-in-out;
-  margin-left: 10px;
+  height: 35px;
 }
 .rating_button:hover {
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.4); 
