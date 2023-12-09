@@ -54,6 +54,18 @@ nav {
     text-decoration: none !important;
 }
 
+.cart-count-badge {
+    position: absolute;
+    top: -8px;
+    right: -14px;
+    background-color: #fff;
+    color: black;
+    border-radius: 5px;
+    padding: 0.5px 9px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .dropdown-name {
     color: #fff !important;
 }

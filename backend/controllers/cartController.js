@@ -65,6 +65,25 @@ const getCart = (req, res) => {
   });
 };
 
+const getCartCount = (req, res) => {
+  const userId = req.params.userId;
+  const GET_CART_COUNT_QUERY = `SELECT COUNT(*) AS cartCount FROM user_shopping_cart WHERE user_id = ?`;
+
+  db.query(GET_CART_COUNT_QUERY, [userId], (err, results) => {
+    if (err) {
+      console.error("Error getting cart count: " + err);
+      return res.status(500).json({ error: "Error getting cart count" });
+    }
+
+    if (results.length > 0) {
+      const cartCount = results[0].cartCount;
+      return res.status(200).json({ cartCount });
+    } else {
+      return res.status(200).json({ cartCount: 0 });
+    }
+  });
+};
+
 const removeFromCart = async (req, res) => {
   const { user_id, product_id } = req.body;
   const query = `DELETE FROM user_shopping_cart WHERE user_id = ${user_id} AND product_id = ${product_id}`;
@@ -94,4 +113,4 @@ const updateCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart, getCart, removeFromCart, updateCart };
+module.exports = { addToCart, getCart, getCartCount, removeFromCart, updateCart };

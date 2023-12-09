@@ -12,6 +12,7 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn");
@@ -21,6 +22,29 @@ function Navbar() {
       setUsername(storedUsername);
     }
   }, []);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(
+          `http://localhost:3000/cart/getCartCount/${userId}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCartCount(data.cartCount);
+        } else {
+          console.error("Failed to fetch cart count");
+        }
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchCartCount();
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
     window.location.href = "/";
@@ -166,13 +190,27 @@ function Navbar() {
                 ) : (
                   <>
                     <li className="nav-item" style={{ marginRight: "15px" }}>
-                      <Link className="nav-link" to="/Cart">
-                        <img
-                          src={shoppingCart}
-                          alt="shopping-cart"
-                          height="25"
-                        />
-                      </Link>
+                      <div className="nav-item">
+                        <Link
+                          className="nav-link"
+                          to="/Cart"
+                          style={{ position: "relative" }}
+                        >
+                          <div style={{ position: "relative" }}>
+                            <img
+                              src={shoppingCart}
+                              alt="shopping-cart"
+                              height="25"
+                            />
+                            {cartCount > 0 && (
+                              <span className="cart-count-badge">
+                                {cartCount}
+                              </span>
+                            )}
+                          </div>
+                          <div className="cart-box"></div>
+                        </Link>
+                      </div>
                     </li>
                     <li className="nav-item dropdown">
                       <a
