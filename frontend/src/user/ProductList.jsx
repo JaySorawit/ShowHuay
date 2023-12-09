@@ -14,8 +14,6 @@ function ProductList() {
   const [trackColor, setTrackColor] = useState(
     "linear-gradient(to right, orange 0%, transparent 0%)"
   );
-  const category = localStorage.getItem("selectedCategory");
-  const search = category;
   const updateTrackColor = (values) => {
     const percent = (values[0] + values[1]) / 10;
     setTrackColor(
@@ -60,9 +58,31 @@ function ProductList() {
   console.log("Id",categoryId)
   console.log('key',searchKey==null)
   console.log('Id',categoryId==null)
+  const categories = [
+    ['Clothes'],
+    ['Shoes'],
+    ['Fashion Accessories'],
+    ['Watches & Glasses'],
+    ['Beauty & Personal Care'],
+    ['Pets'],
+    ['Furniture'],
+    ['Home Appliances'],
+    ['Computers & Laptops'],
+    ['Mobile & Gadgets'],
+    ['Tools & Home Improvement'],
+    ['Sports & Outdoors'],
+  ];
   /********************************* Query Information Product ***********************************/
+  let path=`http://localhost:3000/list/productlist/keyword/${searchKey}`
+  let p,search= searchKey;
+  if (searchKey==null){
+      path=`http://localhost:3000/list/productlist/${categoryId}`
+      p=categoryId;
+      search="Category "+categories[categoryId]
+  }
+
   useEffect(() => {
-    fetch(`http://localhost:3000/list/productlist/${categoryId}`)
+    fetch(path)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -73,7 +93,7 @@ function ProductList() {
         setProducts(data);
         setFilteredProducts(data);
         setProductCount(data.length);
-        console.log(categoryId);
+        console.log(p);
         const productPromises = data.map(async (product) => {
           try {
             const totalSoldResponse = await axios.get(
@@ -119,7 +139,9 @@ function ProductList() {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, [categoryId]);
+  }, [p]);
+  
+
   /*************************************************************************************************/
 
   /*************************************  Product list Page  ***************************************/
@@ -140,15 +162,7 @@ function ProductList() {
     pageNumbers.push(i);
   }
 
-  const renderPageNumbers = pageNumbers.map((number) => (
-    <li
-      key={number}
-      onClick={() => setCurrentPage(number)}
-      className={currentPage === number ? "active" : ""}
-    >
-      {number}
-    </li>
-  ));
+ 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -335,7 +349,7 @@ function ProductList() {
                   <>
                     <div
                       className="row-card row-cols-2 row-cols-md-4 g-3"
-                      style={{ marginTop: 20 }}
+                      style={{ marginTop: 5 }}
                     >
                       {currentProducts.map((product) => (
                         <div key={product.product_id} className="col mb-4">

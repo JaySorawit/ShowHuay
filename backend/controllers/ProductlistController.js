@@ -16,4 +16,19 @@ const queryProductsCategoryId = (req, res) => {
   };
 
 /********************************************************************************************************/
-module.exports = { queryProductsCategoryId };
+/******************************************* Query Products By search Key  ******************************/
+const queryProductskey = (req, res) => {
+  const searchKey = req.params.searchKey;
+  const selectProductQuery = "SELECT * FROM product WHERE product_name LIKE ?";
+  db.query(selectProductQuery, [`%${searchKey}%`], (err, results) => {
+    if (err) {
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Failed to fetch products" });
+      return;
+    }
+    res.json(results);
+  });
+};
+
+/********************************************************************************************************/
+module.exports = { queryProductsCategoryId ,queryProductskey};

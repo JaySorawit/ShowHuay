@@ -10,8 +10,8 @@
 
  const router = require("express").Router();
 
- const { queryProductsCategoryId } = require("../controllers/ProductListController");
+ const { queryProductsCategoryId, queryProductskey } = require("../controllers/ProductListController");
  
  router.route("/productlist/:categoryId").get(queryProductsCategoryId);
- router.route("/productlist/keyword/:searchkey").get(queryProductsCategoryId);
+ router.route("/productlist/keyword/:searchKey").get(queryProductskey);
  module.exports = router;
