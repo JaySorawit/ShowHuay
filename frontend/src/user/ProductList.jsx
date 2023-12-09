@@ -141,13 +141,17 @@ function ProductList() {
         });
 
         const updatedProducts = await Promise.all(productPromises);
+        if (clickedButton === "Top Sales") {
+          updatedProducts.sort((a, b) => b.total_sold - a.total_sold);
+        }
         setProducts(updatedProducts);
         setFilteredProducts(updatedProducts);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, [p]);
+      
+  }, [p, clickedButton]);
 
   /*************************************************************************************************/
 
@@ -281,61 +285,6 @@ function ProductList() {
             <div className="search_result_word">
               Search result for " {search} "
             </div>
-            <div className="sort-box">
-              <div className="sorting_word">Sort by</div>
-              <button
-                className={`sort-button1 ${
-                  clickedButton === "Latest" ? "active" : ""
-                }`}
-                onClick={() => handleSortButtonClick("Latest")}
-              >
-                Latest
-              </button>
-              <button
-                className={`sort-button1 ${
-                  clickedButton === "Top Sales" ? "active" : ""
-                }`}
-                onClick={() => handleSortButtonClick("Top Sales")}
-              >
-                Top Sales
-              </button>
-              <button
-                className={`sort-button2 ${isPriceClicked ? "active" : ""}`}
-                onClick={() => {
-                  setIsPriceClicked(!isPriceClicked);
-                }}
-              >
-                Price{" "}
-                <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
-              </button>
-              <div className="page-button">
-                <button
-                  className="current-page"
-                  onClick={() => handlePageChange(currentPage)}
-                  disabled
-                >
-                  {currentPage} /{" "}
-                  {Math.ceil(filteredProducts.length / productsPerPage)}
-                </button>
-                <button
-                  className="previos-next-button"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  &lt;
-                </button>
-                <button
-                  className="previos-next-button"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={
-                    currentPage ===
-                    Math.ceil(filteredProducts.length / productsPerPage)
-                  }
-                >
-                  &gt;
-                </button>
-              </div>
-            </div>
             <div
               className="pt-3 pb-3"
               style={{ backgroundColor: "#F1F0F0", minHeight: "640px" }}
@@ -352,7 +301,61 @@ function ProductList() {
                     <p>No products available</p>
                   </div>
                 ) : (
-                  <>
+                  <><div className="sort-box">
+                  <div className="sorting_word">Sort by</div>
+                  <button
+                    className={`sort-button1 ${
+                      clickedButton === "Latest" ? "active" : ""
+                    }`}
+                    onClick={() => handleSortButtonClick("Latest")}
+                  >
+                    Latest
+                  </button>
+                  <button
+                    className={`sort-button1 ${
+                      clickedButton === "Top Sales" ? "active" : ""
+                    }`}
+                    onClick={() => handleSortButtonClick("Top Sales")}
+                  >
+                    Top Sales
+                  </button>
+                  <button
+                    className={`sort-button2 ${isPriceClicked ? "active" : ""}`}
+                    onClick={() => {
+                      setIsPriceClicked(!isPriceClicked);
+                    }}
+                  >
+                    Price{" "}
+                    <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
+                  </button>
+                  <div className="page-button">
+                    <button
+                      className="current-page"
+                      onClick={() => handlePageChange(currentPage)}
+                      disabled
+                    >
+                      {currentPage} /{" "}
+                      {Math.ceil(filteredProducts.length / productsPerPage)}
+                    </button>
+                    <button
+                      className="previos-next-button"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      className="previos-next-button"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={
+                        currentPage ===
+                        Math.ceil(filteredProducts.length / productsPerPage)
+                      }
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </div>
                     <div
                       className="row-card row-cols-2 row-cols-md-4 g-3"
                       style={{ marginTop: 5 }}
