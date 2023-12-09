@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
@@ -12,6 +13,7 @@ const CartItem = ({
   price,
   quantity,
   imagePath,
+  sellerName,
   selected,
   handleCheckboxChange,
   handleDeleteProduct,
@@ -26,6 +28,7 @@ const CartItem = ({
       <img src={imagePath} alt="product" style={{ width: "100px", height: "100px" }} />
     </div>
     <div className="item-details">
+      <h4>{sellerName}</h4>
       <h3>{name}</h3>
       <p>ID: {id}</p>
       <p>Price: ${price}</p>
@@ -43,6 +46,8 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const [selectedItems, setSelectedItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate();
+
   /* ******************************************************************************************** */
 
 
@@ -106,7 +111,7 @@ const Cart = () => {
                       ...prevItem,
                       productName: productData.product_name,
                       price: productData.price,
-                      sellerId: productData.user_id,
+                      sellerName: productData.username,
                       imgPath: productData.image_path,
                     }
                   : prevItem
@@ -148,7 +153,6 @@ const deleteProduct = async (productId) => {
     );
 
     const responseData = await response.json();
-    console.log(responseData);
 
     // Update cart items after deletion
     getCart();
@@ -156,6 +160,19 @@ const deleteProduct = async (productId) => {
     console.error("Error deleting product:", error);
   }
 };
+
+const handleCheckout = () => {
+  const selectedProducts = cartItems
+    .filter((item) => selectedItems.includes(item.productId))
+    .map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    }));
+
+  // Navigate to the payment page with the selected product information
+  navigate(`/payment/?productInfo=${encodeURIComponent(JSON.stringify(selectedProducts))}`);
+};
+
 
 /* ******************************************************************************************** */
 
@@ -178,13 +195,15 @@ const deleteProduct = async (productId) => {
                   price={item.price || "Product price Unavailable"}
                   imagePath={item.imgPath || "Product image Unavailable"}
                   quantity={item.quantity}
+                  sellerName={item.sellerName}
                   selected={selectedItems.includes(item.productId)}
                   handleCheckboxChange={handleCheckboxChange}
                   handleDeleteProduct={deleteProduct} 
                 />
               ))
             )}
-            <Link to="/payment">Checkout</Link>
+            <Link to="/payment" onClick={handleCheckout}>Checkout</Link>
+
           </Col>
         </Row>
       </Container>
