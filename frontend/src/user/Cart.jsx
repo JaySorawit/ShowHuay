@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -170,8 +169,11 @@ const handleCheckout = () => {
     }));
 
   // Navigate to the payment page with the selected product information
-  navigate(`/payment/?productInfo=${encodeURIComponent(JSON.stringify(selectedProducts))}`);
+  // Use state to pass the selected products
+  return <Link to="/payment" state={{ productInfo: selectedProducts }}>Checkout</Link>;
 };
+
+
 
 
 /* ******************************************************************************************** */
@@ -202,7 +204,8 @@ const handleCheckout = () => {
                 />
               ))
             )}
-            <Link to="/payment" onClick={handleCheckout}>Checkout</Link>
+            <div>{handleCheckout()}</div>
+
 
           </Col>
         </Row>
