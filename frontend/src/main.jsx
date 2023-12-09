@@ -28,7 +28,7 @@ import './App.css'
 
 const commonRoutes = [
   { path: "/", element: <Home /> },
-  { path: "/productList", element: <ProductList /> },
+  { path: "/productList/:categoryId", element: <ProductList /> },
   { path: "/Products/:id", element: <Product /> },
   { path: "/shopProfile/:id", element: <ShopProfile /> },
 ];

@@ -10,6 +10,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const addressRoutes = require('./routes/addressRoutes');
 const creditCardRoutes = require('./routes/creditCardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const productListRoutes = require('./routes/productListRoutes');
 const app = express();
 
 // Enable CORS for all routes
@@ -38,6 +39,7 @@ app.use('/chat', chatRoutes);
 app.use('/creditCard', creditCardRoutes);
 app.use('/cart', cartRoutes);
 app.use('/shop', shopRoutes);
+app.use('/list', productListRoutes);
 app.use('/system', adminRoutes);
 
 // Start the server

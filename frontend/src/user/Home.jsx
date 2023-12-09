@@ -52,8 +52,9 @@ function Home() {
           {categories.map((category, index) => (
             <Link
             key={index}
-            to={`/productlist/`} 
+            to={`/productlist/${index}`} 
           >
+           
             <Button
             className='home_button'
             key={index}

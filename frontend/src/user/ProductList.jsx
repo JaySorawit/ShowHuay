@@ -4,7 +4,9 @@ import "../css/Productlist.css";
 import RatingStar from "./RatingStar";
 import Footer from "./Footer";
 import ReactSlider from "react-slider";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 function ProductList() {
   const [min, setMin] = useState(0);
@@ -12,7 +14,8 @@ function ProductList() {
   const [trackColor, setTrackColor] = useState(
     "linear-gradient(to right, orange 0%, transparent 0%)"
   );
-  const search = localStorage.getItem("selectedCategory");
+  const category = localStorage.getItem("selectedCategory");
+  const search = category;
   const updateTrackColor = (values) => {
     const percent = (values[0] + values[1]) / 10;
     setTrackColor(
@@ -48,8 +51,104 @@ function ProductList() {
   const handleSortButtonClick = (value) => {
     setClickedButton(clickedButton === value ? null : value);
   };
-  const productCount = 0;
-  
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [productCount, setProductCount] = useState(0);
+  const { categoryId } = useParams();
+  /********************************* Query Information Product ***********************************/
+  useEffect(() => {
+    fetch(`http://localhost:3000/list/productlist/${categoryId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(async (data) => {
+        setProducts(data);
+        setFilteredProducts(data);
+        setProductCount(data.length);
+        console.log(categoryId);
+        const productPromises = data.map(async (product) => {
+          try {
+            const totalSoldResponse = await axios.get(
+              `http://localhost:3000/product/${product.product_id}`
+            );
+            const totalSold = totalSoldResponse.data.product[0].total_sold;
+
+            const reviewResponse = await axios.get(
+              `http://localhost:3000/product/getProductReview/${product.product_id}`
+            );
+
+            let averageScore = 0;
+            if (reviewResponse.data.review.length > 0) {
+              const reviews = reviewResponse.data.review.map((review) => ({
+                score: review.review_score,
+              }));
+
+              let totalScore = 0;
+              reviews.forEach((review) => {
+                totalScore += review.score;
+              });
+              averageScore = totalScore / reviews.length;
+            }
+
+            return {
+              ...product,
+              total_sold: totalSold,
+              review_score: Math.round(averageScore),
+            };
+          } catch (error) {
+            return {
+              ...product,
+              total_sold: 0,
+              review_score: 0,
+            };
+          }
+        });
+
+        const updatedProducts = await Promise.all(productPromises);
+        setProducts(updatedProducts);
+        setFilteredProducts(updatedProducts);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, [categoryId]);
+  /*************************************************************************************************/
+
+  /*************************************  Product list Page  ***************************************/
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 16;
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredProducts.length / productsPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
+  }
+
+  const renderPageNumbers = pageNumbers.map((number) => (
+    <li
+      key={number}
+      onClick={() => setCurrentPage(number)}
+      className={currentPage === number ? "active" : ""}
+    >
+      {number}
+    </li>
+  ));
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  /*************************************************************************************************/
+
   return (
     <>
       <Navbar />
@@ -78,14 +177,8 @@ function ProductList() {
               }}
             />
             <div className="Value-Wrapper">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ marginRight: "10px" }}>Min :</div>
+              <div className="show_min_max">
+                <div>Min</div>
                 <input
                   type="number"
                   value={min}
@@ -95,9 +188,9 @@ function ProductList() {
                     textAlign: "center",
                   }}
                 />
-                <div style={{ marginLeft: "10px", marginRight: "10px" }}>
-                  Max :
-                </div>
+              </div>
+              <div className="show_min_max">
+                <div>Max</div>
                 <input
                   type="number"
                   value={max}
@@ -182,14 +275,41 @@ function ProductList() {
                 Top Sales
               </button>
               <button
-  className={`sort-button2 ${isPriceClicked ? "active" : ""}`}
-  onClick={() => {
-    setIsPriceClicked(!isPriceClicked);
-  }}
->
-  Price{" "}
-  <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
-</button>
+                className={`sort-button2 ${isPriceClicked ? "active" : ""}`}
+                onClick={() => {
+                  setIsPriceClicked(!isPriceClicked);
+                }}
+              >
+                Price{" "}
+                <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
+              </button>
+              <div className="page-button">
+              <button
+                className="current-page"
+                onClick={() => handlePageChange(currentPage)}
+                disabled
+              >
+                {currentPage} /{" "}
+                {Math.ceil(filteredProducts.length / productsPerPage)}
+              </button>
+              <button
+                className="previos-next-button"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                &lt;
+              </button>
+              <button
+                className="previos-next-button"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={
+                  currentPage ===
+                  Math.ceil(filteredProducts.length / productsPerPage)
+                }
+              >
+                &gt;
+              </button>
+              </div>
             </div>
             <div
               className="pt-3 pb-3"
@@ -208,17 +328,11 @@ function ProductList() {
                   </div>
                 ) : (
                   <>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        placeholder="Search in this shop..."
-                        value={searchTerm}
-                        onChange={handleSearch}
-                        className="search-input ms-0"
-                      />
-                    </div>
-                    <div className="row-card row-cols-2 row-cols-md-5 g-3">
-                      {filteredProducts.map((product) => (
+                    <div
+                      className="row-card row-cols-2 row-cols-md-4 g-3"
+                      style={{ marginTop: 20 }}
+                    >
+                      {currentProducts.map((product) => (
                         <div key={product.product_id} className="col mb-4">
                           <Link
                             to={`/Products/${product.product_id}`}

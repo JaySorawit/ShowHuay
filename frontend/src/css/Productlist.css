@@ -29,10 +29,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .Value-Wrapper{
-  margin:20px;
-  margin-top: 15px;
-  margin-left: auto;
-  margin-right: auto;
+
+  justify-content: center;
+  display: flex;
 }
 
 .filterByText {
@@ -171,14 +170,42 @@ input[type=number]::-webkit-outer-spin-button {
 
 .arrow {
   display: inline-block;
-  margin-left: 0.3em; /* ปรับขนาดระยะห่างระหว่าง Price กับลูกศร */
-  transition: transform 0.3s ease; /* เพื่อทำการ animate เมื่อมีการเปลี่ยนแปลง */
+  margin-left: 0.3em;
+  transition: transform 0.3s ease; 
 }
 
-
-
-/* หมุนลูกศรเมื่อปุ่ม active */
 .sort-button2.active .arrow {
-  transform: rotate(360deg); /* หมุนลูกศร */
+  transform: rotate(360deg); 
 }
 
+.show_min_max{
+  margin-left: 25px;
+  margin-right: 25px;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+}
+
+.previos-next-button{
+  width: 30px;
+  height: 30px;
+  border-radius: 5px; 
+  border: none;
+  margin: 2px;
+  background-color: white;
+}
+
+.current-page{
+  width: 60px;
+  height: 30px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 5px;
+  color: black;
+  background-color: white;
+}
+
+.page-button{
+  margin-left: 30.7%;
+  gap : 2px;
+}
