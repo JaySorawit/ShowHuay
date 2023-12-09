@@ -45,6 +45,7 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const [selectedItems, setSelectedItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   /* ******************************************************************************************** */
@@ -97,34 +98,38 @@ const Cart = () => {
 
   /* ************************************ Fetch product data ************************************ */
   useEffect(() => {
-    const fetchProductData = async () => {
-      const updatedCartItems = await Promise.all(
-        cartItems.map(async (item) => {
-          try {
-            const response = await axios.get(`http://localhost:3000/product/${item.productId}`);
-            const productData = response.data.product[0];
-  
-            if (productData) {
-              return {
-                ...item,
-                productName: productData.product_name,
-                price: productData.price,
-                sellerName: productData.username,
-                imgPath: productData.image_path,
-              };
+    const fetchProductDetails = async (cartItems) => {
+      try {
+        const productDetails = await Promise.all(
+          cartItems.map(async (product) => {
+            try {
+              const response = await axios.get(
+                `http://localhost:3000/product/${product.productId}`
+              );
+              const productData = response.data.product[0];
+              return { ...productData, quantity: product.quantity };
+            } catch (error) {
+              console.error("Error fetching product:", error);
+              throw error;
             }
-          } catch (error) {
-            console.error("Error fetching product data:", error);
-            return item; // Keep the original item in case of an error
-          }
-        })
-      );
-  
-      setCartItems(updatedCartItems.filter(Boolean));
+          })
+        );
+        setProducts(
+          productDetails.map((product) => ({
+            imagePath: product.image_path,
+            price: product.price,
+            productId: product.product_id,
+            productName: product.product_name,
+            quantity: product.quantity,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
     };
-  
-    fetchProductData();
-  }, [cartItems, setCartItems]);
+
+    fetchProductDetails(cartItems);
+  }, [cartItems]);
   
   /* ******************************************************************************************** */
 
@@ -163,12 +168,7 @@ const deleteProduct = async (productId) => {
   }
 };
 
-/* ************************************ Handle checkout *************************************** */
 const handleCheckout = () => {
-  if (selectedItems.length === 0) {
-    alert('Please select at least one item');
-    return;
-  }
   const selectedProducts = cartItems
     .filter((item) => selectedItems.includes(item.productId))
     .map((item) => ({
@@ -176,11 +176,10 @@ const handleCheckout = () => {
       quantity: item.quantity,
     }));
 
-  navigate("/payment", { state: { productInfo: selectedProducts } });
+  // Navigate to the payment page with the selected product information
+  // Use state to pass the selected products
+  return <Link to="/payment" state={{ productInfo: selectedProducts }}>Checkout</Link>;
 };
-/* ******************************************************************************************** */
-
-
 
 
 
@@ -195,16 +194,16 @@ const handleCheckout = () => {
           <Col>
             <h1>Cart</h1>
 
-            {cartItems.length === 0 ? (
+            {products.length === 0 ? (
               <p>Cart is empty</p>
             ) : (
-              cartItems.map((item) => (
+              products.map((item) => (
                 <CartItem
                   key={item.productId}
                   id={item.productId}
                   name={item.productName || "Product Name Unavailable"}
                   price={item.price || "Product price Unavailable"}
-                  imagePath={item.imgPath || "Product image Unavailable"}
+                  imagePath={item.imagePath || "Product image Unavailable"}
                   quantity={item.quantity}
                   sellerName={item.sellerName}
                   selected={selectedItems.includes(item.productId)}
@@ -213,8 +212,7 @@ const handleCheckout = () => {
                 />
               ))
             )}
-            <button onClick={handleCheckout}>Check out</button>
-
+            <div>{handleCheckout()}</div>
 
 
           </Col>
