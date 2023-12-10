@@ -166,6 +166,29 @@ const Product = () => {
   };
   /* ******************************************************************************************** */
 
+  /* ************************************* Handle Buy Now **************************************** */
+/* ************************************* Handle Buy Now **************************************** */
+const handleBuyNow = (id, quantity) => {
+  const selectedProducts = [{ productId: id, quantity: quantity }]
+
+  navigate("/payment", { state: { productInfo: selectedProducts } });
+};
+/* ******************************************************************************************** */
+
+<button
+  type="submit"
+  style={{
+    color: "#fff",
+    border: "none",
+    backgroundColor: "#F44C0C",
+  }}
+  onClick={() => handleBuyNow(product_id, quantity)}
+>
+  Buy Now
+</button>
+
+/* ******************************************************************************************** */  
+
   return (
     <>
       <Navbar />
@@ -219,8 +242,9 @@ const Product = () => {
                     border: "none",
                     backgroundColor: "#F44C0C",
                   }}
+                  onClick={() => handleBuyNow(id, quantity)}
                 >
-                  Buy Now{" "}
+                  Buy Now
                 </button>
               </div>
             </div>
