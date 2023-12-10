@@ -57,14 +57,19 @@
 
 .content-purchases {
     padding: 10px 0px;
-    border-bottom: 1px solid #e6e6e6;
 }
 
 .content-text {
     font-size: 14px !important;
 }
 
+.rows-content {
+    padding-bottom: 20px;
+    margin-top: 20px;
+}
+
 .footer-purchases {
+    border-top: 1px solid #e6e6e6;
     padding-top: 15px;
 }
 

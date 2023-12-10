@@ -107,12 +107,13 @@ const queryPurchases = (req, res) => {
 };
 /************************************************************************************************************/
 
-/*********************************** Update Review State in Purchase  ***************************************/
+/******************************* Update Review State in Purchase Product  ***********************************/
 const updateReviewState = (req, res) => {
+  const { productId } = req.body;
   const purchaseId = req.params.purchaseId;
-  const updateReviewPurchaseQuery = 'UPDATE purchase SET is_review = 1 WHERE purchase_id = ?';
+  const updateReviewPurchaseQuery = 'UPDATE purchase_product SET is_review = 1 WHERE purchase_id = ? AND product_id = ?';
 
-  db.query(updateReviewPurchaseQuery, [purchaseId], (err, results) => {
+  db.query(updateReviewPurchaseQuery, [purchaseId, productId], (err, results) => {
     if (err) {
       console.error('Error updating review state:', err);
       res.status(500).json({ error: 'Failed to update review state' });

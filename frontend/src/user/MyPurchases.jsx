@@ -39,15 +39,13 @@ const MyPurchases = () => {
         return response.json();
       })
       .then((data) => {
-        setPurchases(data);
-        const productIds = data.map((purchase) => purchase.product_id);
-
-        const productDetailsRequests = productIds.map((productId) =>
-          fetch(`http://localhost:3000/product/${productId}`).then(
+        const purchaseIds = data.map((purchase) => purchase.purchase_id);
+        const purchaseProductRequests = purchaseIds.map((purchaseId) =>
+          fetch(`http://localhost:3000/product/purchases/${purchaseId}`).then(
             (response) => {
               if (!response.ok) {
                 throw new Error(
-                  `Failed to fetch product with ID: ${productId}`
+                  `Failed to fetch products for purchase with ID: ${purchaseId}`
                 );
               }
               return response.json();
@@ -55,39 +53,24 @@ const MyPurchases = () => {
           )
         );
 
-        const usernameRequests = productIds.map((productId) =>
-          fetch(`http://localhost:3000/account/username/${productId}`).then(
-            (response) => {
-              if (!response.ok) {
-                throw new Error(
-                  `Failed to fetch username for product with ID: ${productId}`
-                );
-              }
-              return response.json();
-            }
-          )
-        );
-
-        Promise.all([...productDetailsRequests, ...usernameRequests])
-          .then((results) => {
-            const productsData = results.slice(0, productIds.length);
-            const usernamesData = results.slice(productIds.length);
-
+        Promise.all(purchaseProductRequests)
+          .then((productsData) => {
             const purchasesWithProducts = data.map((purchase, index) => ({
               ...purchase,
-              productDetails: productsData[index].product[0],
-              username: usernamesData[index].username,
+              products: productsData[index],
             }));
             setFilteredPurchases(purchasesWithProducts);
+            console.log(purchasesWithProducts);
           })
           .catch((error) => {
-            console.error("Error fetching product or username details:", error);
+            console.error("Error fetching products for purchases:", error);
           });
       })
       .catch((error) => {
         console.error("Error fetching purchases:", error);
       });
   }, []);
+
   /***************************************************************************************************/
 
   /*************************************** Link of Products ******************************************/
@@ -230,32 +213,34 @@ const MyPurchases = () => {
                 </div>
               ) : (
                 sortedPurchases.map((purchase) => (
-                  <Row key={purchase.purchase_id} className="purchase-item">
-                    <div>
-                      {purchase.username && (
+                  <div key={purchase.purchase_id} className="purchase-item">
+                    {purchase.products.purchaseDetails.map((product) => (
+                      <>
                         <div className="heading-purchases">
                           <i
                             className="nav-icon fas fa-store me-2"
                             style={{ color: "#F44C0C", fontSize: "14px" }}
                           />
                           <span style={{ fontWeight: "500" }}>
-                            {purchase.username}
+                            {product.username}
                           </span>
                           <button
                             className="view-button ms-2"
-                            onClick={() => handleView(purchase.product_id)}
+                            onClick={() => handleView(product.product_id)}
                           >
                             View Page
                           </button>
                         </div>
-                      )}
-                      {purchase.productDetails && (
+
                         <div className="content-purchases">
-                          <Row>
+                          <Row
+                            key={product.product_id}
+                            className="rows-content"
+                          >
                             <Col md={2}>
                               <img
-                                src={purchase.productDetails.image_path}
-                                alt={purchase.productDetails.product_name}
+                                src={product.image_path}
+                                alt={product.product_name}
                                 className="product-image"
                                 style={{ width: "120px", height: "120px" }}
                               />
@@ -264,10 +249,10 @@ const MyPurchases = () => {
                             <Col md={9}>
                               <div>
                                 <p className="content-text">
-                                  {purchase.productDetails.product_name}
+                                  {product.product_name}
                                 </p>
                                 <p className="content-text">
-                                  x{purchase.quantity}
+                                  x{product.quantity}
                                 </p>
                               </div>
                             </Col>
@@ -281,76 +266,69 @@ const MyPurchases = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  ฿{purchase.productDetails.price}
+                                  ฿{product.price}
                                 </p>
                               </div>
                             </Col>
-                          </Row>
-                        </div>
-                      )}
-
-                      {purchase.productDetails && (
-                        <div className="footer-purchases">
-                          <Row>
-                            <Col>
-                              <p
-                                className="mt-2 text-muted"
-                                style={{ fontSize: "12px" }}
-                              >
-                                Payment time:{" "}
-                                {format(
-                                  new Date(purchase.payment_timestamp),
-                                  "dd/MM/yyyy HH:mm:ss"
-                                )}
-                              </p>
-                            </Col>
-                            <Col>
-                              <p className="content-text text-right">
-                                Order Total:&nbsp;
-                                <span
-                                  style={{
-                                    color: "#F44C0C",
-                                    fontWeight: "500",
-                                    fontSize: "20px",
-                                  }}
-                                >
-                                  ฿
-                                  {purchase.productDetails.price *
-                                    purchase.quantity}
-                                </span>
-                              </p>
-                            </Col>
-                          </Row>
-
-                          <div className="footer-button">
-                            <button
-                              className="contact-review-button"
-                              onClick={() =>
-                                handleContactSeller(
-                                  purchase.productDetails.user_id
-                                )
-                              }
-                            >
-                              Contact Seller
-                            </button>
-                            {purchase.is_review === 0 && (
+                            <div className="footer-button">
                               <button
                                 className="contact-review-button"
                                 onClick={() =>
-                                  handleReview(
-                                    purchase.purchase_id,
-                                    purchase.productDetails.product_id
-                                  )
+                                  handleContactSeller(product.user_id)
                                 }
                               >
-                                Review
+                                Contact Seller
                               </button>
-                            )}
-                          </div>
+                              {product.is_review === 0 && (
+                                <button
+                                  className="contact-review-button"
+                                  onClick={() =>
+                                    handleReview(
+                                      purchase.purchase_id,
+                                      product.product_id
+                                    )
+                                  }
+                                >
+                                  Review
+                                </button>
+                              )}
+                            </div>
+                          </Row>
                         </div>
-                      )}
+                      </>
+                    ))}
+
+                    <div className="footer-purchases">
+                      <Row>
+                        <Col>
+                          <p
+                            className="mt-2 text-muted"
+                            style={{ fontSize: "12px" }}
+                          >
+                            Payment time:{" "}
+                            {format(
+                              new Date(purchase.payment_timestamp),
+                              "dd/MM/yyyy HH:mm:ss"
+                            )}
+                          </p>
+                        </Col>
+                        <Col>
+                          <p className="content-text text-right">
+                            Order Total:&nbsp;
+                            <span
+                              style={{
+                                color: "#F44C0C",
+                                fontWeight: "500",
+                                fontSize: "20px",
+                              }}
+                            >
+                              ฿{purchase.products.purchaseDetails.reduce((totalPrice, product) => totalPrice + product.price, 0)}
+                            </span>
+                          </p>
+                        </Col>
+                      </Row>
                     </div>
-                  </Row>
+                  </div>
                 ))
               )}
             </Col>
