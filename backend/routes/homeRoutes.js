@@ -10,8 +10,7 @@
 
  const router = require("express").Router();
 
- const { queryProductsCategoryId, queryProductskey } = require("../controllers/productListController");
+ const { queryhighestquntityproduct } = require("../controllers/homeController");
  
- router.route("/productlist/:categoryId").get(queryProductsCategoryId);
- router.route("/productlist/keyword/:searchKey").get(queryProductskey);
+ router.route("/").get(queryhighestquntityproduct);
  module.exports = router;

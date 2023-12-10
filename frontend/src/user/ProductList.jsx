@@ -159,9 +159,7 @@ function ProductList() {
         if (clickedButton === "Top Sales") {
           updatedProducts.sort((a, b) => b.total_sold - a.total_sold);
         } else if (clickedButton === "Latest") {
-          updatedProducts.sort(
-            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          );
+          updatedProducts.sort((a, b) => a.product_id - b.product_id);
         }
 
         if (arrowDirection === "up") {
@@ -203,7 +201,7 @@ function ProductList() {
   };
   /*************************************************************************************************/
 
-  const handleApply = () => {
+  const handleApply = (x) => {
     let filteredByRatingProducts = products;
 
     if (scoreRating !== null) {
@@ -215,7 +213,6 @@ function ProductList() {
     const filteredByPriceProducts = filteredByRatingProducts.filter(
       (product) => product.price >= min && product.price <= max
     );
-
     setFilteredProducts(filteredByPriceProducts);
   };
 

@@ -25,17 +25,6 @@
     gap:20px;
 }
 
-.TopProductsBox button {
-    height: 200px;
-    width: 180px;
-    border: 1px solid #000;
-    overflow: hidden;
-    background-size: cover;
-    color: #fff;
-    padding: 10px;
-    border-radius: 0;
-  }
-
   .categoryBox img {
     position: relative;
     top: 20px;

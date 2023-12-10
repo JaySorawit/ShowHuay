@@ -12,6 +12,7 @@ const creditCardRoutes = require('./routes/creditCardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const productListRoutes = require('./routes/productListRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
+const homeRoutes = require('./routes/homeRoutes');
 const app = express();
 
 // Enable CORS for all routes
@@ -41,8 +42,9 @@ app.use('/creditCard', creditCardRoutes);
 app.use('/cart', cartRoutes);
 app.use('/shop', shopRoutes);
 app.use('/list', productListRoutes);
-app.use('/system', adminRoutes);
 app.use('/purchase', purchaseRoutes);
+app.use('/home', homeRoutes);
+app.use('/system', adminRoutes);
 
 // Start the server
 server.listen(3000, () => {
