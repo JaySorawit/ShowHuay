@@ -1,3 +1,13 @@
+/********************************************************************
+ *   Login.jsx                                                      *
+ *                                                                  *
+ *   React component providing a user interface for the login       *
+ *   functionality. It includes a form for users to input their     *
+ *   credentials and log into the website.                          *
+ *                                                                  *
+ ********************************************************************/
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import Navbar from './Navbar';

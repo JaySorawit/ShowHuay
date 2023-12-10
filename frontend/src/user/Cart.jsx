@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
+import QuantityAdjust from "./QuantityAdjust";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import "../css/Cart.css";
@@ -17,56 +18,74 @@ const CartItem = ({
   handleCheckboxChange,
   handleDeleteProduct,
 }) => (
-  <div className="item" key={id}>
-    <div className="gray-curved-box">
-      <div className="item-row">
-        <input
-          type="checkbox"
-          checked={selected}
-          onChange={() => handleCheckboxChange(id)}
-        />
-        <div className="checkbox-divider"></div>
-        <div className="item-content">
-          <div className="item-image">
-            <img src={imagePath} alt="product" />
-          </div>
-          <div className="item-details">
-            {/* <div className="column">
-              <h4>{sellerName}</h4>
-            </div> */}
-            <div className="column">
-              <p>Product Name</p>
-              <p>{name}</p>
+  <div
+    className="item"
+    key={id}
+    style={{
+      display: "flex",
+      height: "200px",
+      maxWidth: "1000px",
+      backgroundColor: "#F1F0F0",
+      borderRadius: "20px",
+      margin: "20px auto",
+    }}
+  >
+    <div className="item-row">
+      <input
+        type="checkbox"
+        checked={selected}
+        onChange={() => handleCheckboxChange(id)}
+        style={{ width: "10%" }}
+      />
+      <div className="item-content" style={{ width: "815px" }}>
+        <div className="nameSeller">
+          <i
+            className="nav-icon fas fa-store me-2"
+            style={{ color: "#F44C0C", fontSize: "14px" }}
+          />
+          <p style={{ fontSize: "18px", fontWeight: "600" }}>{sellerName}</p>
+        </div>
+        <div className="item-details" style={{ width: "100%" }}>
+          <div className="productinfo">
+            <div className="item-image">
+              <img src={imagePath} alt="product" />
+            </div>
+            <div className="column" style={{ height: "80px", width: "20%" }}>
+              <p style={{ fontSize: "15px", fontWeight: "600" }}>
+                Product Name
+              </p>
+              <p className="productTitle">{name}</p>
             </div>
             <div className="column">
-              <p>Price</p>
-              <p>${price}</p>
+              <p style={{ fontSize: "15px", fontWeight: "600" }}>Price</p>
+              <p>฿{price}</p>
             </div>
             <div className="column">
-              <p>Quantity</p>
-              <p>${quantity}</p>
+              {/* <p style={{ fontSize: "15px", fontWeight: "600" }}>Quantity</p>
+              <p>{quantity}</p> */}
+              <QuantityAdjust/>
             </div>
             <div className="column">
-              <p>Total Price</p>
-              <p>${quantity * price}</p>
+              <p style={{ fontSize: "15px", fontWeight: "600" }}>Total Price</p>
+              <p>฿{quantity * price}</p>
             </div>
           </div>
         </div>
-
-        <button class='cart-del-button'onClick={() => handleDeleteProduct(id)}>Delete</button>
       </div>
+      <button
+        style={{ width: "20%" }}
+        className="cart-del-button"
+        onClick={() => handleDeleteProduct(id)}
+      >
+        Delete
+      </button>
     </div>
   </div>
 );
 
-
-
-
 /* ******************************************************************************************** */
 
-
 const Cart = () => {
-
   /* **************************** Initialize State & define variable **************************** */
   const userId = localStorage.getItem("userId");
   const [selectedItems, setSelectedItems] = useState([]);
@@ -75,7 +94,6 @@ const Cart = () => {
   const navigate = useNavigate();
 
   /* ******************************************************************************************** */
-
 
   /* ************************************ Fetch cart data ************************************ */
   const getCart = async () => {
@@ -89,16 +107,16 @@ const Cart = () => {
           },
         }
       );
-  
+
       if (response.status === 204) {
         console.log("Cart is empty");
         setCartItems([]); // Set cart items to an empty array or handle as needed
         return;
       }
-  
+
       const responseData = await response.json();
       console.log(responseData);
-  
+
       const carts = responseData.carts || [];
       setCartItems(
         carts.map((item) => ({
@@ -111,16 +129,14 @@ const Cart = () => {
       console.error("Error fetching cart:", error);
     }
   };
-  
-  /* ******************************************************************************************** */
 
+  /* ******************************************************************************************** */
 
   /* ************************ Fetch cart data on component mount ********************************* */
   useEffect(() => {
     getCart();
-  }, []); 
+  }, []);
   /* ******************************************************************************************** */
-  
 
   /* ************************************ Fetch product data ************************************ */
   useEffect(() => {
@@ -158,7 +174,7 @@ const Cart = () => {
 
     fetchProductDetails(cartItems);
   }, [cartItems]);
-  
+
   /* ******************************************************************************************** */
 
   /* ************************************ Handle when checkbox change *************************** */
@@ -170,93 +186,109 @@ const Cart = () => {
   };
   /* ******************************************************************************************** */
 
-/* ****************************** Delete product from cart ************************************ */
-const deleteProduct = async (productId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/cart/removeFromCart`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          product_id: productId,
-        }),
-      }
+  /* ****************************** Delete product from cart ************************************ */
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/cart/removeFromCart`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            product_id: productId,
+          }),
+        }
+      );
+
+      const responseData = await response.json();
+
+      // Update cart items after deletion
+      getCart();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+  /* ******************************************************************************************** */
+
+  /**************************************** handleCheckout ****************************************/
+  const handleCheckout = () => {
+    if (selectedItems.length === 0) {
+      alert("Please select at least one item to checkout");
+      return;
+    }
+    const selectedProducts = cartItems
+      .filter((item) => selectedItems.includes(item.productId))
+      .map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        stockRemaining: item.stockRemaining,
+      }));
+
+    const allProductsAvailable = selectedProducts.every(
+      (product) =>
+        products.find((p) => p.productId === product.productId)
+          .stockRemaining >= product.quantity
     );
 
-    const responseData = await response.json();
-
-    // Update cart items after deletion
-    getCart();
-    window.location.reload();
-  } catch (error) {
-    console.error("Error deleting product:", error);
-  }
-};
-/* ******************************************************************************************** */
-
-
-/**************************************** handleCheckout ****************************************/
-const handleCheckout = () => {
-  if (selectedItems.length === 0) {
-    alert("Please select at least one item to checkout");
-    return;
-  }
-  const selectedProducts = cartItems
-    .filter((item) => selectedItems.includes(item.productId))
-    .map((item) => ({
-      productId: item.productId,
-      quantity: item.quantity,
-      stockRemaining: item.stockRemaining,
-    }));
-
-  const allProductsAvailable = selectedProducts.every(
-    (product) =>
-      products.find((p) => p.productId === product.productId).stockRemaining >= product.quantity
-  );
-
-  if (allProductsAvailable) {
-    navigate("/payment", { state: { productInfo: selectedProducts } });
-  } else {
-    alert("Some products are out of stock. Please adjust your quantity.");
-  }
-};
-/* ******************************************************************************************** */
+    if (allProductsAvailable) {
+      navigate("/payment", { state: { productInfo: selectedProducts } });
+    } else {
+      alert("Some products are out of stock. Please adjust your quantity.");
+    }
+  };
+  /* ******************************************************************************************** */
 
   return (
     <>
       <Navbar />
-      <h1>Cart</h1>
-      <Container>
-      <Row>
-
+      <Container style={{ height: "65vh" }}>
+        <h2
+          style={{
+            margin: "30px auto",
+          }}
+        >
+          My carts
+        </h2>
+        <hr style={{ opacity: "100%" }}></hr>
+        <Row>
           <Col>
-            
-
             {products.length === 0 ? (
               <p>Cart is empty</p>
             ) : (
-              products.map((item) => (
-                <CartItem
-                  key={item.productId}
-                  id={item.productId}
-                  name={item.productName || "Product Name Unavailable"}
-                  price={item.price || "Product price Unavailable"}
-                  imagePath={item.imagePath || "Product image Unavailable"}
-                  quantity={item.quantity}
-                  sellerName={item.sellerName}
-                  selected={selectedItems.includes(item.productId)}
-                  handleCheckboxChange={handleCheckboxChange}
-                  handleDeleteProduct={deleteProduct} 
-                />
-              ))
+              <>
+                {products.map((item) => (
+                  <CartItem
+                    key={item.productId}
+                    id={item.productId}
+                    name={item.productName || "Product Name Unavailable"}
+                    price={item.price || "Product price Unavailable"}
+                    imagePath={item.imagePath || "Product image Unavailable"}
+                    quantity={item.quantity}
+                    sellerName={item.sellerName}
+                    selected={selectedItems.includes(item.productId)}
+                    handleCheckboxChange={handleCheckboxChange}
+                    handleDeleteProduct={deleteProduct}
+                  />
+                ))}
+                <div style={{ display: "flex" }}>
+                  <button
+                    className="editBtn"
+                    style={{
+                      margin: "20px auto",
+                      width: "150px",
+                      borderRadius: "10px",
+                    }}
+                    onClick={handleCheckout}
+                  >
+                    Check out
+                  </button>
+                </div>
+              </>
             )}
-            <button onClick={handleCheckout}>Checkout</button>
-
-
           </Col>
         </Row>
       </Container>
@@ -264,6 +296,5 @@ const handleCheckout = () => {
     </>
   );
 };
-
 
 export default Cart;

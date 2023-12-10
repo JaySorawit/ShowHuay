@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Home.jsx                                                       *
+ *                                                                  *
+ *   React component serving as the main landing page of the        *
+ *   website. It includes categories selection, discount code       *
+ *   announcements, and navigation to another sections.             *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -18,7 +27,6 @@ import Mobile_GadgetsImage from "../assets/Category/10.png";
 import Tools_Home_ImprovementImage from "../assets/Category/11.png";
 import Sports_OutdoorsImage from "../assets/Category/12.png";
 import { Link } from "react-router-dom";
-
 
 function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
