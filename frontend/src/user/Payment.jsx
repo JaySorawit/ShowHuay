@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import "../css/Payment.css";
 
 /* ************************************ Address Modal Component ************************************ */
 const AddressModal = ({ addresses, onSelect, onClose }) => {
@@ -282,7 +283,9 @@ function Payment() {
         ) {
           alert("Some items are out of stock. Please adjust your quantity.");
         } else {
-          alert(`Error placing order: Some items are out of stock. Please adjust your quantity.`);
+          alert(
+            `Error placing order: Some items are out of stock. Please adjust your quantity.`
+          );
         }
 
         return;
@@ -308,149 +311,195 @@ function Payment() {
   return (
     <>
       <Navbar />
-      <Container>
-        <Row>
-          <Col>
-            <h1>Payment</h1>
+      <div
+        className="purchases-container"
+        style={{
+          backgroundColor: "#F1F0F0",
+          minHeight: "640px",
+        }}
+      >
+        <Container
+          style={{
+            maxWidth: "1080px",
+            backgroundColor: "#fff",
+            paddingBottom: "30px",
+          }}
+        >
+          <div className="heading pt-4 pl-3 pb-2">
+            <h4 style={{ fontSize: "22px" }}>Payment</h4>
+          </div>
 
-            <div>
-              <h3>Shipping Address:</h3>
-              {defaultAddress ? (
-                <div key={defaultAddress.address_id}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      margin: "0 30px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        flexWrap: "wrap",
-                        maxWidth: "500px",
-                        fontWeight: "bold",
-                      }}
+          <div>
+            {defaultAddress ? (
+              <div className="addresses-box">
+                <p className="heading-delivery mb-2">Delivery Address</p>
+                <Row key={defaultAddress.address_id}>
+                  <Col md={10}>
+                    <p>
+                      {`${defaultAddress.address_fname} ${defaultAddress.address_lname} (${defaultAddress.address_telephone_number}`}
+                      &#41;,&#32;
+                      {`${defaultAddress.address_detail}, ${defaultAddress.district}, ${defaultAddress.province}, ${defaultAddress.zipcode}`}
+                    </p>
+                  </Col>
+                  <Col md={2} className="text-md-right">
+                    <button
+                      className="btn-changed-payment"
+                      onClick={() => handleAddressClick(defaultAddress)}
                     >
-                      <p>{`${defaultAddress.address_fname} ${defaultAddress.address_lname} | ${defaultAddress.address_telephone_number}`}</p>
-                      <p>{`${defaultAddress.address_detail}, ${defaultAddress.district}, ${defaultAddress.province}, ${defaultAddress.zipcode}`}</p>
-                    </div>
-                    <button onClick={() => handleAddressClick(defaultAddress)}>
                       Change
                     </button>
-                  </div>
-                  <hr style={{ opacity: "100%", margin: "20px" }} />
-                </div>
-              ) : (
-                <Link to="/myAddress">Add Address</Link>
-              )}
-              {isModalOpen && (
-                <AddressModal
-                  addresses={addresses}
-                  onSelect={(address) => {
-                    setSelectedAddress(address);
-                    setIsModalOpen(false);
-                  }}
-                  onClose={() => setIsModalOpen(false)}
-                />
-              )}
-            </div>
+                  </Col>
+                </Row>
+              </div>
+            ) : (
+              <Link to="/myAddress">Add Address</Link>
+            )}
+            {isModalOpen && (
+              <AddressModal
+                addresses={addresses}
+                onSelect={(address) => {
+                  setSelectedAddress(address);
+                  setIsModalOpen(false);
+                }}
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+          </div>
 
-            <div className="ProductOrder">
-              <h3>Products Ordered:</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th style={{ opacity: "0" }}>Product Image</th>
-                    <th>Product Name</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((product) => (
-                    <tr key={product.productId}>
-                      <td>
-                        <img
-                          src={product.imagePath}
-                          alt={product.productName}
-                          style={{ width: "100px" }}
-                        />
-                      </td>
-                      <td>{product.productName}</td>
-                      <td>{product.price}</td>
-                      <td>{product.quantity}</td>
-                      <td>{product.price * product.quantity}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="PaymentMethod">
-              <h3>Credit cards information:</h3>
-              {defaultCreditCard ? (
-                <div key={defaultCreditCard.credit_card_id}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      margin: "0 30px",
-                      flexWrap: "wrap",
-                    }}
+          <Row className="content-payment">
+            <Col className="content-payment-left">
+              <div className="ProductOrder">
+                <div className="heading-order">
+                  <i
+                    className="nav-icon fas fa-shopping-cart me-2"
+                    style={{ color: "#F44C0C" }}
+                  />
+                  <span
+                    className="heading-delivery mb-2"
+                    style={{ fontSize: "16px" }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        flexWrap: "wrap",
-                        maxWidth: "500px",
-                      }}
-                    >
-                      <p>{`Credit card number : ${maskedCreditCardNumber(
-                        defaultCreditCard.credit_card_number
-                      )}`}</p>
-                      <p>{`Type : ${defaultCreditCard.card_type}`}</p>
-                    </div>
-                    <button onClick={handleCreditCardChange}>Change</button>
-                  </div>
-                  <hr style={{ opacity: "100%", margin: "20px" }} />
+                    Products Ordered
+                  </span>
                 </div>
-              ) : (
-                <Link to="/myCreditCard">Add Credit Cards</Link>
-              )}
-              {isModalOpen && (
-                <CreditCardModal
-                  creditCards={creditCards}
-                  onSelect={handleCreditCardSelect}
-                  onClose={() => setIsModalOpen(false)}
-                />
-              )}
-            </div>
-
-            {/*Payment Detaiils   ฝากทำต่อ Frontend ที่เหลือ*/}
-            <div className="paymentDetail">
-              <h3>Payment Details:</h3>
-              <p> Merchandise Subtotal : </p>
-              <p> Voucher : </p>
-              <p> Total Amount : </p>
-            </div>
-
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handlePlaceOrder}
-            >
-              Place Order
-            </button>
-          </Col>
-        </Row>
-      </Container>
+                <table
+                  style={{ borderCollapse: "separate", borderSpacing: "15px" }}
+                >
+                  <thead>
+                    <tr>
+                      <th style={{ width: "10%" }}></th>
+                      <th style={{ width: "30%" }}>Name</th>
+                      <th style={{ width: "20%" }}>Price</th>
+                      <th style={{ width: "15%" }}>Quantity</th>
+                      <th style={{ width: "25%" }}>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((product) => (
+                      <tr key={product.productId} className="table-row pb-4">
+                        <td className="row-product-purchase">
+                          <img
+                            src={product.imagePath}
+                            alt={product.productName}
+                            style={{ width: "100px" }}
+                          />
+                        </td>
+                        <td className="row-product-purchase row-product-purchase-name">
+                          {product.productName}
+                        </td>
+                        <td className="row-product-purchase">
+                          {product.price}
+                        </td>
+                        <td className="row-product-purchase">
+                          {product.quantity}
+                        </td>
+                        <td className="row-product-purchase">
+                          {product.price * product.quantity}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Col>
+            <Col className="content-payment-right d-flex flex-column">
+              <Row className="content-payment-right-upper mb-3">
+                <div className="payment-method">
+                  <div className="heading-order">
+                    <i
+                      className="nav-icon fas fa-credit-card me-2"
+                      style={{ color: "#F44C0C" }}
+                    />
+                    <span
+                      className="heading-delivery mb-2"
+                      style={{ fontSize: "16px" }}
+                    >
+                      Credit card Information
+                    </span>
+                  </div>
+                  {defaultCreditCard ? (
+                    <div
+                      key={defaultCreditCard.credit_card_id}
+                      className="credit-card-content"
+                    >
+                      <div>
+                        <p>{`Card number : ${maskedCreditCardNumber(
+                          defaultCreditCard.credit_card_number
+                        )}`}</p>
+                        <p>{`Card Type : ${defaultCreditCard.card_type}`}</p>
+                      </div>
+                      <div className="text-md-right">
+                        <button
+                          className="btn-changed-payment"
+                          onClick={handleCreditCardChange}
+                        >
+                          Change
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Link to="/myCreditCard">Add Credit Cards</Link>
+                  )}
+                  {isModalOpen && (
+                    <CreditCardModal
+                      creditCards={creditCards}
+                      onSelect={handleCreditCardSelect}
+                      onClose={() => setIsModalOpen(false)}
+                    />
+                  )}
+                </div>
+              </Row>
+              <Row className="content-payment-right-lower flex-grow-1">
+                <div className="paymentDetail">
+                  <div className="heading-order">
+                    <i
+                      className="nav-icon fas fa-file-invoice-dollar me-2"
+                      style={{ color: "#F44C0C" }}
+                    />
+                    <span
+                      className="heading-delivery mb-2"
+                      style={{ fontSize: "16px" }}
+                    >
+                      Payment Detail
+                    </span>
+                  </div>
+                  <div className="payment-content">
+                    <p> Merchandise Subtotal : </p>
+                    <p> Voucher : </p>
+                    <p> Total Amount : </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-placeorder"
+                  onClick={handlePlaceOrder}
+                >
+                  Place Order
+                </button>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
       <Footer />
     </>
   );

@@ -1,0 +1,98 @@
+.heading-delivery {
+    font-weight: 600;
+}
+
+.addresses-box {
+    border: 1px solid #000;
+    border-radius: 15px;
+    padding: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-changed-payment {
+    border: none;
+    color: #F44C0C;
+    background-color: #fff;
+}
+
+.content-payment {
+    padding: 10px 50px;
+}
+
+.content-payment-left {
+    padding: 25px 20px 10px 20px;
+    margin-right: 15px;
+    border: 1px solid #000;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-payment-right {
+    margin-left: 15px;
+}
+
+.content-payment-right-upper {
+    padding: 25px 20px 15px 20px;
+    border: 1px solid #000;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-payment-right-lower {
+    padding: 25px 20px 15px 20px;
+    border: 1px solid #000;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.heading-order {
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px;
+}
+
+.table-row {
+    position: relative;
+    padding-bottom: 30px !important;
+}
+
+.table-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid #000;
+    pointer-events: none;
+}
+
+.row-product-purchase {
+    padding-bottom: 20px;
+}
+
+.credit-card-content {
+    padding-top: 10px;
+}
+
+.payment-content {
+    padding-top: 10px;
+}
+
+.btn-placeorder {
+    margin-top: 10px;
+    padding: 10px;
+    color: #fff;
+    background-color: #F44C0C;
+    border: none;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn-placeorder:hover {
+    background-color: #fa602d;
+}
