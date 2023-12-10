@@ -36,14 +36,13 @@ function ProductList() {
       setMin(inputMax);
     }
   };
-  const handleApply = () => {
-    console.log("Apply clicked! Min:", min, " Max:", max);
-  };
+
   const [isPriceClicked, setIsPriceClicked] = useState(false);
   const [clickedButton, setClickedButton] = useState(null);
+  const [scoreRating, setScoreRating] = useState(null);
 
   const handleButtonClick = (score) => {
-    setClickedButton(score === clickedButton ? null : score);
+    setScoreRating(score === scoreRating ? null : score);
   };
 
   const handleSortButtonClick = (value) => {
@@ -73,6 +72,17 @@ function ProductList() {
     ["Sports & Outdoors"],
   ];
   /********************************* Query Information Product ***********************************/
+  const [arrowDirection, setArrowDirection] = useState("none");
+
+  const handleArrowClick = () => {
+    if (arrowDirection === "up") {
+      setArrowDirection("down");
+    } else if (arrowDirection === "down") {
+      setArrowDirection("none");
+    } else {
+      setArrowDirection("up");
+    }
+  };
   let path = `http://localhost:3000/list/productlist/keyword/${searchKey}`;
   let p,
     search = searchKey;
@@ -146,12 +156,27 @@ function ProductList() {
         }
         setProducts(updatedProducts);
         setFilteredProducts(updatedProducts);
+        if (clickedButton === "Top Sales") {
+          updatedProducts.sort((a, b) => b.total_sold - a.total_sold);
+        } else if (clickedButton === "Latest") {
+          updatedProducts.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          );
+        }
+
+        if (arrowDirection === "up") {
+          updatedProducts.sort((a, b) => a.price - b.price);
+        } else if (arrowDirection === "down") {
+          updatedProducts.sort((a, b) => b.price - a.price);
+        }
+
+        setProducts(updatedProducts);
+        setFilteredProducts(updatedProducts);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-      
-  }, [p, clickedButton]);
+  }, [p, clickedButton, arrowDirection]);
 
   /*************************************************************************************************/
 
@@ -178,6 +203,22 @@ function ProductList() {
   };
   /*************************************************************************************************/
 
+  const handleApply = () => {
+    let filteredByRatingProducts = products;
+
+    if (scoreRating !== null) {
+      filteredByRatingProducts = products.filter((product) => {
+        return product.review_score > scoreRating - 1;
+      });
+    }
+
+    const filteredByPriceProducts = filteredByRatingProducts.filter(
+      (product) => product.price >= min && product.price <= max
+    );
+
+    setFilteredProducts(filteredByPriceProducts);
+  };
+
   return (
     <>
       <Navbar />
@@ -193,7 +234,7 @@ function ProductList() {
               trackClassName="tracker"
               min={0}
               max={100000}
-              minDistance={1}
+              minDistance={100}
               step={100}
               withTracks={true}
               pearling={true}
@@ -235,41 +276,31 @@ function ProductList() {
             <div className="form-label">Score rating</div>
             <div className="buttonContainer">
               <button
-                className={`rating_button ${
-                  clickedButton === 5 ? "active" : ""
-                }`}
+                className={`rating_button ${scoreRating === 5 ? "active" : ""}`}
                 onClick={() => handleButtonClick(5)}
               >
                 <RatingStar score={5} />
               </button>
               <button
-                className={`rating_button ${
-                  clickedButton === 4 ? "active" : ""
-                }`}
+                className={`rating_button ${scoreRating === 4 ? "active" : ""}`}
                 onClick={() => handleButtonClick(4)}
               >
                 <RatingStar score={4} />
               </button>
               <button
-                className={`rating_button ${
-                  clickedButton === 3 ? "active" : ""
-                }`}
+                className={`rating_button ${scoreRating === 3 ? "active" : ""}`}
                 onClick={() => handleButtonClick(3)}
               >
                 <RatingStar score={3} />
               </button>
               <button
-                className={`rating_button ${
-                  clickedButton === 2 ? "active" : ""
-                }`}
+                className={`rating_button ${scoreRating === 2 ? "active" : ""}`}
                 onClick={() => handleButtonClick(2)}
               >
                 <RatingStar score={2} />
               </button>
               <button
-                className={`rating_button ${
-                  clickedButton === 1 ? "active" : ""
-                }`}
+                className={`rating_button ${scoreRating === 1 ? "active" : ""}`}
                 onClick={() => handleButtonClick(1)}
               >
                 <RatingStar score={1} />
@@ -301,61 +332,83 @@ function ProductList() {
                     <p>No products available</p>
                   </div>
                 ) : (
-                  <><div className="sort-box">
-                  <div className="sorting_word">Sort by</div>
-                  <button
-                    className={`sort-button1 ${
-                      clickedButton === "Latest" ? "active" : ""
-                    }`}
-                    onClick={() => handleSortButtonClick("Latest")}
-                  >
-                    Latest
-                  </button>
-                  <button
-                    className={`sort-button1 ${
-                      clickedButton === "Top Sales" ? "active" : ""
-                    }`}
-                    onClick={() => handleSortButtonClick("Top Sales")}
-                  >
-                    Top Sales
-                  </button>
-                  <button
-                    className={`sort-button2 ${isPriceClicked ? "active" : ""}`}
-                    onClick={() => {
-                      setIsPriceClicked(!isPriceClicked);
-                    }}
-                  >
-                    Price{" "}
-                    <span className="arrow">{isPriceClicked ? "↓" : "↑"}</span>
-                  </button>
-                  <div className="page-button">
-                    <button
-                      className="current-page"
-                      onClick={() => handlePageChange(currentPage)}
-                      disabled
-                    >
-                      {currentPage} /{" "}
-                      {Math.ceil(filteredProducts.length / productsPerPage)}
-                    </button>
-                    <button
-                      className="previos-next-button"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      &lt;
-                    </button>
-                    <button
-                      className="previos-next-button"
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={
-                        currentPage ===
-                        Math.ceil(filteredProducts.length / productsPerPage)
-                      }
-                    >
-                      &gt;
-                    </button>
-                  </div>
-                </div>
+                  <>
+                    <div className="sort-box">
+                      <div className="sorting_word">Sort by</div>
+                      <button
+                        className={`sort-button1 ${
+                          clickedButton === "Latest" ? "active" : ""
+                        }`}
+                        onClick={() => handleSortButtonClick("Latest")}
+                      >
+                        Latest
+                      </button>
+                      <button
+                        className={`sort-button1 ${
+                          clickedButton === "Top Sales" ? "active" : ""
+                        }`}
+                        onClick={() => handleSortButtonClick("Top Sales")}
+                      >
+                        Top Sales
+                      </button>
+                      <button
+                        className={`sort-button2 ${
+                          isPriceClicked ? "active" : ""
+                        }`}
+                        onClick={() => {
+                          setIsPriceClicked(!isPriceClicked);
+                          handleArrowClick();
+                        }}
+                      >
+                        Price{" "}
+                        {arrowDirection === "up" && (
+                          <span
+                            className={`arrow ${
+                              isPriceClicked ? "active" : ""
+                            }`}
+                          >
+                            ↓
+                          </span>
+                        )}
+                        {arrowDirection === "down" && (
+                          <span
+                            className={`arrow ${
+                              isPriceClicked ? "active" : ""
+                            }`}
+                          >
+                            ↑
+                          </span>
+                        )}
+                      </button>
+
+                      <div className="page-button">
+                        <button
+                          className="current-page"
+                          onClick={() => handlePageChange(currentPage)}
+                          disabled
+                        >
+                          {currentPage} /{" "}
+                          {Math.ceil(filteredProducts.length / productsPerPage)}
+                        </button>
+                        <button
+                          className="previos-next-button"
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                        >
+                          &lt;
+                        </button>
+                        <button
+                          className="previos-next-button"
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={
+                            currentPage ===
+                            Math.ceil(filteredProducts.length / productsPerPage)
+                          }
+                        >
+                          &gt;
+                        </button>
+                      </div>
+                    </div>
                     <div
                       className="row-card row-cols-2 row-cols-md-4 g-3"
                       style={{ marginTop: 5 }}
