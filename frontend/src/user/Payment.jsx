@@ -209,34 +209,32 @@ function Payment() {
 
   /**********************************************************************************************************/
 
-
   /* ****************************** Delete product from cart ************************************ */
-const deleteProduct = async (productId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/cart/removeFromCart`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          product_id: productId,
-        }),
-      }
-    );
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/cart/removeFromCart`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            product_id: productId,
+          }),
+        }
+      );
 
-    const responseData = await response.json();
+      const responseData = await response.json();
 
-    // Update cart items after deletion
-    // getCart();
-  } catch (error) {
-    console.error("Error deleting product:", error);
-  }
-};
-/* ******************************************************************************************** */
-
+      // Update cart items after deletion
+      // getCart();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+  /* ******************************************************************************************** */
 
   /* ************************************ Handle place order ************************************ */
   const handlePlaceOrder = async () => {
@@ -249,7 +247,7 @@ const deleteProduct = async (productId) => {
         alert("Please select an address");
         return;
       }
-  
+
       const response = await fetch(
         `http://localhost:3000/purchase/placeOrder/${userId}`,
         {
@@ -263,14 +261,36 @@ const deleteProduct = async (productId) => {
           }),
         }
       );
-  
+
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorMessage = await response.json();
+
+        if (
+          response.status === 400 &&
+          errorMessage.error === "Product does not exist"
+        ) {
+          alert("Product does not exist. Please choose a valid product.");
+        } else if (
+          response.status === 500 &&
+          errorMessage.error === "Failed to check stock"
+        ) {
+          alert("Failed to check stock. Please try again later.");
+        } else if (
+          response.status === 400 &&
+          errorMessage.error ===
+            "Some items are out of stock. Please adjust your quantity."
+        ) {
+          alert("Some items are out of stock. Please adjust your quantity.");
+        } else {
+          alert(`Error placing order: Some items are out of stock. Please adjust your quantity.`);
+        }
+
+        return;
       }
-  
+
       const data = await response.json();
       console.log(data);
-  
+
       if (response.status === 200) {
         productInfo.forEach((product) => {
           deleteProduct(product.productId);
@@ -279,10 +299,10 @@ const deleteProduct = async (productId) => {
         navigate("/myPurchases");
       }
     } catch (error) {
-      console.error("Error placing order:", error.message);
+      console.error(error.message);
+      alert("An unexpected error occurred. Please try again.");
     }
   };
-  
   /* ******************************************************************************************** */
 
   return (
@@ -292,7 +312,6 @@ const deleteProduct = async (productId) => {
         <Row>
           <Col>
             <h1>Payment</h1>
-
 
             <div>
               <h3>Shipping Address:</h3>
@@ -340,7 +359,6 @@ const deleteProduct = async (productId) => {
               )}
             </div>
 
-
             <div className="ProductOrder">
               <h3>Products Ordered:</h3>
               <table>
@@ -372,7 +390,6 @@ const deleteProduct = async (productId) => {
                 </tbody>
               </table>
             </div>
-
 
             <div className="PaymentMethod">
               <h3>Credit cards information:</h3>
@@ -416,8 +433,6 @@ const deleteProduct = async (productId) => {
               )}
             </div>
 
-            
-
             {/*Payment Detaiils   ฝากทำต่อ Frontend ที่เหลือ*/}
             <div className="paymentDetail">
               <h3>Payment Details:</h3>
@@ -426,10 +441,13 @@ const deleteProduct = async (productId) => {
               <p> Total Amount : </p>
             </div>
 
-            <button type="button" className="btn btn-primary" onClick={handlePlaceOrder}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handlePlaceOrder}
+            >
               Place Order
             </button>
-
           </Col>
         </Row>
       </Container>

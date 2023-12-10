@@ -133,6 +133,10 @@ const Product = () => {
   /* ***************************************** Add To Cart ************************************** */
   const addToCart = async (productId, quantity) => {
     try {
+      if (stockRemaining <= 0) {
+        alert("Product is out of stock");
+        return;
+      }
       const response = await axios.post(
         "http://localhost:3000/cart/addToCart",
         {
@@ -141,12 +145,18 @@ const Product = () => {
           quantity: quantity,
         }
       );
-  
-      if (response.status === 200 && response.data.message === "Product added to cart successfully") {
+
+      if (
+        response.status === 200 &&
+        response.data.message === "Product added to cart successfully"
+      ) {
         console.log(response.data);
         alert("Product added to cart successfully");
         window.location.reload();
-      } else if (response.status === 200 && response.data.message === "Product is already in the cart") {
+      } else if (
+        response.status === 200 &&
+        response.data.message === "Product is already in the cart"
+      ) {
         console.log(response.data);
         alert("Product is already in the cart");
       } else {
@@ -157,7 +167,7 @@ const Product = () => {
       console.error("Error adding to cart:", error);
       alert("Error adding to cart. Please try again later.");
     }
-  };  
+  };
   /* ******************************************************************************************** */
 
   /* ************************************* Handle quantity ************************************** */
@@ -167,27 +177,15 @@ const Product = () => {
   /* ******************************************************************************************** */
 
   /* ************************************* Handle Buy Now **************************************** */
-/* ************************************* Handle Buy Now **************************************** */
-const handleBuyNow = (id, quantity) => {
-  const selectedProducts = [{ productId: id, quantity: quantity }]
-
-  navigate("/payment", { state: { productInfo: selectedProducts } });
-};
-/* ******************************************************************************************** */
-
-<button
-  type="submit"
-  style={{
-    color: "#fff",
-    border: "none",
-    backgroundColor: "#F44C0C",
-  }}
-  onClick={() => handleBuyNow(product_id, quantity)}
->
-  Buy Now
-</button>
-
-/* ******************************************************************************************** */  
+  const handleBuyNow = (id, quantity) => {
+    if (stockRemaining <= 0) {
+      alert("Product is out of stock");
+      return;
+    }
+    const selectedProducts = [{ productId: id, quantity: quantity }];
+    navigate("/payment", { state: { productInfo: selectedProducts } });
+  };
+  /* ******************************************************************************************** */
 
   return (
     <>
