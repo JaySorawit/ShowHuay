@@ -1,3 +1,12 @@
+/********************************************************************
+ *   AddProduct.jsx                                                 *
+ *                                                                  *
+ *   This page is use for adding new products. It provides a form   *
+ *   for users to input product details such as name, description,  *
+ *   and price and other information of products to the system.     *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Container, InputGroup } from "react-bootstrap";

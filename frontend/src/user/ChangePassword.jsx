@@ -1,3 +1,12 @@
+/********************************************************************
+ *   ChangePassword.jsx                                             *
+ *                                                                  *
+ *   This page is representing the user interface for changing      *
+ *   the password. It includes a form for entering the current      *
+ *   and new passwords, confirm password.                           *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect,useRef } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import axios from 'axios';
