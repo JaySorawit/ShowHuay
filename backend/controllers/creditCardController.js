@@ -1,3 +1,13 @@
+/********************************************************************
+ *   creditCardController.js                                        *
+ *                                                                  *
+ *   Controller managing routes for user credit card operations,    *
+ *   including CRUD actions and handling payment-related            *
+ *   functionalities.                                               *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /****************************************** Get User Credit Cards *******************************************/
