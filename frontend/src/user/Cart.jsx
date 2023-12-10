@@ -121,6 +121,7 @@ const Cart = () => {
             productId: product.product_id,
             productName: product.product_name,
             quantity: product.quantity,
+            stockRemaining: product.stock_remaining,
           }))
         );
       } catch (error) {
@@ -182,9 +183,19 @@ const handleCheckout = () => {
     .map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
+      stockRemaining: item.stockRemaining,
     }));
 
-  navigate("/payment", { state: { productInfo: selectedProducts } });
+  const allProductsAvailable = selectedProducts.every(
+    (product) =>
+      products.find((p) => p.productId === product.productId).stockRemaining >= product.quantity
+  );
+
+  if (allProductsAvailable) {
+    navigate("/payment", { state: { productInfo: selectedProducts } });
+  } else {
+    alert("Some products are out of stock. Please adjust your quantity.");
+  }
 };
 /* ******************************************************************************************** */
 
