@@ -1,3 +1,13 @@
+/********************************************************************
+ *                                                                  *
+ *   creditCardRoutes.js                                            *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for credit cards information           *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const route = require("express").Router();
 
 const { 

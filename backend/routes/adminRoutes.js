@@ -1,6 +1,27 @@
+/********************************************************************
+ *                                                                  *
+ *   adminRoutes.js                                                 *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for admin information                  *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const router = require("express").Router();
 
-const { orders, users, deleteUsers, addUsers, products, deleteProducts, coupons, deleteCoupons, checkCouponCode, addCoupons } = require("../controllers/adminController");
+const {
+  orders,
+  users,
+  deleteUsers,
+  addUsers,
+  products,
+  deleteProducts,
+  coupons,
+  deleteCoupons,
+  checkCouponCode,
+  addCoupons,
+} = require("../controllers/adminController");
 
 router.route("/orders").get(orders);
 
@@ -15,6 +36,5 @@ router.route("/coupons").get(coupons);
 router.route("/coupons/:couponCode").delete(deleteCoupons);
 router.route("/check-coupon-code").get(checkCouponCode);
 router.route("/addcoupons").post(addCoupons);
-
 
 module.exports = router;

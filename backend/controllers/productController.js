@@ -1,3 +1,13 @@
+/********************************************************************
+ *                    productController.js                          *
+ *                                                                  *
+ *   Controller handling backend routes for product-related         *
+ *   functionalities, including CRUD operations for managing        *
+ *   products and their details.                                    *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /***************************************** Add product  *********************************************/
@@ -164,9 +174,60 @@ const getProductReview = (req, res) => {
 };
 /* ****************************************************************************************************** */
 
+/************************************* Query Products By highest quntity  *******************************/
+const queryHighestQuntityProduct = (req, res) => {
+  const searchKey = req.params.searchKey;
+  const selectProductQuery = "SELECT product.*, SUM(purchase_product.quantity) AS total_sales FROM product JOIN purchase_product ON purchase_product.product_id = product.product_id GROUP BY product.product_id ORDER BY total_sales DESC LIMIT 5";
+  db.query(selectProductQuery, (err, results) => {
+    if (err) {
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Failed to fetch products" });
+      return;
+    }
+    res.json(results);
+  });
+};
+
+/********************************************************************************************************/
+
+/******************************************* Query Products By Category  ********************************/
+const queryProductsCategoryId = (req, res) => {
+  const categoryId = req.params.categoryId;
+  const selectProductQuery = "SELECT * FROM product WHERE category_id = ?";
+
+  db.query(selectProductQuery, [categoryId], (err, results) => {
+    if (err) {
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Failed to fetch products" });
+      return;
+    }
+    res.json(results);
+  });
+};
+
+/********************************************************************************************************/
+
+/******************************************* Query Products By search Key  ******************************/
+const queryProductskey = (req, res) => {
+const searchKey = req.params.searchKey;
+const selectProductQuery = "SELECT * FROM product WHERE product_name LIKE ?";
+db.query(selectProductQuery, [`%${searchKey}%`], (err, results) => {
+  if (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Failed to fetch products" });
+    return;
+  }
+  res.json(results);
+});
+};
+
+/********************************************************************************************************/
 module.exports = {
   addProduct,
   getOneProduct,
   getProductWithPurchaseId,
   getProductReview,
+  queryHighestQuntityProduct,
+  queryProductsCategoryId ,
+  queryProductskey
 };

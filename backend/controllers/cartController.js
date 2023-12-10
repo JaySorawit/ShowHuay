@@ -1,3 +1,13 @@
+/********************************************************************
+ *   cartController.js                                              *
+ *                                                                  *
+ *   Controller managing routes for user shopping carts,            *
+ *   handling operations like adding, removing, and updating        *
+ *   items in the cart.                                             *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 const addToCart = (req, res) => {

@@ -1,3 +1,12 @@
+/********************************************************************
+ *   EditMyProfile.jsx                                              *
+ *                                                                  *
+ *   This page is providing a user interface for editing            *
+ *   personal profile information. It includes a form for modifying *
+ *   details such as name, email, and other user-specific data.     *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Container, FormGroup } from "react-bootstrap";

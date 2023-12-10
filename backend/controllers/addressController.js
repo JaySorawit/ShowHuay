@@ -1,3 +1,12 @@
+/********************************************************************
+ *   addressController.js                                           *
+ *                                                                  *
+ *   Controller managing routes for user addresses, including       *
+ *   CRUD operations and related functionalities.                   *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /******************************************* Get User Address **********************************************/

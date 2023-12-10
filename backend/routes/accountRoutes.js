@@ -1,3 +1,13 @@
+/********************************************************************
+ *                                                                  *
+ *   accountRoutes.js                                               *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for account information                *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const router = require("express").Router();
 
 const { 

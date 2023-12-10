@@ -83,11 +83,11 @@ function ProductList() {
       setArrowDirection("up");
     }
   };
-  let path = `http://localhost:3000/list/productlist/keyword/${searchKey}`;
+  let path = `http://localhost:3000/product/productlist/keyword/${searchKey}`;
   let p,
     search = searchKey;
   if (searchKey == null) {
-    path = `http://localhost:3000/list/productlist/${categoryId}`;
+    path = `http://localhost:3000/product/productlist/${categoryId}`;
     p = categoryId;
     search = "Category " + categories[categoryId];
   }

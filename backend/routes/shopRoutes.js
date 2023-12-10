@@ -1,6 +1,24 @@
+/********************************************************************
+ *                                                                  *
+ *   productRoutes.js                                               *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for product information                *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const router = require("express").Router();
 
-const { getFirstName, updateUser, addProduct, queryProducts, getProduct, updateProduct, deleteProducts } = require("../controllers/shopController");
+const {
+  getFirstName,
+  updateUser,
+  addProduct,
+  queryProducts,
+  getProduct,
+  updateProduct,
+  deleteProducts,
+} = require("../controllers/shopController");
 
 router.route("/userInfo/:userId").get(getFirstName);
 router.route("/updateUser/:userId").put(updateUser);

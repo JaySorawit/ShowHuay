@@ -1,3 +1,13 @@
+/********************************************************************
+ *   shopController.js                                              *
+ *                                                                  *
+ *   Controller handling backend routes for managing                *
+ *   shopping-related functionalities, including product listings,  *
+ *   searching, and user interactions with the online shop.         *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 const path = require("path");
 const multer = require("multer");

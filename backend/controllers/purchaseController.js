@@ -1,3 +1,13 @@
+/********************************************************************
+ *                    purchaseController.js                         *
+ *                                                                  *
+ *   Controller managing backend routes for user purchases,         *
+ *   handling operations such as order creation, retrieval, and     *
+ *   updating purchase information.                                 *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require('../Database/database')
 
 const purchaseProduct = (req, res) => {

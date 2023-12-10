@@ -1,3 +1,13 @@
+/********************************************************************
+ *                                                                  *
+ *   cartRoutes.js                                                  *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for cart information                   *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const router = require("express").Router();
 
 const { addToCart, getCart, getCartCount, updateCart, removeFromCart  } = require("../controllers/cartController");

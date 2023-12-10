@@ -91,7 +91,7 @@ const Shop = () => {
     return (
       <>
         <Navbar />
-        <div className="pt-4 pb-5" style={{ backgroundColor: "#F44C0C" }}>
+        <div className="pt-5 pb-5" style={{ backgroundColor: "#F44C0C", minHeight: "640px" }}>
           <Container className="p-4" style={{ maxWidth: "1080px" }}>
             <Row className="no-gutters">
               <Col

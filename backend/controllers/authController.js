@@ -1,3 +1,12 @@
+/********************************************************************
+ *   authController.js                                              *
+ *                                                                  *
+ *   Controller handling routes for user accounts includes          *
+ *   middleware for authentication and authorization.               *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /********************************** Register BackEnd ****************************************/
