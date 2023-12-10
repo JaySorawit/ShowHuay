@@ -1,3 +1,13 @@
+/********************************************************************
+ *                                                                  *
+ *   addressRoutes.js                                               *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for address information                *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const route = require("express").Router();
 
 const { getUserAddress,

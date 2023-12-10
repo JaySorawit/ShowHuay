@@ -1,3 +1,13 @@
+/********************************************************************
+ *                                                                  *
+ *   chatRoutes.js                                                  *
+ *                                                                  *
+ *   This file contains a collection of routers to handle           *
+ *   requests to the backend for chat information                   *
+ *                                                                  *
+ ********************************************************************
+ */
+
 const express = require("express");
 const router = express.Router();
 const {
@@ -20,9 +30,6 @@ const chatRoutes = (io) => {
     socket.on("sendMessage", ({ senderId, receiveId, chatText }) => {
       const user = onlineUsers.find((user) => user.userId === receiveId);
       if (user) {
-        // console.log('user',user.socketId);
-        // console.log('message',chatText);
-
         io.to(user.socketId).emit("getMessage", {
           receiveId,
           senderId,
