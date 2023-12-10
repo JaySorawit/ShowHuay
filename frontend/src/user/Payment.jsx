@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -77,6 +77,7 @@ function Payment() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [creditCards, setCreditCards] = useState([]);
   const [selectedCreditCard, setSelectedCreditCard] = useState(null);
+  const navigate = useNavigate();
 
   /* ******************************************************************************************** */
 
@@ -153,6 +154,10 @@ function Payment() {
     setSelectedAddress(address);
     setIsModalOpen(true);
   };
+
+  if (!selectedAddress && defaultAddress) {
+    setSelectedAddress(defaultAddress);
+  }
   /* ******************************************************************************************** */
 
   /************************************ Fetch creditCard User *************************************/
@@ -197,36 +202,87 @@ function Payment() {
     setSelectedCreditCard(creditCard);
     setIsModalOpen(false);
   };
+
+  if (!selectedCreditCard && defaultCreditCard) {
+    setSelectedCreditCard(defaultCreditCard);
+  }
+
   /**********************************************************************************************************/
+
+
+  /* ****************************** Delete product from cart ************************************ */
+const deleteProduct = async (productId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/cart/removeFromCart`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          product_id: productId,
+        }),
+      }
+    );
+
+    const responseData = await response.json();
+
+    // Update cart items after deletion
+    // getCart();
+  } catch (error) {
+    console.error("Error deleting product:", error);
+  }
+};
+/* ******************************************************************************************** */
+
 
   /* ************************************ Handle place order ************************************ */
   const handlePlaceOrder = async () => {
-    // try {
-    //   const response = await fetch(
-    //     `http://localhost:3000/order/placeOrder/${userId}`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         addressId: selectedAddress.address_id,
-    //         creditCardId: selectedCreditCard.credit_card_id,
-    //         productInfo: productInfo,
-    //       }),
-    //     }
-    //   );
-
-    //   if (!response.ok) {
-    //     throw new Error("Network response was not ok");
-    //   }
-
-    //   const data = await response.json();
-    //   console.log(data);
-    // } catch (error) {
-    //   console.error("Error placing order:", error.message);
-    // }
-  }
+    try {
+      if (!selectedCreditCard) {
+        alert("Please select a credit card");
+        return;
+      }
+      if (!selectedAddress) {
+        alert("Please select an address");
+        return;
+      }
+  
+      const response = await fetch(
+        `http://localhost:3000/purchase/placeOrder/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            creditCardId: selectedCreditCard.credit_card_id,
+            productInfo: productInfo,
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      if (response.status === 200) {
+        productInfo.forEach((product) => {
+          deleteProduct(product.productId);
+        });
+        alert("Order placed successfully");
+        navigate("/myPurchases");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error.message);
+    }
+  };
+  
   /* ******************************************************************************************** */
 
   return (

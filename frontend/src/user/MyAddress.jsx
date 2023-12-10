@@ -227,7 +227,7 @@ function MyAddress() {
                 const data = await response.json();
                 const provinceValues = data.map((item) => item.province);
 
-                console.log('Provinces:', provinceValues);
+                // console.log('Provinces:', provinceValues);
                 setProvinces(provinceValues);
             } catch (error) {
                 console.error('Error fetching provinces:', error.message);
@@ -258,7 +258,7 @@ function MyAddress() {
                 const data = await response.json();
                 const districtValues = data.map((item) => item.district);
 
-                console.log('Districts:', districtValues);
+                // console.log('Districts:', districtValues);
                 setDistricts(districtValues);
             } catch (error) {
                 console.error('Error fetching districts:', error.message);
@@ -288,7 +288,7 @@ function MyAddress() {
                 // Assuming data is an array of objects with a 'zipcode' key
                 const zipcodeValues = data.map((item) => item.zipcode);
     
-                console.log('Zipcodes:', zipcodeValues);
+                // console.log('Zipcodes:', zipcodeValues);
                 setZipcodes(zipcodeValues);
             } catch (error) {
                 console.error('Error fetching zipcodes:', error.message);

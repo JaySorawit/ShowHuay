@@ -18,7 +18,7 @@ function MyCreditCard() {
     const creditCardRef = useRef(null);
     const [formData, setFormData] = useState({
         creditCardId: '',
-        userId: '',
+        userId: userId,
         creditCardNumber: '',
         cardType: '',
         expiryDate: '',

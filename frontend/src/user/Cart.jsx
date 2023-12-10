@@ -167,7 +167,10 @@ const deleteProduct = async (productId) => {
     console.error("Error deleting product:", error);
   }
 };
+/* ******************************************************************************************** */
 
+
+/**************************************** handleCheckout ****************************************/
 const handleCheckout = () => {
   if (selectedItems.length === 0) {
     alert("Please select at least one item to checkout");
@@ -182,11 +185,6 @@ const handleCheckout = () => {
 
   navigate("/payment", { state: { productInfo: selectedProducts } });
 };
-
-
-
-
-
 /* ******************************************************************************************** */
 
   return (
