@@ -322,7 +322,12 @@ const MyPurchases = () => {
                                 fontSize: "20px",
                               }}
                             >
-                              ฿{purchase.products.purchaseDetails.reduce((totalPrice, product) => totalPrice + product.price, 0)}
+                              ฿
+                              {purchase.products.purchaseDetails.reduce(
+                                (totalPrice, product) =>
+                                  totalPrice + product.price * product.quantity,
+                                0
+                              )}
                             </span>
                           </p>
                         </Col>
