@@ -46,7 +46,7 @@ function Home() {
     ["Sports & Outdoors", Sports_OutdoorsImage],
   ];
   useEffect(() => {
-    fetch(`http://localhost:3000/home`)
+    fetch(`http://localhost:3000/product`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

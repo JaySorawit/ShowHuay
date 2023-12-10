@@ -24,9 +24,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const addressRoutes = require('./routes/addressRoutes');
 const creditCardRoutes = require('./routes/creditCardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
-const productListRoutes = require('./routes/productListRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
-const homeRoutes = require('./routes/homeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 /*******************************************************************************/
 
@@ -64,9 +62,7 @@ app.use('/chat', initializedChatRoutes);
 app.use('/creditCard', creditCardRoutes);
 app.use('/cart', cartRoutes);
 app.use('/shop', shopRoutes);
-app.use('/list', productListRoutes);
 app.use('/purchase', purchaseRoutes);
-app.use('/home', homeRoutes);
 app.use('/system', adminRoutes);
 /*******************************************************************************/
 
