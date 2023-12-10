@@ -1,0 +1,55 @@
+.gray-curved-box {
+    background-color: #ddd;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .item-row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-divider {
+    border-right: 1px solid #000;
+    height: 100%; /* Set height to 100% to match the height of the gray box */
+    margin: 0 10px;
+  }
+  
+  .item-content {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Take up the entire width of the gray box */
+  }
+  
+  .item-image img {
+    margin-left: 20px;
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+  }
+  
+  
+  .cart-del-button {
+    background-color: #ddd;
+    border: none;
+    margin-left: auto;
+    color: rgb(244, 76, 12);;
+  }
+  input[type=checkbox]
+  {
+  accent-color:rgb(244, 76, 12);;
+  mix-blend-mode: multiply;
+  }
+  .item-details {
+    display: flex;
+  }
+  
+  .column {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd; /* Add a border for better visibility */
+    margin:40px;
+  }
+  

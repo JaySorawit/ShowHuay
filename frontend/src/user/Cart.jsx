@@ -4,7 +4,7 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-
+import "../css/Cart.css";
 /* ************************************ Cart Item Component ************************************ */
 const CartItem = ({
   id,
@@ -18,24 +18,50 @@ const CartItem = ({
   handleDeleteProduct,
 }) => (
   <div className="item" key={id}>
-    <input
-      type="checkbox"
-      checked={selected}
-      onChange={() => handleCheckboxChange(id)}
-    />
-    <div className="item-image">
-      <img src={imagePath} alt="product" style={{ width: "100px", height: "100px" }} />
+    <div className="gray-curved-box">
+      <div className="item-row">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={() => handleCheckboxChange(id)}
+        />
+        <div className="checkbox-divider"></div>
+        <div className="item-content">
+          <div className="item-image">
+            <img src={imagePath} alt="product" />
+          </div>
+          <div className="item-details">
+            {/* <div className="column">
+              <h4>{sellerName}</h4>
+            </div> */}
+            <div className="column">
+              <p>Product Name</p>
+              <p>{name}</p>
+            </div>
+            <div className="column">
+              <p>Price</p>
+              <p>${price}</p>
+            </div>
+            <div className="column">
+              <p>Quantity</p>
+              <p>${quantity}</p>
+            </div>
+            <div className="column">
+              <p>Total Price</p>
+              <p>${quantity * price}</p>
+            </div>
+          </div>
+        </div>
+
+        <button class='cart-del-button'onClick={() => handleDeleteProduct(id)}>Delete</button>
+      </div>
     </div>
-    <div className="item-details">
-      <h4>{sellerName}</h4>
-      <h3>{name}</h3>
-      <p>ID: {id}</p>
-      <p>Price: ${price}</p>
-      <p>Quantity: {quantity}</p>
-    </div>
-    <button onClick={() => handleDeleteProduct(id)}>Delete</button>
   </div>
 );
+
+
+
+
 /* ******************************************************************************************** */
 
 
@@ -116,6 +142,7 @@ const Cart = () => {
         );
         setProducts(
           productDetails.map((product) => ({
+            sellerName: product.username,
             imagePath: product.image_path,
             price: product.price,
             productId: product.product_id,
@@ -202,10 +229,12 @@ const handleCheckout = () => {
   return (
     <>
       <Navbar />
+      <h1>Cart</h1>
       <Container>
-        <Row>
+      <Row>
+
           <Col>
-            <h1>Cart</h1>
+            
 
             {products.length === 0 ? (
               <p>Cart is empty</p>
@@ -235,5 +264,6 @@ const handleCheckout = () => {
     </>
   );
 };
+
 
 export default Cart;
