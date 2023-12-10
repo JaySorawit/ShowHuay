@@ -163,6 +163,7 @@ const deleteProduct = async (productId) => {
 
     // Update cart items after deletion
     getCart();
+    window.location.reload();
   } catch (error) {
     console.error("Error deleting product:", error);
   }

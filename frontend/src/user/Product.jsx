@@ -145,6 +145,7 @@ const Product = () => {
       if (response.status === 200 && response.data.message === "Product added to cart successfully") {
         console.log(response.data);
         alert("Product added to cart successfully");
+        window.location.reload();
       } else if (response.status === 200 && response.data.message === "Product is already in the cart") {
         console.log(response.data);
         alert("Product is already in the cart");
