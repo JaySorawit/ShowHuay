@@ -1,3 +1,13 @@
+/********************************************************************
+ *   chatController.js                                              *
+ *                                                                  *
+ *   Controller handling backend routes for real-time chat          *
+ *   functionalities, including message handling and user           *
+ *   interactions using Socket.io.                                  *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /******************************************* Get Message *******************************************/

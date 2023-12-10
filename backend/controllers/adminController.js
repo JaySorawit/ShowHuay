@@ -1,3 +1,12 @@
+/********************************************************************
+ *                         adminController.js                       *
+ *                                                                  *
+ *   Controller handling backend routes for admin functionalities,  *
+ *   such as managing system, product and user.                     *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /****************************************** Orders Section  ********************************************/

@@ -1,3 +1,13 @@
+/********************************************************************
+ *                    productController.js                          *
+ *                                                                  *
+ *   Controller handling backend routes for product-related         *
+ *   functionalities, including CRUD operations for managing        *
+ *   products and their details.                                    *
+ *                                                                  *
+ ********************************************************************
+*/
+
 const db = require("../Database/database");
 
 /***************************************** Add product  *********************************************/
