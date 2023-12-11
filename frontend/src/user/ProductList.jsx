@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 function ProductList() {
+  /************************************ Slider  ***************************************/
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100000);
   const [trackColor, setTrackColor] = useState(
@@ -28,7 +29,6 @@ function ProductList() {
       setMax(inputMin);
     }
   };
-
   const handleMaxInputChange = (e) => {
     const inputMax = parseInt(e.target.value);
     setMax(inputMax);
@@ -36,11 +36,12 @@ function ProductList() {
       setMin(inputMax);
     }
   };
+  /************************************************************************************/
 
+  /****************************** Sort / Filter Button  *******************************/
   const [isPriceClicked, setIsPriceClicked] = useState(false);
   const [clickedButton, setClickedButton] = useState(null);
   const [scoreRating, setScoreRating] = useState(null);
-
   const handleButtonClick = (score) => {
     setScoreRating(score === scoreRating ? null : score);
   };
@@ -48,9 +49,9 @@ function ProductList() {
   const handleSortButtonClick = (value) => {
     setClickedButton(clickedButton === value ? null : value);
   };
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [productCount, setProductCount] = useState(0);
+  /*********************************************************************************/
+  
+  /************************************ Category Id to Key  ************************************/
   const { categoryId } = useParams();
   const { searchKey } = useParams();
   console.log("key", searchKey);
@@ -71,9 +72,13 @@ function ProductList() {
     ["Tools & Home Improvement"],
     ["Sports & Outdoors"],
   ];
-  /********************************* Query Information Product ***********************************/
-  const [arrowDirection, setArrowDirection] = useState("none");
+  /************************************************************************************/
 
+  /********************************* Query Information Product ***********************************/
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [arrowDirection, setArrowDirection] = useState("none");
+  const [productCount, setProductCount] = useState(0);
   const handleArrowClick = () => {
     if (arrowDirection === "up") {
       setArrowDirection("down");
@@ -201,6 +206,7 @@ function ProductList() {
   };
   /*************************************************************************************************/
 
+  /************************************ Filter Product Fuction  ***************************************/
   const handleApply = (x) => {
     let filteredByRatingProducts = products;
 
@@ -215,6 +221,7 @@ function ProductList() {
     );
     setFilteredProducts(filteredByPriceProducts);
   };
+  /*************************************************************************************************/
 
   return (
     <>
