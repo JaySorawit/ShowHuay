@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Coupons.jsx                                                    *
+ *                                                                  *
+ *   React component for managing and administering coupons. It     *
+ *   typically includes features for creating, editing, and         *
+ *   deleting coupons.                                              *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
