@@ -29,11 +29,10 @@ import Sports_OutdoorsImage from "../assets/Category/12.png";
 import { Link } from "react-router-dom";
 
 function Home() {
+  /********************************** Categery Button  *************************************/
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [productCount, setProductCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
+  //const [filteredProducts, setFilteredProducts] = useState([]);
+  //const [productCount, setProductCount] = useState(0);
   const handleCategoryClick = (category) => {
     console.log(`Selected Category: ${category}`);
     localStorage.setItem("selectedCategory", category);
@@ -53,6 +52,10 @@ function Home() {
     ["Tools & Home Improvement", Tools_Home_ImprovementImage],
     ["Sports & Outdoors", Sports_OutdoorsImage],
   ];
+  /*****************************************************************************************/
+
+  /********************************* Query Information Product ***********************************/
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:3000/product`)
       .then((response) => {
@@ -112,6 +115,7 @@ function Home() {
         console.error("Error fetching products:", error);
       });
   });
+  /*******************************************************************************************/
   return (
     <>
       <Navbar />
