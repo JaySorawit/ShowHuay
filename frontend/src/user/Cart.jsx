@@ -245,7 +245,7 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <Container style={{ height: "65vh" }}>
+      <Container style={{ minHeight: "65vh" }}>
         <h2
           style={{
             margin: "30px auto",
