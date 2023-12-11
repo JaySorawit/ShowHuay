@@ -122,5 +122,16 @@ Now, the application should be accessible at http://localhost:3000/ (Back-end) a
 ![ShowHuay](/frontend/public/example/Product.png)
 ![ShowHuay](/frontend/public/example/Cart.png)
 ![ShowHuay](/frontend/public/example/Payment.png)
+
+## Contributing
+
+We welcome contributions to the ShowHuay Project! To contribute, follow these steps:
+1. Fork the repository on GitHub.
+2. Create a new branch with a descriptive name.
+3. Make your changes and commit them with clear messages.
+4. Push your branch to your forked repository.
+5. Open a pull request to the main branch of the ShowHuay repository.
+Thank you for contributing!
+
 ---
 We hope you enjoy using the ShowHuay E-commerce Web Application! If you have any questions or issues, feel free to open an issue. Happy shopping and selling!
