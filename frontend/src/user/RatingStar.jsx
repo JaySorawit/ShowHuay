@@ -1,5 +1,6 @@
 import React from 'react';
 
+/************************************ Display star from rating  *************************************/
 const RatingStar = ({ score }) => {
   const renderStars = () => {
     const roundedScore = Math.round(score);
@@ -19,5 +20,6 @@ const RatingStar = ({ score }) => {
     </div>
   );
 };
+/*****************************************************************************************************/
 
 export default RatingStar;

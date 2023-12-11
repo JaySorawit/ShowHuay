@@ -1,6 +1,7 @@
 // QuantityAdjust.jsx
 import React, { useState, useEffect } from "react";
 
+/************************************ Quantity Adjust  *************************************/
 const QuantityAdjust = ({ stockRemaining, quantity: propQuantity, onQuantityChange }) => {
   const [localQuantity, setLocalQuantity] = useState(propQuantity || 1);
 
@@ -21,7 +22,7 @@ const QuantityAdjust = ({ stockRemaining, quantity: propQuantity, onQuantityChan
       onQuantityChange(localQuantity - 1);
     }
   };
-
+  /******************************************************************************************/
   return (
     <>
       <div className="quantitybox">

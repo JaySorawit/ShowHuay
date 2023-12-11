@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import '../css/Promotion.css'; 
 
+/************************************ Display Promotion  *************************************/
 function Promotion() {
   const [promotions, setPromotions] = useState([
     'Promotion : Free Shipping Over ฿500',
@@ -33,5 +34,5 @@ function Promotion() {
     </div>
   );
 }
-
+/*****************************************************************************************/
 export default Promotion;
