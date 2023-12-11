@@ -629,7 +629,7 @@ function Payment() {
                   )}
                 </div>
               </Row>
-              <Row className="content-payment-right-lower flex-grow-1">
+              <Row className="content-payment-right-lower">
                 <div className="paymentDetail">
                   <div className="heading-order">
                     <i
@@ -660,7 +660,13 @@ function Payment() {
                       <p> Merchandise Subtotal : </p>
                       <p> ฿ {MerchandiseSubtotal} </p>
                     </div>
-                    <div style={{ display: "flex", gap: "20px", justifyContent:'space-between' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "20px",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <p> Voucher : </p>
                       <input
                         type="text"
@@ -668,9 +674,20 @@ function Payment() {
                         onChange={handleCouponCodeChange}
                         style={{ width: "100px" }}
                       />
-                      <div style={{display:'flex'}}>
-                        <button onClick={applyCoupon} style={{marginRight:'50px', border:'none', color:'#F44C0C', backgroundColor:'#fff'}}>Apply</button>
-                        <p> ฿ -{coupon.discount_amount} </p>
+                      <button
+                        onClick={applyCoupon}
+                        style={{
+                          marginRight: "50px",
+                          border: "none",
+                          color: "#F44C0C",
+                          backgroundColor: "#fff",
+                        }}
+                      >
+                        Apply
+                      </button>
+
+                      <div style={{ display: "flex" }}>
+                        {coupon ? <p> ฿ -{coupon.discount_amount} </p> : null}
                       </div>
                     </div>
                     <div

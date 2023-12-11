@@ -11,7 +11,6 @@ const db = require("../Database/database");
 
 const getCoupon = (req, res) => {
     const couponId = req.params.couponId;
-    console.log("couponId:", couponId);
     
     const query = `
             SELECT *
