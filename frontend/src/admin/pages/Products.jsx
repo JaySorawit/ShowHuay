@@ -1,3 +1,13 @@
+/********************************************************************
+ *   Products.jsx                                                   *
+ *                                                                  *
+ *   React component for administering and managing products. It    *
+ *   typically includes features for creating, editing, and         *
+ *   deleting products, as well as managing product-related data.   *
+ *                                                                  *
+ ********************************************************************/
+
+
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";

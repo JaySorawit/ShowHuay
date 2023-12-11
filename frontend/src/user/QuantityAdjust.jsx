@@ -1,6 +1,16 @@
-// QuantityAdjust.jsx
+/********************************************************************
+ *   QuantityAdjust.jsx                                             *
+ *                                                                  *
+ *   React component allowing users to adjust the quantity of       *
+ *   items, typically used in shopping cart or order-related        *
+ *   functionalities. It includes buttons or input fields           *
+ *   for increasing or decreasing the quantity of products          *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 
+/************************************ Quantity Adjust  *************************************/
 const QuantityAdjust = ({ stockRemaining, quantity: propQuantity, onQuantityChange }) => {
   const [localQuantity, setLocalQuantity] = useState(propQuantity || 1);
 
@@ -21,7 +31,7 @@ const QuantityAdjust = ({ stockRemaining, quantity: propQuantity, onQuantityChan
       onQuantityChange(localQuantity - 1);
     }
   };
-
+  /******************************************************************************************/
   return (
     <>
       <div className="quantitybox">

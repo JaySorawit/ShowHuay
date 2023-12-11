@@ -1,3 +1,12 @@
+/********************************************************************
+ *   main.jsx                                                       *
+ *                                                                  *
+ *   File containing the main routing configuration for the         *
+ *   application. It typically includes routes for different        *
+ *   sections and high-level views of the application.              *
+ *                                                                  *
+ ********************************************************************/
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';

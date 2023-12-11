@@ -1,11 +1,35 @@
+/********************************************************************
+ *   Content.jsx                                                    *
+ *                                                                  *
+ *   React component for managing and administering content         *
+ *   within the application. It typically includes features for     *
+ *   creating, editing, and organizing various types of content.    *
+ *                                                                  *
+ ********************************************************************/
+
 import React from "react";
 
 function Content() {
   return (
     <div>
-      <div className="content-wrapper" style={{ backgroundColor: "#F44C0C", display: "flex", justifyContent: "center", alignItems: "center", minHeight: "92.4vh" }}>
-        <div style={{ textAlign: "center", color: '#fff' }} >
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div
+        className="content-wrapper"
+        style={{
+          backgroundColor: "#F44C0C",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "92.4vh",
+        }}
+      >
+        <div style={{ textAlign: "center", color: "#fff" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <img
               src="../src/assets/icon/logo.png"
               alt="ShowHuay Logo"

@@ -1,5 +1,15 @@
+/********************************************************************
+ *   PageNotFound.jsx                                               *
+ *                                                                  *
+ *   React component displayed when a user tries to access a page   *
+ *   that doesn't exist or is not accessible. It provides a         *
+ *   friendly message and potentially navigation options.           *
+ *                                                                  *
+ ********************************************************************/
+
 import React from 'react'
 
+/******************************Display Page Not Found******************************/
 function PageNotFound() {
 
   const PageNotFoundStyle = {
@@ -35,5 +45,5 @@ function PageNotFound() {
     </>
   )
 }
-
+/********************************************************************************/
 export default PageNotFound

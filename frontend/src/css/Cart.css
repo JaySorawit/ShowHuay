@@ -14,7 +14,7 @@
 
 .checkbox-divider {
   border-right: 1px solid #000;
-  height: 100%; /* Set height to 100% to match the height of the gray box */
+  height: 100%; 
   margin: 0 10px;
 }
 

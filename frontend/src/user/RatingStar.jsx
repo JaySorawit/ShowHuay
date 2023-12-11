@@ -1,5 +1,15 @@
+/********************************************************************
+ *   RatingStar.jsx                                                 *
+ *                                                                  *
+ *   React component representing a star rating system. It allows   *
+ *   users to provide feedback by selecting a rating through stars. *
+ *   It's commonly used in product reviews and user feedback forms. *
+ *                                                                  *
+ ********************************************************************/
+
 import React from 'react';
 
+/************************************ Display star from rating  *************************************/
 const RatingStar = ({ score }) => {
   const renderStars = () => {
     const roundedScore = Math.round(score);
@@ -13,11 +23,10 @@ const RatingStar = ({ score }) => {
 
   return (
     <div>
-      {/* <p>Rating:</p> */}
       {renderStars()}
-      {/* <p>Score: {score}</p> */}
     </div>
   );
 };
+/*****************************************************************************************************/
 
 export default RatingStar;

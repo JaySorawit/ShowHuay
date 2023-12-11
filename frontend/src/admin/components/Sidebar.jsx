@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Sidebar.jsx                                                    *
+ *                                                                  *
+ *   React component representing the sidebar of the admin          *
+ *   dashboard. It typically includes navigation links, menus, or   *
+ *   other elements providing quick access to admin functionalities.*
+ *                                                                  *
+ ********************************************************************/
+
 import React from "react";
 
 function Sidebar() {

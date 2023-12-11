@@ -1,8 +1,17 @@
+/********************************************************************
+ *   Orders.jsx                                                     *
+ *                                                                  *
+ *   React component for administering and managing orders. It      *
+ *   typically includes features for viewing, processing, and       *
+ *   managing customer orders.                                      *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import "./css/Orders.css"; // Rename the CSS file if necessary
+import "./css/Orders.css"; 
 
 function Orders() {
   /************************************** Initialize State ***************************************/

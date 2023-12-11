@@ -1,3 +1,12 @@
+/********************************************************************
+ *   database.js                                                    *
+ *                                                                  *
+ *   File responsible for database configuration and connection.    *
+ *   It often includes settings for connecting to and interacting   *
+ *   with the database, such as connection URLs and configurations. *
+ *                                                                  *
+ ********************************************************************/
+
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({

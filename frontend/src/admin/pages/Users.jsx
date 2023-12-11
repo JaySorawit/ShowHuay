@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Users.jsx                                                      *
+ *                                                                  *
+ *   React component for managing and administering user-related    *
+ *   functionalities. It typically includes features for viewing,   *
+ *   editing, deleting  user accounts and their permissions.        *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";

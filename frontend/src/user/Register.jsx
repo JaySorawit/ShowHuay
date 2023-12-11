@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Register.jsx                                                   *
+ *                                                                  *
+ *   This page is providing a user interface for the                *
+ *   registration or sign-up process. It includes a form            *
+ *   for users to input necessary information to create an account. *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useRef } from "react";
 import { Form, Button, Row, Col, Container, Alert } from "react-bootstrap";
 import Navbar from "./Navbar";

@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Shop.jsx                                                       *
+ *                                                                  *
+ *   This page is serving as the main view for the shopping         *
+ *   section of the application. It typically displays a selection  *
+ *   of products, categories, and options for user interaction.     *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";

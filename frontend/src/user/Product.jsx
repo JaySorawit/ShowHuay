@@ -1,3 +1,13 @@
+/********************************************************************
+ *   Product.jsx                                                    *
+ *                                                                  *
+ *   This page is rendering the details of a single product.        *
+ *   It includes product information, images, and options           *
+ *   for users to interact with, such as adding to cart or viewing  *
+ *   more details.                                                  *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, json } from "react-router-dom";
 import axios from "axios";
@@ -28,7 +38,6 @@ const Product = () => {
     stockRemaining: "",
     imgPath: "",
   });
-
   /* ******************************************************************************************** */
 
   /* ************************************ Fetch product data ************************************ */
@@ -67,7 +76,6 @@ const Product = () => {
         }
       });
   }, [id, navigate]);
-
   /* ******************************************************************************************** */
 
   /* ************************************ Fetch review data ************************************ */
@@ -99,7 +107,6 @@ const Product = () => {
         }
       });
   }, [id, navigate]);
-
   /* ******************************************************************************************** */
 
   /* ************** Calculate the score and product remaining for product *********************** */
@@ -127,7 +134,6 @@ const Product = () => {
       color: selectedScore === score ? "white" : "black",
     };
   };
-
   /* ******************************************************************************************** */
 
   /* ***************************************** Add To Cart ************************************** */

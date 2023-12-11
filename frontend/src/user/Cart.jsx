@@ -32,7 +32,7 @@ const Cart = () => {
 
       if (response.status === 204) {
         console.log("Cart is empty");
-        setCartItems([]); // Set cart items to an empty array or handle as needed
+        setCartItems([]);
         return;
       }
 

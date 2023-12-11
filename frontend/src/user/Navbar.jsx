@@ -1,3 +1,12 @@
+/********************************************************************
+ *   Navbar.jsx                                                     *
+ *                                                                  *
+ *   React component representing the navigation bar of the         *
+ *   application. It typically includes links, search bar, other    *
+ *   elements for navigation between different sections.            *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import logo from "../assets/icon/logo.png";
 import search from "../assets/icon/search.png";
@@ -9,11 +18,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function Navbar() {
+  /************************************ Initialize State *************************************/
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [searchText, setSearchText] = useState("");
   const [cartCount, setCartCount] = useState(0);
+  /*******************************************************************************************/
 
+  /************************************ Check Login Status ***********************************/
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn");
     if (loggedInStatus === "true") {
@@ -22,7 +34,9 @@ function Navbar() {
       setUsername(storedUsername);
     }
   }, []);
+  /*******************************************************************************************/
 
+  /************************************ Fetch Cart Count *************************************/
   useEffect(() => {
     const fetchCartCount = async () => {
       try {
@@ -45,7 +59,9 @@ function Navbar() {
       fetchCartCount();
     }
   }, [isLoggedIn]);
+  /*******************************************************************************************/
 
+  /**************************************** Logout *******************************************/
   const handleLogout = () => {
     window.location.href = "/";
     localStorage.clear();
@@ -55,7 +71,9 @@ function Navbar() {
   const handleToggle = () => {
     setIsToggled(!isToggled);
   };
+  /*******************************************************************************************/
 
+  /**************************************** Search *******************************************/
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -70,6 +88,7 @@ function Navbar() {
   const handleInputChange = (e) => {
     setSearchText(e.target.value);
   };
+  /*******************************************************************************************/
 
   return (
     <nav
