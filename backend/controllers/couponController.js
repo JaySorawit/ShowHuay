@@ -9,6 +9,7 @@
 
 const db = require("../Database/database");
 
+/***************************** Get coupon  ***********************************/
 const getCoupon = (req, res) => {
     const couponId = req.params.couponId;
     
@@ -26,5 +27,6 @@ const getCoupon = (req, res) => {
         res.json(results);
     });
     };
+/***************************************************************************/
 
 module.exports = { getCoupon };

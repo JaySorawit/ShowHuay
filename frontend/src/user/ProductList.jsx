@@ -1,3 +1,13 @@
+/********************************************************************
+ *   ProductList.jsx                                                *
+ *                                                                  *
+ *   React component displaying a list of products. It typically    *
+ *   includes a collection of Product components and provides       *
+ *   options for sorting, filtering, and navigating through         *
+ *   multiple products.                                             *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import "../css/Productlist.css";

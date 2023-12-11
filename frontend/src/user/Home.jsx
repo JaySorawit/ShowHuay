@@ -31,8 +31,6 @@ import { Link } from "react-router-dom";
 function Home() {
   /********************************** Categery Button  *************************************/
   const [selectedCategory, setSelectedCategory] = useState(null);
-  //const [filteredProducts, setFilteredProducts] = useState([]);
-  //const [productCount, setProductCount] = useState(0);
   const handleCategoryClick = (category) => {
     console.log(`Selected Category: ${category}`);
     localStorage.setItem("selectedCategory", category);

@@ -16,8 +16,8 @@
 }
 
 .sideBar-body {
-    border-bottom: 1px solid #ddd; /* Add a bottom border */
-    padding-bottom: 15px /* Adjust the padding */
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px 
 }
 
 .col-sm-3.side {
@@ -30,7 +30,7 @@ padding: 0px;
 }
 
 .col-sm-8.conversation {
-    border: 1px solid #ddd; /* Add border */
+    border: 1px solid #ddd; 
 }
 
 .rowheading2 {

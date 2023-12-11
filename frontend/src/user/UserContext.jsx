@@ -1,3 +1,13 @@
+/********************************************************************
+ *   UserContext.jsx                                                *
+ *                                                                  *
+ *   React context file managing user-related state and providing   *
+ *   context to components that need access to user information.    *
+ *   It typically includes state, methods, and data related to the  *
+ *   current user's authentication and profile information.         *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();

@@ -1,3 +1,13 @@
+/********************************************************************
+ *   Payment.jsx                                                    *
+ *                                                                  *
+ *   This page is representing the payment page in the              *
+ *   application. It typically includes a form for entering         *
+ *   payment details and completing transactions.                   *
+ *                                                                  *
+ ********************************************************************/
+
+
 import React, { useEffect, useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -394,6 +404,7 @@ function Payment() {
   };
   /* ******************************************************************************************** */
 
+  /* ************************************ Handle apply coupon ************************************ */
   const applyCoupon = async () => {
     try {
       const coupon = await getCoupon(couponCode);
@@ -452,6 +463,7 @@ function Payment() {
   useEffect(() => {
     setTotalAmount(MerchandiseSubtotal);
   }, [MerchandiseSubtotal]);
+  /* ******************************************************************************************** */
 
   return (
     <>

@@ -1,3 +1,12 @@
+/********************************************************************
+ *   MyPurchases.jsx                                                *
+ *                                                                  *
+ *   This page is presenting a user's purchase history and          *
+ *   order details. It includes options for viewing past            *
+ *   purchases, contact buyer, and accessing related information.   *
+ *                                                                  *
+ ********************************************************************/
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
@@ -173,9 +182,11 @@ const MyPurchases = () => {
   };
   /***************************************************************************************************/
 
+  /***************************************** Sort Purchase********************************************/
   const sortedPurchases = [...filteredPurchases].sort(
     (a, b) => b.purchase_id - a.purchase_id
   );
+  /***************************************************************************************************/
 
   return (
     <div>
