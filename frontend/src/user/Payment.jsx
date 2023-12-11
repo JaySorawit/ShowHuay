@@ -8,48 +8,105 @@ import "../css/Payment.css";
 
 /* ************************************ Address Modal Component ************************************ */
 const AddressModal = ({ addresses, onSelect, onClose }) => {
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const handleSelect = (address) => {
+    setSelectedAddress(address);
+    onSelect(address);
+  };
+
+  const handleRadioChange = (event, address) => {
+    if (event.target.checked) {
+      handleSelect(address);
+    }
+  };
+
+  console.log(addresses);
+  console.log(selectedAddress);
+
   return (
-    <div>
-      <h2>Select an Address</h2>
+    <div className="modal">
+      <div className="modal-content">
+        <h4 style={{ color: "#F44C0C" }}>Select an Address</h4>
+        <ul>
+          {addresses.map((address) => (
+            <div key={address.address_id}>
+              <label style={{ display: "flex", gap: "20px" }}>
+                <input
+                  type="radio"
+                  name="address"
+                  value={address.address_id}
+                  checked={selectedAddress === address}
+                  onChange={(event) => handleRadioChange(event, address)}
+                />
+                <div style={{ margin: "10px" }}>
+                  {`${address.address_fname} ${address.address_lname} | ${address.address_telephone_number}`}
+                  <br />
+                  {`${address.address_detail}, ${address.district}, ${address.province}, ${address.zipcode}`}
+                </div>
+              </label>
+            </div>
+          ))}
+        </ul>
+        <div style={{ display: "flex", justifyContent: "center", gap: "25px" }}>
+          <Link to="/myAddress">
+            <button className="editBtn" style={{ width: "150px" }}>
+              Add Address
+            </button>
+          </Link>
+          <button
+            onClick={onClose}
+            className="editBtn"
+            style={{ width: "150px" }}
+          >
+            Close{" "}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ******************************************************************************************** */
+
+/* ************************************ Credit Card Modal Component **************************** */
+const CreditCardModal = ({ creditCards, onSelect, onClose, selectedCreditCard }) => {
+  return (
+    <div className="modal">
+      <div className="modal-content">
+      <h4 style={{ color: "#F44C0C" }}>Select a Credit Card</h4>
       <ul>
-        {addresses.map((address) => (
-          <li key={address.address_id} onClick={() => onSelect(address)}>
-            {`${address.address_fname} ${address.address_lname} | ${address.address_telephone_number}`}
-            <br />
-            {`${address.address_detail}, ${address.district}, ${address.province}, ${address.zipcode}`}
-          </li>
+        {creditCards.map((creditCard) => (
+          <div key={creditCard.credit_card_id}>
+            <label style={{ display: "flex", gap: "20px" }}>
+              <input
+                type="radio"
+                name="creditCard"
+                value={creditCard.credit_card_id}
+                checked={selectedCreditCard && selectedCreditCard.credit_card_id === creditCard.credit_card_id}
+                onChange={() => onSelect(creditCard)}
+              />
+              <div style={{ margin: "10px" }}>
+                {`Credit card number : ${maskedCreditCardNumber(
+                  creditCard.credit_card_number
+                )}`}
+                <br />
+                {`Type : ${creditCard.card_type}`}
+              </div>
+            </label>
+          </div>
         ))}
       </ul>
-      <button onClick={onClose}>Close Modal</button>
+      <div style={{ display: "flex", justifyContent: "center", gap: "25px" }}>
+        <Link to="/myCreditCard"><button className="editBtn" style={{ width: "170px" }}>Add Credit Card</button> </Link>
+        <button onClick={onClose} className="editBtn" style={{ width: "170px" }}>Close </button>
+      </div>
+      </div>
     </div>
   );
 };
 /* ******************************************************************************************** */
 
-/* ************************************ Credit Card Modal Component **************************** */
-const CreditCardModal = ({ creditCards, onSelect, onClose }) => {
-  return (
-    <div>
-      <h2>Select a Credit Card</h2>
-      <ul>
-        {creditCards.map((creditCard) => (
-          <li
-            key={creditCard.credit_card_id}
-            onClick={() => onSelect(creditCard)}
-          >
-            {`Credit card number : ${maskedCreditCardNumber(
-              creditCard.credit_card_number
-            )}`}
-            <br />
-            {`Type : ${creditCard.card_type}`}
-          </li>
-        ))}
-      </ul>
-      <button onClick={onClose}>Close Modal</button>
-    </div>
-  );
-};
-/* ******************************************************************************************** */
 
 /* ************************************ Display creadit card property ************************** */
 const today = new Date();
@@ -75,7 +132,8 @@ function Payment() {
   const [products, setProducts] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalAddressOpen, setIsModalAddressOpen] = useState(false);
+  const [isModalCreditCardOpen, setIsModalCreditCardOpen] = useState(false);
   const [creditCards, setCreditCards] = useState([]);
   const [selectedCreditCard, setSelectedCreditCard] = useState(null);
   const navigate = useNavigate();
@@ -151,14 +209,21 @@ function Payment() {
   const defaultAddress = addresses.find(
     (address) => address.address_default === 1
   );
-  const handleAddressClick = (address) => {
-    setSelectedAddress(address);
-    setIsModalOpen(true);
-  };
 
   if (!selectedAddress && defaultAddress) {
     setSelectedAddress(defaultAddress);
   }
+
+  const handleAddressClick = (address) => {
+    setSelectedAddress(address);
+    setIsModalAddressOpen(true);
+  };
+
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address);
+    setIsModalAddressOpen(false);
+  };
+
   /* ******************************************************************************************** */
 
   /************************************ Fetch creditCard User *************************************/
@@ -196,12 +261,12 @@ function Payment() {
   );
 
   const handleCreditCardChange = () => {
-    setIsModalOpen(true);
+    setIsModalCreditCardOpen(true);
   };
 
   const handleCreditCardSelect = (creditCard) => {
     setSelectedCreditCard(creditCard);
-    setIsModalOpen(false);
+    setIsModalCreditCardOpen(false);
   };
 
   if (!selectedCreditCard && defaultCreditCard) {
@@ -330,21 +395,34 @@ function Payment() {
           </div>
 
           <div>
-            {defaultAddress ? (
+            {selectedAddress || defaultAddress ? (
               <div className="addresses-box">
                 <p className="heading-delivery mb-2">Delivery Address</p>
-                <Row key={defaultAddress.address_id}>
+                <Row key={(selectedAddress || defaultAddress).address_id}>
                   <Col md={10}>
                     <p>
-                      {`${defaultAddress.address_fname} ${defaultAddress.address_lname} (${defaultAddress.address_telephone_number}`}
-                      &#41;,&#32;
-                      {`${defaultAddress.address_detail}, ${defaultAddress.district}, ${defaultAddress.province}, ${defaultAddress.zipcode}`}
+                      {`${(selectedAddress || defaultAddress).address_fname} ${
+                        (selectedAddress || defaultAddress).address_lname
+                      } | ${
+                        (selectedAddress || defaultAddress)
+                          .address_telephone_number
+                      }`}
+                    </p>
+
+                    <p>
+                      {`${
+                        (selectedAddress || defaultAddress).address_detail
+                      }, ${(selectedAddress || defaultAddress).district}, ${
+                        (selectedAddress || defaultAddress).province
+                      }, ${(selectedAddress || defaultAddress).zipcode}`}
                     </p>
                   </Col>
                   <Col md={2} className="text-md-right">
                     <button
                       className="btn-changed-payment"
-                      onClick={() => handleAddressClick(defaultAddress)}
+                      onClick={() =>
+                        handleAddressClick(selectedAddress || defaultAddress)
+                      }
                     >
                       Change
                     </button>
@@ -354,14 +432,11 @@ function Payment() {
             ) : (
               <Link to="/myAddress">Add Address</Link>
             )}
-            {isModalOpen && (
+            {isModalAddressOpen && (
               <AddressModal
                 addresses={addresses}
-                onSelect={(address) => {
-                  setSelectedAddress(address);
-                  setIsModalOpen(false);
-                }}
-                onClose={() => setIsModalOpen(false)}
+                onSelect={handleSelectAddress}
+                onClose={() => setIsModalAddressOpen(false)}
               />
             )}
           </div>
@@ -436,16 +511,21 @@ function Payment() {
                       Credit card Information
                     </span>
                   </div>
-                  {defaultCreditCard ? (
+                  {selectedCreditCard || defaultCreditCard ? (
                     <div
-                      key={defaultCreditCard.credit_card_id}
+                      key={
+                        (selectedCreditCard || defaultCreditCard).credit_card_id
+                      }
                       className="credit-card-content"
                     >
                       <div>
                         <p>{`Card number : ${maskedCreditCardNumber(
-                          defaultCreditCard.credit_card_number
+                          (selectedCreditCard || defaultCreditCard)
+                            .credit_card_number
                         )}`}</p>
-                        <p>{`Card Type : ${defaultCreditCard.card_type}`}</p>
+                        <p>{`Card Type : ${
+                          (selectedCreditCard || defaultCreditCard).card_type
+                        }`}</p>
                       </div>
                       <div className="text-md-right">
                         <button
@@ -459,11 +539,12 @@ function Payment() {
                   ) : (
                     <Link to="/myCreditCard">Add Credit Cards</Link>
                   )}
-                  {isModalOpen && (
+
+                  {isModalCreditCardOpen && (
                     <CreditCardModal
                       creditCards={creditCards}
                       onSelect={handleCreditCardSelect}
-                      onClose={() => setIsModalOpen(false)}
+                      onClose={() => setIsModalCreditCardOpen(false)}
                     />
                   )}
                 </div>
