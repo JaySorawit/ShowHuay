@@ -25,6 +25,7 @@ const addressRoutes = require('./routes/addressRoutes');
 const creditCardRoutes = require('./routes/creditCardRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
+const couponRoutes = require('./routes/couponRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 /*******************************************************************************/
 
@@ -63,6 +64,7 @@ app.use('/creditCard', creditCardRoutes);
 app.use('/cart', cartRoutes);
 app.use('/shop', shopRoutes);
 app.use('/purchase', purchaseRoutes);
+app.use('/coupon', couponRoutes);
 app.use('/system', adminRoutes);
 /*******************************************************************************/
 

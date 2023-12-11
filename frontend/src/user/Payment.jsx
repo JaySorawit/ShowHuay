@@ -70,43 +70,61 @@ const AddressModal = ({ addresses, onSelect, onClose }) => {
 /* ******************************************************************************************** */
 
 /* ************************************ Credit Card Modal Component **************************** */
-const CreditCardModal = ({ creditCards, onSelect, onClose, selectedCreditCard }) => {
+const CreditCardModal = ({
+  creditCards,
+  onSelect,
+  onClose,
+  selectedCreditCard,
+}) => {
   return (
     <div className="modal">
       <div className="modal-content">
-      <h4 style={{ color: "#F44C0C" }}>Select a Credit Card</h4>
-      <ul>
-        {creditCards.map((creditCard) => (
-          <div key={creditCard.credit_card_id}>
-            <label style={{ display: "flex", gap: "20px" }}>
-              <input
-                type="radio"
-                name="creditCard"
-                value={creditCard.credit_card_id}
-                checked={selectedCreditCard && selectedCreditCard.credit_card_id === creditCard.credit_card_id}
-                onChange={() => onSelect(creditCard)}
-              />
-              <div style={{ margin: "10px" }}>
-                {`Credit card number : ${maskedCreditCardNumber(
-                  creditCard.credit_card_number
-                )}`}
-                <br />
-                {`Type : ${creditCard.card_type}`}
-              </div>
-            </label>
-          </div>
-        ))}
-      </ul>
-      <div style={{ display: "flex", justifyContent: "center", gap: "25px" }}>
-        <Link to="/myCreditCard"><button className="editBtn" style={{ width: "170px" }}>Add Credit Card</button> </Link>
-        <button onClick={onClose} className="editBtn" style={{ width: "170px" }}>Close </button>
-      </div>
+        <h4 style={{ color: "#F44C0C" }}>Select a Credit Card</h4>
+        <ul>
+          {creditCards.map((creditCard) => (
+            <div key={creditCard.credit_card_id}>
+              <label style={{ display: "flex", gap: "20px" }}>
+                <input
+                  type="radio"
+                  name="creditCard"
+                  value={creditCard.credit_card_id}
+                  checked={
+                    selectedCreditCard &&
+                    selectedCreditCard.credit_card_id ===
+                      creditCard.credit_card_id
+                  }
+                  onChange={() => onSelect(creditCard)}
+                />
+                <div style={{ margin: "10px" }}>
+                  {`Credit card number : ${maskedCreditCardNumber(
+                    creditCard.credit_card_number
+                  )}`}
+                  <br />
+                  {`Type : ${creditCard.card_type}`}
+                </div>
+              </label>
+            </div>
+          ))}
+        </ul>
+        <div style={{ display: "flex", justifyContent: "center", gap: "25px" }}>
+          <Link to="/myCreditCard">
+            <button className="editBtn" style={{ width: "170px" }}>
+              Add Credit Card
+            </button>{" "}
+          </Link>
+          <button
+            onClick={onClose}
+            className="editBtn"
+            style={{ width: "170px" }}
+          >
+            Close{" "}
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 /* ******************************************************************************************** */
-
 
 /* ************************************ Display creadit card property ************************** */
 const today = new Date();
@@ -131,6 +149,9 @@ function Payment() {
   const productInfo = location.state?.productInfo || [];
   const [products, setProducts] = useState([]);
   const [addresses, setAddresses] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isModalAddressOpen, setIsModalAddressOpen] = useState(false);
   const [isModalCreditCardOpen, setIsModalCreditCardOpen] = useState(false);
@@ -373,6 +394,65 @@ function Payment() {
   };
   /* ******************************************************************************************** */
 
+  const applyCoupon = async () => {
+    try {
+      const coupon = await getCoupon(couponCode);
+      console.log("coupon", coupon);
+      const newTotalAmount = calculateTotalAmount(MerchandiseSubtotal, coupon);
+      console.log("newTotalAmount", newTotalAmount);
+      setTotalAmount(newTotalAmount);
+    } catch (error) {
+      console.error("Error applying coupon:", error.message);
+    }
+  };
+
+  const getCoupon = async (couponCode) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/coupon/${couponCode}`
+      );
+      setCoupon(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching coupon:", error.message);
+      throw error;
+    }
+  };
+
+  const calculateTotalAmount = (subtotal, coupon) => {
+    if (coupon) {
+      if (coupon[0].discount_type === "Percentage") {
+        let discount_amount = subtotal * (coupon[0].discount_amount / 100);
+        setCoupon({ ...coupon, discount_amount: discount_amount });
+        return subtotal * (1 - coupon[0].discount_amount / 100);
+      } else if (coupon[0].discount_type === "Fixed Amount") {
+        setCoupon({ ...coupon, discount_amount: coupon[0].discount_amount });
+        return subtotal - coupon[0].discount_amount;
+      }
+    }
+
+    return subtotal;
+  };
+
+  const handleCouponCodeChange = (event) => {
+    const newCouponCode = event.target.value;
+    setCouponCode(newCouponCode);
+    const newTotalAmount = calculateTotalAmount(
+      MerchandiseSubtotal,
+      newCouponCode
+    );
+    setTotalAmount(newTotalAmount);
+  };
+
+  const MerchandiseSubtotal = products.reduce(
+    (total, product) => total + product.price * product.quantity,
+    0
+  );
+
+  useEffect(() => {
+    setTotalAmount(MerchandiseSubtotal);
+  }, [MerchandiseSubtotal]);
+
   return (
     <>
       <Navbar />
@@ -563,10 +643,53 @@ function Payment() {
                       Payment Detail
                     </span>
                   </div>
-                  <div className="payment-content">
-                    <p> Merchandise Subtotal : </p>
-                    <p> Voucher : </p>
-                    <p> Total Amount : </p>
+                  <div
+                    className="payment-content"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <p> Merchandise Subtotal : </p>
+                      <p> ฿ {MerchandiseSubtotal} </p>
+                    </div>
+                    <div style={{ display: "flex", gap: "20px", justifyContent:'space-between' }}>
+                      <p> Voucher : </p>
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={handleCouponCodeChange}
+                        style={{ width: "100px" }}
+                      />
+                      <div style={{display:'flex'}}>
+                        <button onClick={applyCoupon} style={{marginRight:'50px', border:'none', color:'#F44C0C', backgroundColor:'#fff'}}>Apply</button>
+                        <p> ฿ -{coupon.discount_amount} </p>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <p> Total Amount : </p>
+                      <p
+                        style={{
+                          fontSize: "20px",
+                          fontWeight: "600",
+                          color: "#F44C0C",
+                        }}
+                      >
+                        ฿ {totalAmount}{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <button
