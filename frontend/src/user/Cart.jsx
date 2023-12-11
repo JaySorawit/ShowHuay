@@ -6,84 +6,6 @@ import QuantityAdjust from "./QuantityAdjust";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import "../css/Cart.css";
-/* ************************************ Cart Item Component ************************************ */
-const CartItem = ({
-  id,
-  name,
-  price,
-  quantity,
-  imagePath,
-  sellerName,
-  selected,
-  handleCheckboxChange,
-  handleDeleteProduct,
-}) => (
-  <div
-    className="item"
-    key={id}
-    style={{
-      display: "flex",
-      height: "200px",
-      maxWidth: "1000px",
-      backgroundColor: "#F1F0F0",
-      borderRadius: "20px",
-      margin: "20px auto",
-    }}
-  >
-    <div className="item-row">
-      <input
-        type="checkbox"
-        checked={selected}
-        onChange={() => handleCheckboxChange(id)}
-        style={{ width: "10%" }}
-      />
-      <div className="item-content" style={{ width: "815px" }}>
-        <div className="nameSeller">
-          <i
-            className="nav-icon fas fa-store me-2"
-            style={{ color: "#F44C0C", fontSize: "14px" }}
-          />
-          <p style={{ fontSize: "18px", fontWeight: "600" }}>{sellerName}</p>
-        </div>
-        <div className="item-details" style={{ width: "100%" }}>
-          <div className="productinfo">
-            <div className="item-image">
-              <img src={imagePath} alt="product" />
-            </div>
-            <div className="column" style={{ height: "80px", width: "20%" }}>
-              <p style={{ fontSize: "15px", fontWeight: "600" }}>
-                Product Name
-              </p>
-              <p className="productTitle">{name}</p>
-            </div>
-            <div className="column">
-              <p style={{ fontSize: "15px", fontWeight: "600" }}>Price</p>
-              <p>฿{price}</p>
-            </div>
-            <div className="column">
-              {/* <p style={{ fontSize: "15px", fontWeight: "600" }}>Quantity</p>
-              <p>{quantity}</p> */}
-              <QuantityAdjust/>
-            </div>
-            <div className="column">
-              <p style={{ fontSize: "15px", fontWeight: "600" }}>Total Price</p>
-              <p>฿{quantity * price}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button
-        style={{ width: "20%" }}
-        className="cart-del-button"
-        onClick={() => handleDeleteProduct(id)}
-      >
-        Delete
-      </button>
-    </div>
-  </div>
-);
-
-/* ******************************************************************************************** */
 
 const Cart = () => {
   /* **************************** Initialize State & define variable **************************** */
@@ -158,6 +80,7 @@ const Cart = () => {
         );
         setProducts(
           productDetails.map((product) => ({
+            sellerId: product.user_id,
             sellerName: product.username,
             imagePath: product.image_path,
             price: product.price,
@@ -242,6 +165,124 @@ const Cart = () => {
   };
   /* ******************************************************************************************** */
 
+  /* ************************************ Handle quantity change ************************************ */
+  const handleQuantityChange = async (productId, newQuantity) => {
+    try {
+      await axios.put(
+        `http://localhost:3000/cart/updateQuantity/${userId}/${productId}`,
+        {
+          quantity: newQuantity,
+        }
+      );
+
+      const updatedProducts = products.map((product) => {
+        if (product.productId === productId) {
+          return {
+            ...product,
+            quantity: newQuantity,
+          };
+        }
+        return product;
+      });
+
+      setCartItems(updatedProducts);
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
+  /* *********************************************************************************************** */
+
+  /* ************************************ Cart Item Component ************************************ */
+  const CartItem = ({
+    id,
+    name,
+    price,
+    quantity,
+    stockRemaining,
+    imagePath,
+    sellerId,
+    sellerName,
+    selected,
+    handleCheckboxChange,
+    handleDeleteProduct,
+  }) => (
+    <div
+      className="item"
+      key={id}
+      style={{
+        display: "flex",
+        height: "200px",
+        maxWidth: "1000px",
+        backgroundColor: "#F1F0F0",
+        borderRadius: "20px",
+        margin: "20px auto",
+      }}
+    >
+      <div className="item-row">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={() => handleCheckboxChange(id)}
+          style={{ width: "10%" }}
+        />
+        <div className="item-content" style={{ width: "815px" }}>
+          <div className="nameSeller">
+            <i
+              className="nav-icon fas fa-store me-2"
+              style={{ color: "#F44C0C", fontSize: "14px" }}
+            />
+            <Link to={`/shopProfile/${sellerId}`}>
+              <p style={{ fontSize: "18px", fontWeight: "600", color: "#000" }}>
+                {sellerName}
+              </p>
+            </Link>
+          </div>
+          <div className="item-details" style={{ width: "100%" }}>
+            <div className="productinfo">
+              <div className="item-image">
+                <img src={imagePath} alt="product" />
+              </div>
+              <div className="column column-product" style={{ height: "80px", width: "20%" }}>
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>
+                  Product Name
+                </p>
+                <p className="productTitle">{name}</p>
+              </div>
+              <div className="column column-product">
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>Price</p>
+                <p>฿{price}</p>
+              </div>
+              <div className="column quantityBox">
+                <QuantityAdjust
+                  stockRemaining={stockRemaining}
+                  quantity={quantity}
+                  onQuantityChange={(newQuantity) =>
+                    handleQuantityChange(id, newQuantity)
+                  }
+                />
+              </div>
+              <div className="column column-product">
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>
+                  Total Price
+                </p>
+                <p>฿{quantity * price}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          style={{ width: "20%" }}
+          className="cart-del-button"
+          onClick={() => handleDeleteProduct(id)}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+  /* ******************************************************************************************** */
+
   return (
     <>
       <Navbar />
@@ -268,6 +309,8 @@ const Cart = () => {
                     price={item.price || "Product price Unavailable"}
                     imagePath={item.imagePath || "Product image Unavailable"}
                     quantity={item.quantity}
+                    stockRemaining={item.stockRemaining}
+                    sellerId={item.sellerId}
                     sellerName={item.sellerName}
                     selected={selectedItems.includes(item.productId)}
                     handleCheckboxChange={handleCheckboxChange}

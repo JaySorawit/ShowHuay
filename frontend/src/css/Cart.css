@@ -56,6 +56,10 @@ input[type="checkbox"] {
   flex: 1;
 }
 
+.column-product {
+  padding-top: 2px;
+}
+
 .productTitle {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -69,4 +73,16 @@ input[type="checkbox"] {
   align-items: center;
   height: 30%;
   padding-bottom: 5px;
+}
+
+.quantityBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.quantityBox div:first-child p {
+  font-weight: 600;
 }

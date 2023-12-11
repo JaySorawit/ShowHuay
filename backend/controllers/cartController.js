@@ -123,4 +123,21 @@ const updateCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart, getCart, getCartCount, removeFromCart, updateCart };
+const updateQuantityCart = async (req, res) => {
+  const { userId, productId } = req.params;
+  const { quantity } = req.body;
+
+  const sql = `UPDATE user_shopping_cart SET quantity = ? WHERE user_id = ? AND product_id = ?`;
+
+  db.query(sql, [quantity, userId, productId], (err, result) => {
+    if (err) {
+      console.error('Error updating quantity:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    
+    res.json({ message: 'Quantity updated successfully' });
+  });
+};
+
+module.exports = { addToCart, getCart, getCartCount, removeFromCart, updateCart, updateQuantityCart };
